@@ -88,3 +88,6 @@ build
 
 # VSCode configuration folder
 .vscode
+
+# env vars
+.env

@@ -18,9 +18,17 @@ module.exports = {
     sourceType: 'module',
     project: './server/tsconfig.json',
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   rules: {
-    // note you must disable the base rule as it can report incorrect errors
     "indent": "off",
     "@typescript-eslint/indent": ["error", 2],
+    "no-console": "off",
+    "import/prefer-default-export": "off",
   }
 };
