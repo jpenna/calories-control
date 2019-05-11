@@ -8,6 +8,7 @@ import apiV1 from './api/v1';
 // Create a new express application instance
 const app: express.Application = express();
 
+app.use(express.json());
 if (process.env.NODE_ENV !== 'production') app.use(morgan('dev'));
 
 app.use('/api/v1', apiV1);
