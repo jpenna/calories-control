@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 mongoose.connect(process.env.MONGO_URL!, {
   useNewUrlParser: true, // mongodb
   useCreateIndex: true, // mongodb
+  useFindAndModify: false, // mongodb
   dbName: process.env.MONGO_DB,
   user: process.env.MONGO_USER,
   pass: process.env.MONGO_PASSWORD,
