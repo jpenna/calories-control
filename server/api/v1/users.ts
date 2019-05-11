@@ -7,10 +7,11 @@ export default express.Router()
   .post('/', async (req, res): Promise<void> => {
     try {
       const userModel = new UsersModel(req.body);
-      const user = await userModel.save();
-      res.send(user);
+      const { password, ...user } = (await userModel.save()).toObject();
+      res.json(user);
     } catch (error) {
-      res.send({
+      res.status(500);
+      res.json({
         success: false,
         error: error.message,
       });
@@ -20,11 +21,17 @@ export default express.Router()
   // Update
   .put('/:id', async (req, res): Promise<void> => {
     try {
-      const opts = { new: true, runValidators: true };
-      const user = await UsersModel.findByIdAndUpdate(req.params.id, req.body, opts);
-      res.send(user);
+      const user = await UsersModel.findById(req.params.id);
+      if (!user) {
+        res.status(404);
+        throw Error('User not found');
+      }
+      user.set(req.body);
+      const { password, ...userData } = (await user.save()).toObject();
+      res.json(userData);
     } catch (error) {
-      res.send({
+      if (error.message !== 'User not found') res.status(500);
+      res.json({
         success: false,
         error: error.message,
       });

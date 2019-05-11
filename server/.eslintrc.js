@@ -29,6 +29,7 @@ module.exports = {
     // eslint borken rules (using typescript)
     "import/no-unresolved": "off",
     "consistent-return": "off",
+    "func-names": "off",
 
     // Custom
     "indent": "off",
