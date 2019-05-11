@@ -21,11 +21,15 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"]
+        extensions: [".js", ".ts"],
       }
-    }
+    },
   },
   rules: {
+    // eslint borken rules (using typescript)
+    "import/no-unresolved": "off",
+
+    // Custom
     "indent": "off",
     "@typescript-eslint/indent": ["error", 2],
     "no-console": "off",
