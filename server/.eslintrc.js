@@ -37,5 +37,6 @@ module.exports = {
     "no-console": "off",
     "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
+    "arrow-body-style": "off",
   }
 };
