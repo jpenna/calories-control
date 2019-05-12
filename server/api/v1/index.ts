@@ -8,6 +8,7 @@ import meals from './meals';
 declare module 'express-serve-static-core' {
   interface Response {
     sendError: (status: number, errorMessage: string) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sendSuccess: (payload: { [key: string]: any }) => void;
   }
 }

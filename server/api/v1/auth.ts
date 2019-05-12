@@ -4,7 +4,7 @@ import passportJwt from 'passport-jwt';
 import passportLocal from 'passport-local';
 import jwt from 'jsonwebtoken';
 
-import UserModel, { UserInterface } from '../../db/models/users';
+import UserModel from '../../db/models/users';
 
 const { Strategy: JwtStrategy, ExtractJwt } = passportJwt;
 const { Strategy: LocalStrategy } = passportLocal;
