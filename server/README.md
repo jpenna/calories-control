@@ -38,7 +38,7 @@ All requests should have `/api/v1` before the mentioned ath.
 
 ### Users
 
-#### GET /users
+#### GET /users/list
 
 > Users list (`/api/v1/users` don't have pagination, this is not good with a few hundred users, but with the current requirements, I wouldn't say too many users are expected.
 

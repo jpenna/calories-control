@@ -11,6 +11,7 @@ export interface UserInterface extends mongoose.Document {
   email: string;
   password: string;
   permissions: ['users_edit' | 'meals_all'];
+  dailyCalories: number;
   verifyPassword: (password: string) => Promise<boolean>;
 }
 

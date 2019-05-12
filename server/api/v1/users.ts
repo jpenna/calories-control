@@ -1,11 +1,11 @@
 import express from 'express';
 
 import UserModel from '../../db/models/users';
-import { USERS_EDIT } from '../../utils/permissions';
+import { USERS_EDIT, ROLES } from '../../utils/permissions';
 
 export default express.Router()
   // List users
-  .get('/', async (req, res): Promise<void> => {
+  .get('/list', async (req, res): Promise<void> => {
     try {
       const requester = req.user;
       const filter = requester.hasPermission(USERS_EDIT) ? {} : { _id: requester.id };
@@ -25,6 +25,12 @@ export default express.Router()
     } catch (err) {
       res.sendError(500, err.message);
     }
+  })
+
+
+  // User by ID
+  .get('/roles', (req, res): void => {
+    res.sendSuccess({ roles: ROLES });
   })
 
   // User by ID
