@@ -20,4 +20,26 @@ export default express.Router()
     } catch (err) {
       res.sendError(500, err.message);
     }
+  })
+
+  .get('/list', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+      // eslint-disable-next-line object-curly-newline
+      const { limit, skip, from, until, userId } = req.query;
+
+      const queryFilters: { eatenAt?: { [key: string]: Date }; user?: string } = {};
+      if (from) queryFilters.eatenAt = { $gte: new Date(from) };
+      if (until) queryFilters.eatenAt = { ...queryFilters.eatenAt, $lte: new Date(until) };
+      if (userId) queryFilters.user = userId;
+
+      const meals = await MealModel.find(queryFilters)
+        .lean()
+        .limit(+limit || 10)
+        .skip(+skip || 0)
+        .sort({ eatenAt: 1 });
+      res.sendSuccess({ meals });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
   });

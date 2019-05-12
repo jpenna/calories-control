@@ -13,3 +13,5 @@ mongoose.connect(process.env.MONGO_URL!, {
     (): void => console.log('MongoDB connected!'),
     console.error.bind(console, 'MongoDB connection error:'),
   );
+
+mongoose.set('debug', true);
