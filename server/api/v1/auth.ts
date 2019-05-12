@@ -56,7 +56,7 @@ export default express.Router()
         (err, token): void => {
           if (err) {
             console.error(err);
-            res.status(500).send({ success: false, error: 'JWT error' });
+            res.sendError(500, 'JWT error');
           }
           res.json({ success: true, token });
         },
@@ -70,11 +70,7 @@ export default express.Router()
       const user = await userModel.save();
       res.json(user);
     } catch (err) {
-      res.status(500);
-      res.json({
-        success: false,
-        error: err.message,
-      });
+      res.sendError(500, err.message);
     }
   })
 
