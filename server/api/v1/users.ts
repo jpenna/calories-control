@@ -27,6 +27,21 @@ export default express.Router()
     }
   })
 
+  // User by ID
+  .get('/:id', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+      const canEditUsers = requester.hasPermission(USERS_EDIT);
+      if (requester.id !== req.params.id && !canEditUsers) {
+        return res.sendError(403, 'You can only see your own account');
+      }
+      const user = await UserModel.findById(req.params.id);
+      res.sendSuccess({ user });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
   // Update
   .put('/:id', async (req, res): Promise<void> => {
     try {

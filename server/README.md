@@ -50,6 +50,12 @@ If the user don't have `USER_EDIT` permission (check *Roles and Permissions* bel
 
 Return requester info
 
+#### GET /users/:id
+
+Get user information for provided ID.
+
+If the user don't have `USER_EDIT` permission (check *Roles and Permissions* below), only his user will can be retrieved.
+
 #### PUT /users/:id
 
 Update user.
