@@ -4,6 +4,7 @@ import MealModel from '../../db/models/meals';
 import { MEALS_ALL } from '../../utils/permissions';
 
 export default express.Router()
+  // Create meal
   .post('/new', async (req, res): Promise<void> => {
     try {
       const requester = req.user;
@@ -22,6 +23,7 @@ export default express.Router()
     }
   })
 
+  // List meals
   .get('/list', async (req, res): Promise<void> => {
     try {
       const requester = req.user;
@@ -40,12 +42,30 @@ export default express.Router()
       }
 
       const meals = await MealModel.find(queryFilters)
-        .lean()
         .limit(+limit || 10)
         .skip(+skip || 0)
         .sort({ eatenAt: 1 });
 
       res.sendSuccess({ meals });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
+  // Get single meal
+  .get('/:mealId', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+      // eslint-disable-next-line object-curly-newline
+      const { mealId } = req.params;
+      const meal = await MealModel.findById(mealId);
+
+      if (!meal) return res.sendError(404, 'Meal not found.');
+      if (!meal.user.equals(requester.id) && !requester.hasPermission(MEALS_ALL)) {
+        return res.sendError(403, 'You can\'t fetch meals of others.');
+      }
+
+      res.sendSuccess({ meal });
     } catch (err) {
       res.sendError(500, err.message);
     }

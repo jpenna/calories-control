@@ -9,7 +9,7 @@ export default express.Router()
     try {
       const requester = req.user;
       const filter = requester.hasPermission(USERS_EDIT) ? {} : { _id: requester.id };
-      const users = await UserModel.find(filter).lean();
+      const users = await UserModel.find(filter);
       res.sendSuccess({ users });
     } catch (err) {
       res.sendError(500, err.message);

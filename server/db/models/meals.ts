@@ -5,9 +5,10 @@ interface MealInterface extends mongoose.Document {
   name: string;
   calories: number;
   notes: string;
+  user: mongoose.Types.ObjectId;
 }
 
-function transform(doc: MealInterface, ret: { _id: string; password: string }): void {
+function transform(doc: MealInterface, ret: { _id: string }): void {
   /* eslint-disable no-param-reassign */
   delete ret._id;
   /* eslint-enable */

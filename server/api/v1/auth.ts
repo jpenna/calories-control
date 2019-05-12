@@ -53,7 +53,7 @@ const signJwt: signJwtType = function (res, userId): void {
     { expiresIn: '7 days', audience: jwtAudience },
     (err, token): void => {
       if (err) res.sendError(500, 'JWT error');
-      res.sendSuccess({ token });
+      res.sendSuccess({ userId, token });
     },
   );
 };
