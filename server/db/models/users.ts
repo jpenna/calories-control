@@ -9,6 +9,14 @@ export interface UserInterface extends mongoose.Document {
   email: string;
   password: string;
   permissions: ['users_edit' | 'meals_all'];
+  verifyPassword: (password: string) => Promise<boolean>;
+}
+
+function transform(doc: UserInterface, ret: { _id: string; password: string }): void {
+  /* eslint-disable no-param-reassign */
+  delete ret._id;
+  delete ret.password;
+  /* eslint-enable */
 }
 
 // TODO lock account if too many login attempts
@@ -33,9 +41,20 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   permissions: { type: [{ type: String, enum: ['users_edit', 'meals_all'] }] },
-}, { versionKey: false });
+}, {
+  toObject: {
+    virtuals: true,
+    versionKey: false,
+    transform,
+  },
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform,
+  },
+});
 
-UserSchema.methods.comparePassword = function (password: string): Promise<boolean> {
+UserSchema.methods.verifyPassword = function (password: string): Promise<boolean> {
   return bcrypt.compare(password, this.password);
 };
 
@@ -51,5 +70,4 @@ UserSchema.pre<UserInterface>('save', function (next): void {
   });
 });
 
-
-export default mongoose.model('User', UserSchema);
+export default mongoose.model<UserInterface>('User', UserSchema);

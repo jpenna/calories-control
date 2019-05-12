@@ -35,6 +35,7 @@ module.exports = {
     "indent": "off",
     "@typescript-eslint/indent": ["error", 2],
     "no-console": "off",
+    "no-underscore-dangle": "off",
     "import/prefer-default-export": "off",
   }
 };

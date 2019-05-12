@@ -12,8 +12,8 @@ export default express.Router()
         throw Error('User not found');
       }
       user.set(req.body);
-      const { password, ...userData } = (await user.save()).toObject();
-      res.json(userData);
+      const updatedUser = await user.save();
+      res.json(updatedUser);
     } catch (err) {
       if (err.message !== 'User not found') res.status(500);
       res.json({

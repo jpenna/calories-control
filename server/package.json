@@ -25,6 +25,7 @@
     "@types/mongoose": "^5.5.0",
     "@types/morgan": "^1.7.35",
     "@types/passport-jwt": "^3.0.1",
+    "@types/passport-local": "^1.0.33",
     "@typescript-eslint/eslint-plugin": "^1.7.0",
     "@typescript-eslint/parser": "^1.7.0",
     "bcrypt": "^3.0.6",
@@ -35,6 +36,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "typescript": "^3.4.5"
   },
   "devDependencies": {
