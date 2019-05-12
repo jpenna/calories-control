@@ -26,18 +26,25 @@ export default express.Router()
     try {
       const requester = req.user;
       // eslint-disable-next-line object-curly-newline
-      const { limit, skip, from, until, userId } = req.query;
+      const { limit, skip, from, until, userId: mealUserId } = req.query;
+
+      if (mealUserId && requester.id !== mealUserId && !requester.hasPermission(MEALS_ALL)) {
+        return res.sendError(403, 'You can\'t list meals of others.');
+      }
 
       const queryFilters: { eatenAt?: { [key: string]: Date }; user?: string } = {};
       if (from) queryFilters.eatenAt = { $gte: new Date(from) };
       if (until) queryFilters.eatenAt = { ...queryFilters.eatenAt, $lte: new Date(until) };
-      if (userId) queryFilters.user = userId;
+      if (mealUserId || !requester.hasPermission(MEALS_ALL)) {
+        queryFilters.user = mealUserId || requester.id;
+      }
 
       const meals = await MealModel.find(queryFilters)
         .lean()
         .limit(+limit || 10)
         .skip(+skip || 0)
         .sort({ eatenAt: 1 });
+
       res.sendSuccess({ meals });
     } catch (err) {
       res.sendError(500, err.message);
