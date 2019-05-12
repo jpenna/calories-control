@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
+import * as permissions from '../../utils/permissions';
+
 const SALT_ROUNDS = 10;
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -40,7 +42,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  permissions: { type: [{ type: String, enum: ['users_edit', 'meals_all'] }] },
+  permissions: {
+    type: [{
+      type: String,
+      enum: [
+        permissions.USERS_EDIT,
+        permissions.MEALS_ALL,
+      ],
+    }],
+  },
 }, {
   toObject: {
     virtuals: true,
@@ -56,6 +66,10 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.methods.verifyPassword = function (password: string): Promise<boolean> {
   return bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.hasPermission = function (permission: string): boolean {
+  return this.permissions.includes(permission);
 };
 
 UserSchema.pre<UserInterface>('save', function (next): void {
