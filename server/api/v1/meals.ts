@@ -73,6 +73,28 @@ export default express.Router()
     }
   })
 
+  // Remove meals
+  .delete('/:mealId', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+
+      const whereClause = {
+        _id: req.params.mealId,
+        user: requester.hasPermission(MEALS_ALL) ? null : req.user.id,
+      };
+      if (!whereClause.user) delete whereClause.user;
+
+      // eslint-disable-next-line object-curly-newline
+      const meal = await MealModel.findOneAndRemove(whereClause, { select: 'id' }).lean();
+
+      if (!meal) return res.sendError(404, 'Meal not found or you don\'t have permission to delete it.');
+
+      res.sendSuccess({ mealId: meal._id });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
   // Get single meal
   .get('/:mealId', async (req, res): Promise<void> => {
     try {

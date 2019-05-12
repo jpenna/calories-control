@@ -162,6 +162,22 @@ Update meal.
 
 If user have `MEALS_All` permission, it can update other user's meals.
 
+#### DELETE /meals/:mealId
+
+Delete meal.
+
+If user have `MEALS_All` permission, it can update other user's meals.
+
+**Returns** 
+
+```json
+// Removed meal ID
+{
+    "success": true,
+    "mealId": "5cd7ee0d548c6897d32a8909"
+}
+```
+
 ---
 
 ## Roles and permissions
