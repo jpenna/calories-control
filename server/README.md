@@ -28,15 +28,83 @@ npm run build
 
 ## API
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/d3e1b6c6ca6fef6b807a)
+
 All requests should have `/api/v1` before the mentioned ath.
+
+All requests return a `success` field that has `true` if the request succeeded and `false` if failed.
+If failed, an `errorMessage` is also included.
+
+```json
+{ "success": false, "errorMessage": "description" }
+```
 
 ### Auth
 
+
+
 #### POST /login
+
+**Body signature**
+
+```json
+{
+	"email": "admin@yahoo.com",
+	"password": "pwd"
+}
+```
+
+**Return**
+
+```json
+// Success
+{
+    "success": true,
+    "userId": "5cd7fa6849634f9eab062415",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
 
 #### POST /register
 
+**Body signature**
+
+```json
+{
+	"name": "Admin",
+	"permissions": ["users_edit", "meals_all"],
+	"email": "admin@yahoo.com",
+	"password": "pwd"
+}
+```
+
+**Return**
+
+```json
+// Success
+{
+    "success": true,
+    "userId": "5cd7fa6849634f9eab062415",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
 ### Users
+
+**User signature**
+
+```json
+{
+    "success": true,
+    "user": {
+        "permissions": ["users_edit"],
+        "dailyCalories": 2000,
+        "name": "Manager",
+        "email": "manager@yahoo.com",
+        "id": "5cd7fa6849634f9eab062415"
+    }
+}
+```
 
 #### GET /users/list
 
@@ -61,6 +129,32 @@ If the user don't have `USER_EDIT` permission (check *Roles and Permissions* bel
 Update user.
 
 If the user don't have `USER_EDIT` permission (check *Roles and Permissions* below), only his user can be edited.
+
+### Meals
+
+#### GET /meals/list
+
+List all meals if user has `MEALS_ALL`, otherwise list only user's meal.
+
+Accept query filters:
+
+| Filter | Description                      | Example                                    |
+|--------|----------------------------------|--------------------------------------------|
+| userId | User ID: string                  | /meals/list?userId=123512                  |
+| from   | Start datetime: Date             | /meals/list?from=2019-05-12T06:25:21.920Z  |
+| until  | Until datetime: Date             | /meals/list?until=2019-05-20T00:00:00.920Z |
+| limit  | Pagination: number (default: 20) | /meals/list?limit=20                       |
+| skip   | Pagination: number               | /meals/list?userId=30                      |
+
+#### GET /meals/:id
+
+Return meal. If user don't have `MEALS_All` permission, can only get his own meals.
+
+#### POST /meals/new
+
+Create new meal for user.
+
+If user have `MEALS_All` permission, it can pass a `userId` property to create a meal for another user.
 
 ## Roles and permissions
 

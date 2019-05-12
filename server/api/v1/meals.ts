@@ -42,7 +42,7 @@ export default express.Router()
       }
 
       const meals = await MealModel.find(queryFilters)
-        .limit(+limit || 10)
+        .limit(+limit || 20)
         .skip(+skip || 0)
         .sort({ eatenAt: 1 });
 
