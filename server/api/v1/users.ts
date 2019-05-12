@@ -66,7 +66,7 @@ export default express.Router()
       user.set(req.body);
 
       const updatedUser = await user.save();
-      res.sendSuccess(updatedUser);
+      res.sendSuccess({ user: updatedUser });
     } catch (err) {
       res.sendError(500, err.message);
     }
