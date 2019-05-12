@@ -146,7 +146,7 @@ Accept query filters:
 | limit  | Pagination: number (default: 20) | /meals/list?limit=20                       |
 | skip   | Pagination: number               | /meals/list?userId=30                      |
 
-#### GET /meals/:id
+#### GET /meals/:mealId
 
 Return meal. If user don't have `MEALS_All` permission, can only get his own meals.
 
@@ -155,6 +155,14 @@ Return meal. If user don't have `MEALS_All` permission, can only get his own mea
 Create new meal for user.
 
 If user have `MEALS_All` permission, it can pass a `userId` property to create a meal for another user.
+
+#### PUT /meals/:mealId
+
+Update meal.
+
+If user have `MEALS_All` permission, it can update other user's meals.
+
+---
 
 ## Roles and permissions
 
