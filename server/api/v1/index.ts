@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { RequestHandler } from 'express';
 
 // Routes
 import users from './users';
 import auth from './auth';
+import meals from './meals';
 
 declare module 'express-serve-static-core' {
   interface Response {
@@ -11,21 +12,25 @@ declare module 'express-serve-static-core' {
   }
 }
 
+// Add response methods for ease of use
+const sugarMethods: RequestHandler = (req, res, next): void => {
+  res.sendError = (status, errorMessage): void => {
+    res.status(status).json({
+      success: false,
+      errorMessage,
+    });
+  };
+  res.sendSuccess = (payload): void => {
+    res.json({
+      success: true,
+      ...payload,
+    });
+  };
+  next();
+};
+
 export default express.Router()
-  .use('/', (req, res, next): void => {
-    res.sendError = (status, errorMessage): void => {
-      res.status(status).json({
-        success: false,
-        errorMessage,
-      });
-    };
-    res.sendSuccess = (payload): void => {
-      res.json({
-        success: true,
-        ...payload,
-      });
-    };
-    next();
-  })
+  .use('/', sugarMethods)
   .use('/', auth)
+  .use('/meals', meals)
   .use('/users', users);

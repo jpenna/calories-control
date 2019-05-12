@@ -55,7 +55,6 @@ const UserSchema = new mongoose.Schema({
   dailyCalories: {
     type: Number,
     default: 2000,
-    max: 10000,
   },
 }, {
   toObject: {
