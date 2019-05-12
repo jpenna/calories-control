@@ -4,6 +4,29 @@ import UserModel from '../../db/models/users';
 import { USERS_EDIT } from '../../utils/permissions';
 
 export default express.Router()
+  // List users
+  .get('/', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+      const filter = requester.hasPermission(USERS_EDIT) ? {} : { _id: requester.id };
+      const users = await UserModel.find(filter);
+      res.sendSuccess({ users });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
+  // Requester user
+  .get('/me', async (req, res): Promise<void> => {
+    try {
+      const requester = req.user;
+      const user = await UserModel.findById(requester.id);
+      res.sendSuccess({ user });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
   // Update
   .put('/:id', async (req, res): Promise<void> => {
     try {
@@ -15,7 +38,7 @@ export default express.Router()
       }
 
       const user = await UserModel.findById(req.params.id);
-      if (!user) throw Error('User not found');
+      if (!user) return res.sendError(404, 'User not found');
 
       // Only allowed users can edit permissions
       if (!canEditUsers) delete req.body.permissions;
@@ -24,7 +47,6 @@ export default express.Router()
       const updatedUser = await user.save();
       res.sendSuccess(updatedUser);
     } catch (err) {
-      if (err.message !== 'User not found') res.sendError(404, err.message);
       res.sendError(500, err.message);
     }
   });
