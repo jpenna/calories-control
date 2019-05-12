@@ -9,15 +9,20 @@ export default express.Router()
     try {
       // Validate permissions
       const requester = req.user;
-      if (requester.id !== req.params.id && !requester.hasPermission(USERS_EDIT)) {
+      const canEditUsers = requester.hasPermission(USERS_EDIT);
+      if (requester.id !== req.params.id && !canEditUsers) {
         return res.sendError(403, 'You can only edit your own account');
       }
 
       const user = await UserModel.findById(req.params.id);
       if (!user) throw Error('User not found');
+
+      // Only allowed users can edit permissions
+      if (!canEditUsers) delete req.body.permissions;
       user.set(req.body);
+
       const updatedUser = await user.save();
-      res.json(updatedUser);
+      res.sendSuccess(updatedUser);
     } catch (err) {
       if (err.message !== 'User not found') res.sendError(404, err.message);
       res.sendError(500, err.message);

@@ -10,6 +10,6 @@ mongoose.connect(process.env.MONGO_URL!, {
   pass: process.env.MONGO_PASSWORD,
 })
   .then(
-    (): void => console.log('DB connected!'),
-    console.error.bind(console, 'Mongo connection error:'),
+    (): void => console.log('MongoDB connected!'),
+    console.error.bind(console, 'MongoDB connection error:'),
   );
