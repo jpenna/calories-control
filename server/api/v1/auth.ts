@@ -50,7 +50,7 @@ const signJwt: signJwtType = function (res, userId): void {
     { userId },
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     process.env.JWT_SECRET!,
-    { expiresIn: '7 days', audience: jwtAudience },
+    { expiresIn: '30 days', audience: jwtAudience },
     (err, token): void => {
       if (err) res.sendError(500, 'JWT error');
       res.sendSuccess({ userId, token });
