@@ -8,11 +8,23 @@ module.exports = {
     '@vue/airbnb',
     '@vue/typescript',
   ],
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: [".js", ".ts"],
+      }
+    },
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
+    project: './server/tsconfig.json',
+  },
+  rules: {
+    // eslint broken rules (using typescript)
+    // "import/no-unresolved": "off",
+    "import/extensions": "off",
+
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
 };

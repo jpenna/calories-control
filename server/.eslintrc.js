@@ -26,7 +26,7 @@ module.exports = {
     },
   },
   rules: {
-    // eslint borken rules (using typescript)
+    // eslint broken rules (using typescript)
     "import/no-unresolved": "off",
     "consistent-return": "off",
     "func-names": "off",

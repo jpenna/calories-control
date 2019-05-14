@@ -1,0 +1,161 @@
+@import './_variables';
+
+$spaceAmounts: (0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 75, 100); // Adjust this to include the pixel amounts you need.
+$sides: (top, bottom, left, right); // Leave this variable alone
+
+@each $space in $spaceAmounts {
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    .p#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+}
+
+$display: flex block inline-block inline table table-cell none;
+@each $d in $display {
+  .d-#{$d} {
+    display: #{$d} !important;
+  }
+}
+
+$laterals: right left center;
+@each $l in $laterals {
+  .f#{str-slice($l, 0, 1)} {
+    float: #{$l} !important;
+  }
+
+  .text-#{$l} {
+    text-align: $l !important;
+  }
+}
+
+// 50 = 0.5rem, 140 = 1.4rem
+$sizes: 50 60 70 80 90 100 110 120 130 140 150;
+@each $s in $sizes {
+  .fs-#{$s} {
+    font-size: #{$s / 100}rem !important;
+  }
+}
+
+$weights: 100 300 500 600 700 800;
+@each $w in $weights {
+  .fw-#{$w} {
+    font-weight: #{$w} !important;
+  }
+}
+
+$angle: 90 180 270;
+@each $a in $angle {
+  .rotate-#{$a} {
+    transform: rotate(#{$a}deg) !important;
+  }
+}
+
+$color-props: (
+  color: color,
+  bg: background-color,
+);
+@each $name, $prop in $color-props {
+  // Regular
+  .#{$name}-primary { #{$prop}: $--color-primary !important; };
+  .#{$name}-success { #{$prop}: $--color-success !important; };
+  .#{$name}-warning { #{$prop}: $--color-warning !important; };
+  .#{$name}-danger { #{$prop}: $--color-danger !important; };
+  .#{$name}-info { #{$prop}: $--color-info !important; };
+}
+
+$width: 25 50 75 100;
+@each $w in $width {
+  .w-#{$w} {
+    width: #{$w}\% !important;
+  }
+}
+
+.w-auto {
+  width: auto !important;
+}
+
+.flex {
+  &-grow {
+    flex-grow: 1 !important;
+  }
+
+  &-align {
+    align-items: center !important;
+  }
+
+  &-wrap {
+    flex-wrap: wrap !important;
+  }
+}
+
+.flex-bottom {
+  align-items: flex-end !important;
+}
+
+.v-align-middle {
+  vertical-align: middle !important;
+}
+
+/* Visible or not */
+.visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: opacity .5s;
+}
+.invisible {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: opacity .5s, visibility .5s .5s;
+}
+
+.height-auto {
+  height: auto !important;
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+// 2 columns with space-between
+.flex-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .half {
+    width: 50%;
+    padding: 5px;
+    box-sizing: border-box;
+  }
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.no-wrap {
+  flex-wrap: nowrap !important;
+}
+
+.text-no-wrap {
+  white-space: nowrap !important;
+}
+
+// Set same width for the blocks of a flex container
+.flex-distribute {
+  flex: 1 1 0;
+}
+
+.no-bullets {
+  list-style: none !important;
+}
+
+.small-caps {
+  font-variant: small-caps !important;
+}
