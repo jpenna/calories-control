@@ -22,9 +22,14 @@ export default new Router({
     },
 
     {
-      path: '/auth',
+      path: '/home',
       name: 'auth',
-      component: () => import(/* webpackChunkName: "auth" */ './views/Home.vue'),
+      component: () => import(/* webpackChunkName: "auth" */ './views/Authenticated.vue'),
+      children: [{
+        path: '',
+        name: 'home',
+        component: () => import(/* webpackChunkName: "auth" */ './views/Home/index.vue'),
+      }],
     },
   ],
 });
