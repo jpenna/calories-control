@@ -34,7 +34,7 @@ export default Vue.extend({
 
   methods: {
     doLogin() {
-      this.$router.push({ name: 'auth' });
+      this.$router.push({ name: 'home' });
     },
   },
 });

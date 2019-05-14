@@ -23,7 +23,6 @@ export default new Router({
 
     {
       path: '/home',
-      name: 'auth',
       component: () => import(/* webpackChunkName: "auth" */ './views/Authenticated.vue'),
       children: [{
         path: '',
