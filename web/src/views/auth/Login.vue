@@ -7,13 +7,9 @@
       <el-form-item label="Password">
         <el-input placeholder="Password" v-model="form.password" name="password" show-password />
       </el-form-item>
-
-      <router-link :to="{ name: 'forgot' }">
-        Forgot Password
-      </router-link>
     </el-form>
 
-    <el-button>
+    <el-button @click="doLogin">
       Login
     </el-button>
 
@@ -34,6 +30,12 @@ export default Vue.extend({
         password: '',
       },
     };
+  },
+
+  methods: {
+    doLogin() {
+      this.$router.push({ name: 'auth' });
+    },
   },
 });
 </script>

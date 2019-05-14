@@ -16,19 +16,15 @@ export default new Router({
       component: Login,
     },
     {
-      path: '/',
+      path: '/register',
       name: 'register',
       component: Register,
     },
 
     {
       path: '/auth',
-      name: 'authenticated',
-
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/Home.vue'),
+      name: 'auth',
+      component: () => import(/* webpackChunkName: "auth" */ './views/Home.vue'),
     },
   ],
 });
