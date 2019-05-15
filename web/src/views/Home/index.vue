@@ -1,7 +1,7 @@
 <template>
   <div>
-    <FilterMeals />
-
+    <NewMeal />
+    <MealsFilter />
     <MealsList :mealsList="mealsList" />
   </div>
 </template>
@@ -9,15 +9,17 @@
 <script lang="ts">
 import Vue from 'vue';
 
-import FilterMeals from './FilterMeals.vue';
+import MealsFilter from './MealsFilter.vue';
 import MealsList from './MealsList.vue';
+import NewMeal from './NewMeal.vue';
 
 export default Vue.extend({
   name: 'Home',
 
   components: {
-    FilterMeals,
+    MealsFilter,
     MealsList,
+    NewMeal,
   },
 
   data() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-position="top">
+    <el-form ref="form" :model="form" label-position="top" @submit="doLogin">
       <el-form-item label="E-mail">
         <el-input placeholder="Email" v-model="form.email" name="email" />
       </el-form-item>
