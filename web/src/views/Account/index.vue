@@ -1,5 +1,10 @@
 <template>
   <div>
+    <a @click="$router.go(-1)">
+      <i class="el-icon-caret-left" />
+      Back
+    </a>
+
     <h1>Account</h1>
 
     <!-- Calories goal -->
@@ -15,14 +20,23 @@
       </el-form-item>
     </el-form>
 
+    <!-- Users permissions -->
+    <UsersRoles />
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
+import UsersRoles from './UsersRoles.vue';
+
 export default Vue.extend({
   name: 'Account',
+
+  components: {
+    UsersRoles,
+  },
 
   data() {
     return {
