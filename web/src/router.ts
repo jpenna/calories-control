@@ -28,6 +28,10 @@ export default new Router({
         path: '',
         name: 'home',
         component: () => import(/* webpackChunkName: "auth" */ './views/Home/index.vue'),
+      }, {
+        path: '/account',
+        name: 'account',
+        component: () => import(/* webpackChunkName: "auth" */ './views/Account/index.vue'),
       }],
     },
   ],
