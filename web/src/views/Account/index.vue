@@ -7,9 +7,9 @@
 
     <h1>Account</h1>
 
-    <!-- Calories goal -->
+    <!-- Max Calories -->
     <el-form ref="form" :model="form" label-position="top" @submit="submitCalories">
-      <el-form-item label="Calories Goal">
+      <el-form-item label="Max Calories">
         <el-input-number
           :controls="false"
           :min="0"
@@ -22,6 +22,10 @@
 
     <!-- Users permissions -->
     <UsersRoles />
+
+    <el-button @click="doLogout">
+      Logout
+    </el-button>
 
   </div>
 </template>
@@ -49,6 +53,10 @@ export default Vue.extend({
   methods: {
     submitCalories() {
       console.log('submit');
+    },
+
+    doLogout() {
+      this.$router.push({ name: 'login' });
     },
   },
 });

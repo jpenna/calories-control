@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div>
+      Total Caories: 400 / 3000
+    </div>
+
     <el-card v-for="meal in mealsList" :key="meal.id">
       <div>{{ meal.name }}</div>
       <div>{{ meal.eatenAt }}</div>
