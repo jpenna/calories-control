@@ -2,6 +2,7 @@
   <div>
     <h2>Roles</h2>
 
+    <!-- User List -->
     <div v-for="user of usersList" :key="user.email">
       <div>
         <div>{{ user.name }}</div>
@@ -19,14 +20,27 @@
       </div>
     </div>
 
+    <!-- Pagination -->
+    <Pagination
+      settingsKey="users-list"
+      :startPage="0"
+      :total="50"
+    />
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 
+import Pagination from '@/components/Pagination.vue';
+
 export default Vue.extend({
   name: 'UsersRoles',
+
+  components: {
+    Pagination,
+  },
 
   data() {
     return {
