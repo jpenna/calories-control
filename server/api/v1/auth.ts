@@ -68,10 +68,12 @@ export default express.Router()
   // Create user
   .post('/register', async (req, res): Promise<void> => {
     try {
+      delete req.body.permissions;
       const userModel = new UserModel(req.body);
       const user = await userModel.save();
       signJwt(res, user.id);
     } catch (err) {
+      if (err.name === 'ValidationError') return res.sendError(400, err.message);
       res.sendError(500, err.message);
     }
   })

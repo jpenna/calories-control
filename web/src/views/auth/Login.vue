@@ -14,7 +14,6 @@
       </el-button>
     </el-form>
 
-
     <router-link :to="{ name: 'register' }" class="d-block">
       I don't have an account
     </router-link>
@@ -42,7 +41,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('account', ['doLogin']),
+    ...mapActions('auth', ['doLogin']),
 
     handleLogin() {
       this.doLogin({

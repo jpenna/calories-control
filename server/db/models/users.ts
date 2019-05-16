@@ -51,6 +51,7 @@ const UserSchema = new mongoose.Schema({
         permissions.MEALS_ALL,
       ],
     }],
+    default: [],
   },
   dailyCalories: {
     type: Number,

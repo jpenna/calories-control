@@ -3,23 +3,16 @@
 import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
 import Vue from 'vue';
 
-import * as auth from '@/api/auth';
-import * as api from '@/api/account';
+import * as api from '@/api/auth';
 import * as types from '../types';
 
 import * as utils from '@/helpers/utils';
 
 import RootInterface from './@types/rootState';
-import { State, DoLoginActionArgs } from './@types/account';
+import { State, DoLoginActionArgs, DoRegisterActionArgs } from './@types/auth';
 
 const initialState: State = {
-  user: {
-    permissions: [],
-    dailyCalories: 0,
-    name: '',
-    email: '',
-    id: '',
-  },
+  userId: '',
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
 };
@@ -35,6 +28,17 @@ const actions: ActionTree<State, RootInterface> = {
         commit(types.LOGIN_FAIL, error);
       });
   },
+
+  async doRegister({ commit }, { name, email, password }: DoRegisterActionArgs) {
+    commit(types.REGISTER);
+    api.doRegister({ name, email, password })
+      .then((data: api.DoRegisterResInterface) => {
+        commit(types.REGISTER_DONE, data);
+      })
+      .catch((error: ErrorEvent) => {
+        commit(types.REGISTER_FAIL, error);
+      });
+  },
 };
 
 const mutations: MutationTree<State> = {
@@ -45,18 +49,30 @@ const mutations: MutationTree<State> = {
   [types.LOGIN_DONE](state, data: api.DoLoginResInterface) {
     state.isAuthenticating = false;
     state.isAuthenticated = true;
-    state.user.id = data.userId;
+    state.userId = data.userId;
 
     localStorage.setItem('token', data.token);
-    auth.updateAuthHeader();
+    api.updateAuthHeader();
   },
   [types.LOGIN_FAIL](state, error: ErrorEvent) {
     state.isAuthenticating = false;
     console.error(error);
   },
 
+  // Register (same as Login)
+  [types.REGISTER](state) {
+    state.isAuthenticating = true;
+    mutations[types.LOGIN](state);
+  },
+  [types.REGISTER_DONE](state, data: api.DoRegisterResInterface) {
+    mutations[types.LOGIN_DONE](state, data);
+  },
+  [types.REGISTER_FAIL](state, error: ErrorEvent) {
+    mutations[types.LOGIN_FAIL](state, error);
+  },
+
   doLogout() {
-    auth.logoutUser();
+    api.logoutUser();
   },
 
 };

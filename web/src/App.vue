@@ -11,7 +11,7 @@ import { mapState } from 'vuex';
 
 export default Vue.extend({
   computed: {
-    ...mapState('account', ['isAuthenticated']),
+    ...mapState('auth', ['isAuthenticated']),
   },
 
   watch: {

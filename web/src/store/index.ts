@@ -5,13 +5,13 @@ import Vuex from 'vuex';
 import RootInterface from './modules/@types/rootState';
 
 // Modules
-import account from './modules/account';
+import auth from './modules/auth';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store<RootInterface>({
   strict: process.env.NODE_ENV !== 'production',
   modules: {
-    account,
+    auth,
   },
 });

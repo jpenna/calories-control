@@ -12,15 +12,16 @@
       </el-form-item>
 
       <el-form-item label="Password">
-        <el-input placeholder="Your password" v-model="form.password" name="password" />
+        <el-input type="password" placeholder="Your password" v-model="form.password" name="password" />
       </el-form-item>
 
       <el-form-item label="Password Confirmation">
-        <el-input placeholder="Repeat your password" v-model="form.confirmPassword" name="password" />
+        <el-input type="password" placeholder="Repeat your password" v-model="form.confirmPassword" name="password" />
       </el-form-item>
+
     </el-form>
 
-    <el-button>
+    <el-button @click="handleRegister">
       Register
     </el-button>
 
@@ -30,10 +31,11 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue';
 
 import Header from '@/components/Header.vue';
+import { mapActions } from 'vuex';
 
 export default Vue.extend({
   name: 'Register',
@@ -51,6 +53,18 @@ export default Vue.extend({
         confirmPassword: '',
       },
     };
+  },
+
+  methods: {
+    ...mapActions('auth', ['doRegister']),
+
+    handleRegister() {
+      this.doRegister({
+        name: this.form.name,
+        email: this.form.email,
+        password: this.form.password,
+      });
+    },
   },
 });
 </script>
