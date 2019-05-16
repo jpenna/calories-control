@@ -4,6 +4,10 @@ import Router from 'vue-router';
 import Login from './views/auth/Login.vue';
 import Register from './views/auth/Register.vue';
 
+import Authenticated from './views/Authenticated.vue';
+import Home from './views/Home/index.vue';
+import Account from './views/Account/index.vue';
+
 Vue.use(Router);
 
 export default new Router({
@@ -23,16 +27,17 @@ export default new Router({
 
     {
       path: '/home',
+      name: 'auth',
       props: { auth: true },
-      component: () => import(/* webpackChunkName: "auth" */ './views/Authenticated.vue'),
+      component: Authenticated,
       children: [{
         path: '',
         name: 'home',
-        component: () => import(/* webpackChunkName: "auth" */ './views/Home/index.vue'),
+        component: Home,
       }, {
         path: '/account',
         name: 'account',
-        component: () => import(/* webpackChunkName: "auth" */ './views/Account/index.vue'),
+        component: Account,
       }],
     },
   ],

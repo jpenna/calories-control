@@ -3,18 +3,25 @@
 import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
 import Vue from 'vue';
 
-import * as apiBase from '@/api/apiBase';
+import * as auth from '@/api/auth';
 import * as api from '@/api/account';
 import * as types from '../types';
+
+import * as utils from '@/helpers/utils';
 
 import RootInterface from './@types/rootState';
 import { State, DoLoginActionArgs } from './@types/account';
 
 const initialState: State = {
   user: {
-    userId: '',
+    permissions: [],
+    dailyCalories: 0,
+    name: '',
+    email: '',
+    id: '',
   },
   isAuthenticating: false,
+  isAuthenticated: utils.isAuthenticated(),
 };
 
 const actions: ActionTree<State, RootInterface> = {
@@ -37,8 +44,11 @@ const mutations: MutationTree<State> = {
   },
   [types.LOGIN_DONE](state, data: api.DoLoginResInterface) {
     state.isAuthenticating = false;
+    state.isAuthenticated = true;
+    state.user.id = data.userId;
+
     localStorage.setItem('token', data.token);
-    apiBase.updateAuthHeader();
+    auth.updateAuthHeader();
   },
   [types.LOGIN_FAIL](state, error: ErrorEvent) {
     state.isAuthenticating = false;
@@ -46,7 +56,7 @@ const mutations: MutationTree<State> = {
   },
 
   doLogout() {
-    apiBase.logoutUser();
+    auth.logoutUser();
   },
 
 };

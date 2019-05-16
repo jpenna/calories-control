@@ -23,15 +23,16 @@
     <!-- Users permissions -->
     <UsersRoles />
 
-    <el-button @click="doLogout">
+    <el-button @click="handleLogout">
       Logout
     </el-button>
 
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue';
+import { mapActions } from 'vuex';
 
 import UsersRoles from './UsersRoles.vue';
 
@@ -51,12 +52,14 @@ export default Vue.extend({
   },
 
   methods: {
+    ...mapActions('account', ['doLogout']),
+
     submitCalories() {
       console.log('submit');
     },
 
-    doLogout() {
-      this.$router.push({ name: 'login' });
+    handleLogout() {
+      this.doLogout();
     },
   },
 });

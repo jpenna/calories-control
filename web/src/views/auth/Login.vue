@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue';
 
 import Header from '@/components/Header.vue';
@@ -45,8 +45,10 @@ export default Vue.extend({
     ...mapActions('account', ['doLogin']),
 
     handleLogin() {
-      this.doLogin({ email: this.form.email, password: this.form.password });
-      // this.$router.push({ name: 'home' });
+      this.doLogin({
+        email: this.form.email,
+        password: this.form.password,
+      });
     },
   },
 });
