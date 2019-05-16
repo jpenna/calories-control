@@ -19,6 +19,13 @@
         <el-input type="password" placeholder="Repeat your password" v-model="form.confirmPassword" name="password" />
       </el-form-item>
 
+      <el-form-item>
+        <el-checkbox v-model="form.tos">
+          I accept the
+          <el-button @click="showTos = true">Terms & Condtions</el-button>
+        </el-checkbox>
+      </el-form-item>
+
     </el-form>
 
     <el-button @click="handleRegister">
@@ -28,24 +35,29 @@
     <router-link :to="{ name: 'login' }" class="d-block">
       I already have an account
     </router-link>
+
+    <ToS :show.sync="showTos" />
   </div>
 </template>
 
 <script lang="js">
 import Vue from 'vue';
+import { mapActions } from 'vuex';
 
 import Header from '@/components/Header.vue';
-import { mapActions } from 'vuex';
+import ToS from './tos.vue';
 
 export default Vue.extend({
   name: 'Register',
 
   components: {
     Header,
+    ToS,
   },
 
   data() {
     return {
+      showTos: false,
       form: {
         name: '',
         email: '',

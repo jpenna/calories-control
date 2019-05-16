@@ -52,7 +52,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapMutations('account', ['doLogout']),
+    ...mapMutations('auth', ['doLogout']),
   },
 
   methods: {
