@@ -5,6 +5,8 @@
     </div>
 
     <el-card v-for="meal in mealsList" :key="meal.id">
+      <el-button>Edit</el-button>
+      <el-button>Remove</el-button>
       <div>{{ meal.name }}</div>
       <div>{{ meal.eatenAt }}</div>
       <div>{{ meal.calories }}</div>
