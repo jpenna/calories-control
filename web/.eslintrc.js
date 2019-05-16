@@ -20,11 +20,13 @@ module.exports = {
   },
   rules: {
     // eslint broken rules (using typescript)
-    // "import/no-unresolved": "off",
+    "import/no-unresolved": "off",
     "import/extensions": "off",
 
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'max-len': ["error", { "code": 140 }],
+    'import/prefer-default-export': 'off',
+    'object-curly-newline': 'off',
   },
 };

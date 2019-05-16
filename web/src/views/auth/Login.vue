@@ -2,7 +2,7 @@
   <div>
     <Header />
 
-    <el-form ref="form" :model="form" label-position="top" @submit="doLogin">
+    <el-form ref="form" :model="form" label-position="top" @submit="handleLogin">
       <el-form-item label="E-mail">
         <el-input placeholder="Email" v-model="form.email" name="email" />
       </el-form-item>
@@ -11,7 +11,7 @@
       </el-form-item>
     </el-form>
 
-    <el-button @click="doLogin">
+    <el-button @click="handleLogin">
       Login
     </el-button>
 
@@ -25,6 +25,7 @@
 import Vue from 'vue';
 
 import Header from '@/components/Header.vue';
+import { mapActions } from 'vuex';
 
 export default Vue.extend({
   components: {
@@ -41,8 +42,11 @@ export default Vue.extend({
   },
 
   methods: {
-    doLogin() {
-      this.$router.push({ name: 'home' });
+    ...mapActions('account', ['doLogin']),
+
+    handleLogin() {
+      this.doLogin({ email: this.form.email, password: this.form.password });
+      // this.$router.push({ name: 'home' });
     },
   },
 });
