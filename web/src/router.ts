@@ -27,7 +27,6 @@ export default new Router({
 
     {
       path: '/home',
-      name: 'auth',
       props: { auth: true },
       component: Authenticated,
       children: [{

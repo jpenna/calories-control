@@ -19,7 +19,7 @@ export default Vue.extend({
       immediate: true,
       handler(isAuthenticated: boolean): void {
         if (!isAuthenticated) this.$router.push({ name: 'login' });
-        else if (this.$route.matched[0].name !== 'auth') this.$router.push({ name: 'home' });
+        else if (this.$route.matched[0].path !== '/home') this.$router.push({ name: 'home' });
       },
     },
   },

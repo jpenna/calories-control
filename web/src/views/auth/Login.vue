@@ -2,18 +2,18 @@
   <div>
     <Header />
 
-    <el-form ref="form" :model="form" label-position="top" @submit="handleLogin">
+    <el-form ref="form" :model="form" label-position="top" @submit.native.prevent="handleLogin" >
       <el-form-item label="E-mail">
-        <el-input placeholder="Email" v-model="form.email" name="email" />
+        <el-input placeholder="Email" v-model="form.email" name="email" autocomplete="true" />
       </el-form-item>
       <el-form-item label="Password">
         <el-input placeholder="Password" v-model="form.password" name="password" show-password />
       </el-form-item>
+      <el-button native-type="submit">
+        Login
+      </el-button>
     </el-form>
 
-    <el-button @click="handleLogin">
-      Login
-    </el-button>
 
     <router-link :to="{ name: 'register' }" class="d-block">
       I don't have an account

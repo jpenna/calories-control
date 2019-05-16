@@ -32,7 +32,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapActions } from 'vuex';
+import { mapMutations } from 'vuex';
 
 import UsersRoles from './UsersRoles.vue';
 
@@ -51,8 +51,11 @@ export default Vue.extend({
     };
   },
 
+  computed: {
+    ...mapMutations('account', ['doLogout']),
+  },
+
   methods: {
-    ...mapActions('account', ['doLogout']),
 
     submitCalories() {
       console.log('submit');

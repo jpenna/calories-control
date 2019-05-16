@@ -12,7 +12,8 @@ export function jwtDecode(token: string): { exp: number } {
   return JSON.parse(window.atob(payload));
 }
 
-export function isAuthenticated() {
+export function isAuthenticated(): boolean {
+  if (!localStorage.token) return false;
   const token = jwtDecode(localStorage.token);
   return token.exp * 1000 > Date.now();
 }
