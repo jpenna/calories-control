@@ -1,8 +1,8 @@
 <template>
   <div>
-    Header
+    <h1>Calories Control</h1>
 
-    <router-link :to="{ name: 'account' }">
+    <router-link :to="{ name: 'account' }" v-if="isAuth">
       Account
     </router-link>
   </div>
@@ -13,5 +13,12 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'Header',
+
+  data() {
+    return {
+      // default is not included in the props type...
+      isAuth: ((this.$route.matched[0].props as any).default || {}).auth,
+    };
+  },
 });
 </script>

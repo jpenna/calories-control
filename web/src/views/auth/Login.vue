@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Header />
+
     <el-form ref="form" :model="form" label-position="top" @submit="doLogin">
       <el-form-item label="E-mail">
         <el-input placeholder="Email" v-model="form.email" name="email" />
@@ -22,7 +24,13 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import Header from '@/components/Header.vue';
+
 export default Vue.extend({
+  components: {
+    Header,
+  },
+
   data() {
     return {
       form: {

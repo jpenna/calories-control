@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Header />
+
     <el-form ref="form" :model="form" label-position="top">
       <el-form-item label="Name">
         <el-input placeholder="name" v-model="form.name" name="email" />
@@ -31,8 +33,14 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import Header from '@/components/Header.vue';
+
 export default Vue.extend({
   name: 'Register',
+
+  components: {
+    Header,
+  },
 
   data() {
     return {
