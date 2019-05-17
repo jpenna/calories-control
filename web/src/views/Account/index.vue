@@ -51,11 +51,8 @@ export default Vue.extend({
     };
   },
 
-  computed: {
-    ...mapMutations('auth', ['doLogout']),
-  },
-
   methods: {
+    ...mapMutations('auth', ['doLogout']),
 
     submitCalories() {
       console.log('submit');

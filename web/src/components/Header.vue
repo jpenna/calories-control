@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="flex-split">
     <h1>CNAme</h1>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth">
+      <i class="el-icon-user" />
       Account
     </router-link>
   </div>
