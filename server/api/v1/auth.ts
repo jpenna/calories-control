@@ -75,6 +75,7 @@ export default express.Router()
       signJwt(res, user.id);
     } catch (err) {
       if (err.name === 'ValidationError') return res.sendError(400, err.message);
+      if (err.code === 11000) return res.sendError(400, 'This e-mail is already being used.');
       res.sendError(500, err.message);
     }
   })
