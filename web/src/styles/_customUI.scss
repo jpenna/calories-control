@@ -1,5 +1,24 @@
 // Changes to Element-UI
+@import './variables';
 
+// Increase border radius
 .el-dialog {
   border-radius: 10px;
+}
+
+// Bold title for modal
+.el-dialog__title {
+  font-weight: 500;
+}
+
+// Input label color primary
+.el-form-item__label {
+  color: $--color-text-primary;
+  line-height: 1rem;
+  font-weight: 500;
+}
+
+// Remove underline from <a>
+a {
+  text-decoration: none;
 }

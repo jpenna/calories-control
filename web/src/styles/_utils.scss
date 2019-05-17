@@ -71,7 +71,7 @@ $color-props: (
 $width: 25 50 75 100;
 @each $w in $width {
   .w-#{$w} {
-    width: #{$w}\% !important;
+    width: #{$w}#{"%"} !important;
   }
 }
 

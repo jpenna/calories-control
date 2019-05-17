@@ -22,18 +22,18 @@
       <el-form-item>
         <el-checkbox v-model="form.tos">
           <span style="vertical-align: bottom">I accept the </span>
-          <el-link type="primary" @click="showTos = true">Terms & Condtions</el-link>
+          <el-link type="info" @click="showTos = true" :underline="false">Terms & Condtions</el-link>
         </el-checkbox>
       </el-form-item>
 
     </el-form>
 
-    <el-button @click="handleRegister">
+    <el-button @click="handleRegister" type="primary" class="d-block w-100 mb-40 mt-5">
       Register
     </el-button>
 
-    <router-link :to="{ name: 'login' }" class="d-block">
-      I already have an account
+    <router-link :to="{ name: 'login' }" class="d-block text-center">
+      <el-link type="info" :underline="false">I already have an account</el-link>
     </router-link>
 
     <ToS :show.sync="showTos" />
