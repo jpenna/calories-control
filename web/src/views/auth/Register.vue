@@ -21,8 +21,8 @@
 
       <el-form-item>
         <el-checkbox v-model="form.tos">
-          I accept the
-          <el-button @click="showTos = true">Terms & Condtions</el-button>
+          <span style="vertical-align: bottom">I accept the </span>
+          <el-link type="primary" @click="showTos = true">Terms & Condtions</el-link>
         </el-checkbox>
       </el-form-item>
 

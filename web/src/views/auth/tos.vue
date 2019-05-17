@@ -3,7 +3,10 @@
   <el-dialog
     title="Terms and Conditions"
     :visible="show"
+    top="5vh"
+    center
     @close="$emit('update:show', false)"
+    class="tos-dialog"
   >
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Euismod nisi porta lorem mollis aliquam ut porttitor leo. Eget arcu dictum varius duis at. Cursus in hac habitasse platea. Varius morbi enim nunc faucibus a pellentesque sit amet porttitor. Enim tortor at auctor urna nunc. Elit scelerisque mauris pellentesque pulvinar. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. At elementum eu facilisis sed odio morbi quis commodo odio. Feugiat in ante metus dictum. Suscipit tellus mauris a diam. Semper viverra nam libero justo. Pellentesque pulvinar pellentesque habitant morbi. Egestas purus viverra accumsan in nisl nisi.</p>
     <p>Nec dui nunc mattis enim ut tellus elementum. Porttitor leo a diam sollicitudin. Nisl vel pretium lectus quam id leo in vitae. Ac placerat vestibulum lectus mauris ultrices. Dictum varius duis at consectetur. Cursus risus at ultrices mi tempus. In est ante in nibh mauris cursus mattis molestie. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit. Viverra mauris in aliquam sem fringilla. Aliquam sem fringilla ut morbi tincidunt. Semper auctor neque vitae tempus quam. Est velit egestas dui id ornare arcu odio ut sem. Duis convallis convallis tellus id. Nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit. Congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Congue quisque egestas diam in arcu cursus euismod quis. Malesuada fames ac turpis egestas maecenas pharetra convallis posuere morbi. Feugiat scelerisque varius morbi enim.</p>
@@ -29,3 +32,17 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss">
+.tos-dialog {
+  .el-dialog {
+    padding-bottom: 25px;
+  }
+
+  .el-dialog__body {
+    overflow-y: auto;
+    height: 70vh;
+    padding: 0 30px 10px !important;
+  }
+}
+</style>

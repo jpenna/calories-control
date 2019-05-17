@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Calories Control</h1>
+    <h1>CNAme</h1>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth">
       Account

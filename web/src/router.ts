@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import Login from './views/auth/Login.vue';
 import Register from './views/auth/Register.vue';
+import Container from './views/auth/Container.vue';
 
 import Authenticated from './views/Authenticated.vue';
 import Home from './views/Home/index.vue';
@@ -15,19 +16,20 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'login',
-      component: Login,
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register,
-    },
-
-    {
+      path: '/login',
+      alias: '/',
+      component: Container,
+      children: [{
+        path: '',
+        name: 'login',
+        component: Login,
+      }, {
+        path: '/register',
+        name: 'register',
+        component: Register,
+      }],
+    }, {
       path: '/home',
-      props: { auth: true },
       component: Authenticated,
       children: [{
         path: '',
