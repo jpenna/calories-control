@@ -6,6 +6,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+
+  background-image: url("~@/assets/food_bg.jpg");
+  background-repeat: repeat;
+  background-color: #cccccc;
+  background-size: contain;
 }
 
 /* icon font path, required */
