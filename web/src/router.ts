@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Login from './views/auth/Login.vue';
-import Register from './views/auth/Register.vue';
-import Container from './views/auth/Container.vue';
+import Login from './views/Authentication/Login.vue';
+import Register from './views/Authentication/Register.vue';
+import Container from './views/Authentication/Container.vue';
 
 import Authenticated from './views/Authenticated.vue';
 import Home from './views/Home/index.vue';
@@ -30,6 +30,7 @@ export default new Router({
       }],
     }, {
       path: '/home',
+      props: { auth: true },
       component: Authenticated,
       children: [{
         path: '',
