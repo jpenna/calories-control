@@ -21,6 +21,16 @@
       </el-button>
     </el-form>
 
+    <div
+      class="error-message text-center mb-20"
+      style="margin-top: -20px"
+      v-show="loginError.status"
+    >
+      <span v-if="loginError.status === -1">Check your network connection.</span>
+      <span v-else-if="loginError.status !== 500">E-mail or password is wrong.</span>
+      <span v-else>Server error, please try again later.</span>
+    </div>
+
     <router-link :to="{ name: 'register' }" class="d-block text-center">
       <el-link type="info" :underline="false">I don't have an account</el-link>
     </router-link>
@@ -31,7 +41,7 @@
 import Vue from 'vue';
 
 import Header from '@/components/Header.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default Vue.extend({
   components: {
@@ -47,9 +57,13 @@ export default Vue.extend({
 
       rules: {
         email: [{ required: true, type: 'email', trigger: 'blur', message: 'Please insert a valid e-mail.' }],
-        password: [{ required: true, trigger: 'blur', min: 6, message: 'Please insert a password' }],
+        password: [{ required: true, trigger: 'blur', min: 6, message: 'Password should be longer than 6 characters.' }],
       },
     };
+  },
+
+  computed: {
+    ...mapState('auth', ['loginError']),
   },
 
   methods: {

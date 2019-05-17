@@ -10,6 +10,10 @@ export interface State {
   userId: string;
   isAuthenticating: boolean;
   isAuthenticated: boolean;
+  loginError: {
+    status?: number | null,
+    message?: string,
+  },
 }
 
 export interface DoLoginActionArgs {

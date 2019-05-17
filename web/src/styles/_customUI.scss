@@ -29,3 +29,10 @@ label.el-checkbox {
     margin-top: -10px;
   }
 }
+
+// Error message
+.error-message {
+  color: $--color-danger;
+  font-size: .9rem;
+  font-weight: 500;
+}

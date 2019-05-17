@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
+import { AxiosError } from 'axios';
 import Vue from 'vue';
 
 import * as api from '@/api/auth';
@@ -15,6 +16,8 @@ const initialState: State = {
   userId: '',
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
+
+  loginError: {},
 };
 
 const actions: ActionTree<State, RootInterface> = {
@@ -24,7 +27,7 @@ const actions: ActionTree<State, RootInterface> = {
       .then((data: api.DoLoginResInterface) => {
         commit(types.LOGIN_DONE, data);
       })
-      .catch((error: ErrorEvent) => {
+      .catch((error: AxiosError) => {
         commit(types.LOGIN_FAIL, error);
       });
   },
@@ -35,7 +38,7 @@ const actions: ActionTree<State, RootInterface> = {
       .then((data: api.DoRegisterResInterface) => {
         commit(types.REGISTER_DONE, data);
       })
-      .catch((error: ErrorEvent) => {
+      .catch((error: AxiosError) => {
         commit(types.REGISTER_FAIL, error);
       });
   },
@@ -45,6 +48,7 @@ const mutations: MutationTree<State> = {
   // Login
   [types.LOGIN](state) {
     state.isAuthenticating = true;
+    state.loginError = {};
   },
   [types.LOGIN_DONE](state, data: api.DoLoginResInterface) {
     state.isAuthenticating = false;
@@ -54,9 +58,11 @@ const mutations: MutationTree<State> = {
     localStorage.setItem('token', data.token);
     api.updateAuthHeader();
   },
-  [types.LOGIN_FAIL](state, error: ErrorEvent) {
+  [types.LOGIN_FAIL](state, error: AxiosError) {
+    const { status, message } = error.apiError;
+
     state.isAuthenticating = false;
-    console.error(error);
+    state.loginError = { status, message };
   },
 
   // Register (same as Login)
@@ -67,7 +73,7 @@ const mutations: MutationTree<State> = {
   [types.REGISTER_DONE](state, data: api.DoRegisterResInterface) {
     mutations[types.LOGIN_DONE](state, data);
   },
-  [types.REGISTER_FAIL](state, error: ErrorEvent) {
+  [types.REGISTER_FAIL](state, error: AxiosError) {
     mutations[types.LOGIN_FAIL](state, error);
   },
 
