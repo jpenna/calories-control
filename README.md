@@ -9,3 +9,11 @@ I would develop each one on there own repository, but since I have only 1 to wor
 ## Run local
 
 Enter each project directory and follow the instructions locally.
+
+## Add permission to admin user
+
+Run this command in MongoDB changing the ID to the user ID.
+
+```js
+db.users.update({ _id: ObjectId("5cdeaa8888847a14df5397ef") }, { $set: { permissions: ["user_edit", "meals_all"] } });
+```
