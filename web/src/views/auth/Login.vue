@@ -4,15 +4,17 @@
 
     <el-form
       ref="form"
+      :rules="rules"
       :model="form"
+      hide-required-asterisk
       label-position="top"
       @submit.native.prevent="handleLogin"
     >
-     <el-form-item label="E-mail">
-        <el-input placeholder="Email" v-model="form.email" name="email" autocomplete="true" />
+      <el-form-item label="E-mail" prop="email">
+        <el-input placeholder="Email" v-model="form.email" autocomplete="true" />
       </el-form-item>
-      <el-form-item label="Password">
-        <el-input placeholder="Password" v-model="form.password" name="password" show-password />
+      <el-form-item label="Password" prop="password">
+        <el-input placeholder="Password" v-model="form.password" show-password />
       </el-form-item>
       <el-button native-type="submit" type="primary" class="w-100 mb-40 mt-30">
         Login
@@ -42,6 +44,11 @@ export default Vue.extend({
         email: '',
         password: '',
       },
+
+      rules: {
+        email: [{ required: true, type: 'email', trigger: 'blur', message: 'Please insert a valid e-mail.' }],
+        password: [{ required: true, trigger: 'blur', message: 'Please insert a password' }],
+      },
     };
   },
 
@@ -49,9 +56,12 @@ export default Vue.extend({
     ...mapActions('auth', ['doLogin']),
 
     handleLogin() {
-      this.doLogin({
-        email: this.form.email,
-        password: this.form.password,
+      this.$refs.form.validate((valid) => {
+        if (!valid) return;
+        this.doLogin({
+          email: this.form.email,
+          password: this.form.password,
+        });
       });
     },
   },
