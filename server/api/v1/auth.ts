@@ -68,6 +68,7 @@ export default express.Router()
   // Create user
   .post('/register', async (req, res): Promise<void> => {
     try {
+      if (!req.body.acceptTos) return res.sendError(400, 'You must accept the Terms and Conditions to register');
       delete req.body.permissions;
       const userModel = new UserModel(req.body);
       const user = await userModel.save();

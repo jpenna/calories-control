@@ -21,4 +21,5 @@ export interface DoRegisterActionArgs {
   name: string;
   email: string;
   password: string;
+  acceptTos: boolean;
 }

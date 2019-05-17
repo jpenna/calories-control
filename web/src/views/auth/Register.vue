@@ -63,6 +63,7 @@ export default Vue.extend({
         email: '',
         password: '',
         confirmPassword: '',
+        acceptTos: false,
       },
     };
   },
@@ -75,6 +76,7 @@ export default Vue.extend({
         name: this.form.name,
         email: this.form.email,
         password: this.form.password,
+        tos: this.form.tos,
       });
     },
   },

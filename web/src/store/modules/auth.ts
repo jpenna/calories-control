@@ -29,9 +29,9 @@ const actions: ActionTree<State, RootInterface> = {
       });
   },
 
-  async doRegister({ commit }, { name, email, password }: DoRegisterActionArgs) {
+  async doRegister({ commit }, { name, email, password, acceptTos }: DoRegisterActionArgs) {
     commit(types.REGISTER);
-    api.doRegister({ name, email, password })
+    api.doRegister({ name, email, password, acceptTos })
       .then((data: api.DoRegisterResInterface) => {
         commit(types.REGISTER_DONE, data);
       })

@@ -19,9 +19,15 @@ export interface DoRegisterResInterface {
   userId: string;
   token: string;
 }
-export function doRegister({ name, email, password }: { name: string, email: string, password: string }): Promise<DoRegisterResInterface> {
+export interface DoRegisterParams {
+  name: string;
+  email: string;
+  password: string;
+  acceptTos: boolean;
+}
+export function doRegister({ name, email, password, acceptTos }: DoRegisterParams): Promise<DoRegisterResInterface> {
   return apiBase
-    .post('/register', { name, email, password })
+    .post('/register', { name, email, password, acceptTos })
     .then((res): DoRegisterResInterface => res.data);
 }
 
