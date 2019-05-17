@@ -22,3 +22,10 @@
 a {
   text-decoration: none;
 }
+
+// Put error message and checkbox input closer
+label.el-checkbox {
+  + .el-form-item__error {
+    margin-top: -10px;
+  }
+}

@@ -47,7 +47,7 @@ export default Vue.extend({
 
       rules: {
         email: [{ required: true, type: 'email', trigger: 'blur', message: 'Please insert a valid e-mail.' }],
-        password: [{ required: true, trigger: 'blur', message: 'Please insert a password' }],
+        password: [{ required: true, trigger: 'blur', min: 6, message: 'Please insert a password' }],
       },
     };
   },

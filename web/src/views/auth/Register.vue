@@ -2,25 +2,25 @@
   <div>
     <Header />
 
-    <el-form ref="form" :model="form" label-position="top">
-      <el-form-item label="Name">
-        <el-input placeholder="name" v-model="form.name" name="email" />
+    <el-form ref="form" :model="form" :rules="rules" label-position="top">
+      <el-form-item label="Name" prop="name">
+        <el-input placeholder="name" v-model="form.name" />
       </el-form-item>
 
-      <el-form-item label="E-mail">
-        <el-input placeholder="example@mail.com" v-model="form.email" name="email" />
+      <el-form-item label="E-mail" prop="email">
+        <el-input placeholder="example@mail.com" v-model="form.email" />
       </el-form-item>
 
-      <el-form-item label="Password">
-        <el-input type="password" placeholder="Your password" v-model="form.password" name="password" />
+      <el-form-item label="Password" prop="password">
+        <el-input type="password" placeholder="Your password" v-model="form.password" />
       </el-form-item>
 
-      <el-form-item label="Password Confirmation">
-        <el-input type="password" placeholder="Repeat your password" v-model="form.confirmPassword" name="password" />
+      <el-form-item label="Password Confirmation" prop="confirmPassword">
+        <el-input type="password" placeholder="Repeat your password" v-model="form.confirmPassword" />
       </el-form-item>
 
-      <el-form-item>
-        <el-checkbox v-model="form.tos">
+      <el-form-item prop="acceptTos">
+        <el-checkbox v-model="form.acceptTos">
           <span style="vertical-align: bottom">I accept the </span>
           <el-link type="info" @click="showTos = true" :underline="false">Terms & Condtions</el-link>
         </el-checkbox>
@@ -58,6 +58,7 @@ export default Vue.extend({
   data() {
     return {
       showTos: false,
+
       form: {
         name: '',
         email: '',
@@ -65,18 +66,46 @@ export default Vue.extend({
         confirmPassword: '',
         acceptTos: false,
       },
+
+      rules: {
+        email: [{ required: true, type: 'email', trigger: 'change', message: 'Please insert a valid e-mail.' }],
+        name: [{ required: true, type: 'string', min: 3, message: 'Name should have at least 3 characters.' }],
+        password: [{ required: true, trigger: 'change', min: 6, message: 'Please insert a password.' }],
+        confirmPassword: [{ required: true, trigger: 'change', validator: this.validatePassword }],
+        acceptTos: [{
+          required: true,
+          trigger: 'change',
+          type: 'enum',
+          enum: ['true'],
+          transform: v => v.toString(),
+          message: 'Accept before continuing.',
+        }],
+      },
     };
   },
 
   methods: {
     ...mapActions('auth', ['doRegister']),
 
+    validatePassword(rule, value, callback) {
+      if (!value) {
+        callback(new Error('Please input your password again.'));
+      } else if (value !== this.form.password) {
+        callback(new Error('The confirmation doesn\'t match!'));
+      } else {
+        callback();
+      }
+    },
+
     handleRegister() {
-      this.doRegister({
-        name: this.form.name,
-        email: this.form.email,
-        password: this.form.password,
-        tos: this.form.tos,
+      this.$refs.form.validate((valid) => {
+        if (!valid) return;
+        this.doRegister({
+          name: this.form.name,
+          email: this.form.email,
+          password: this.form.password,
+          tos: this.form.tos,
+        });
       });
     },
   },
