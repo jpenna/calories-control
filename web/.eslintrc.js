@@ -22,6 +22,7 @@ module.exports = {
     // eslint broken rules (using typescript)
     "import/no-unresolved": "off",
     "import/extensions": "off",
+    "prefer-promise-reject-errors": "off",
 
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',

@@ -1,12 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
-declare module 'axios' {
-  interface AxiosError {
-    apiError: {
-      status: number,
-      message: string,
-      code?: number,
-    }
+export interface ApiResponseError extends AxiosError {
+  apiError: {
+    status: number,
+    message: string,
+    code?: number,
   }
 }
 
@@ -36,7 +34,7 @@ axiosBase.interceptors.response.use(res => res,
       };
     }
 
-    return Promise.reject(error);
+    return Promise.reject(error as ApiResponseError);
   });
 
 export default axiosBase;

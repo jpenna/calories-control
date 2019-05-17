@@ -1,18 +1,16 @@
 /* eslint-disable no-param-reassign */
 
 import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
-import { AxiosError } from 'axios';
-import Vue from 'vue';
 
 import * as api from '@/api/auth';
 import * as types from '../types';
+import { ApiResponseError } from '@/api/apiBase';
 
 import * as utils from '@/helpers/utils';
 
-import RootInterface from './@types/rootState';
-import { State, DoLoginActionArgs, DoRegisterActionArgs } from './@types/auth';
+import { RootInterface, AuthState, DoLoginActionArgs, DoRegisterActionArgs } from './@types';
 
-const initialState: State = {
+const initialState: AuthState = {
   userId: '',
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
@@ -20,14 +18,14 @@ const initialState: State = {
   authError: {},
 };
 
-const actions: ActionTree<State, RootInterface> = {
+const actions: ActionTree<AuthState, RootInterface> = {
   async doLogin({ commit }, { email, password }: DoLoginActionArgs) {
     commit(types.LOGIN);
     api.doLogin({ email, password })
       .then((data: api.DoLoginResInterface) => {
         commit(types.LOGIN_DONE, data);
       })
-      .catch((error: AxiosError) => {
+      .catch((error: ApiResponseError) => {
         commit(types.LOGIN_FAIL, error);
       });
   },
@@ -38,13 +36,13 @@ const actions: ActionTree<State, RootInterface> = {
       .then((data: api.DoRegisterResInterface) => {
         commit(types.REGISTER_DONE, data);
       })
-      .catch((error: AxiosError) => {
+      .catch((error: ApiResponseError) => {
         commit(types.REGISTER_FAIL, error);
       });
   },
 };
 
-const mutations: MutationTree<State> = {
+const mutations: MutationTree<AuthState> = {
   // Login
   [types.LOGIN](state) {
     state.isAuthenticating = true;
@@ -58,7 +56,7 @@ const mutations: MutationTree<State> = {
     localStorage.setItem('token', data.token);
     api.updateAuthHeader();
   },
-  [types.LOGIN_FAIL](state, error: AxiosError) {
+  [types.LOGIN_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
 
     state.isAuthenticating = false;
@@ -72,7 +70,7 @@ const mutations: MutationTree<State> = {
   [types.REGISTER_DONE](state, data: api.DoRegisterResInterface) {
     mutations[types.LOGIN_DONE](state, data);
   },
-  [types.REGISTER_FAIL](state, error: AxiosError) {
+  [types.REGISTER_FAIL](state, error: ApiResponseError) {
     mutations[types.LOGIN_FAIL](state, error);
   },
 
