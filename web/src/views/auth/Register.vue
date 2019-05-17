@@ -78,7 +78,7 @@ export default Vue.extend({
           type: 'enum',
           enum: ['true'],
           transform: v => v.toString(),
-          message: 'Accept before continuing.',
+          message: 'You must accept before continuing.',
         }],
       },
     };
