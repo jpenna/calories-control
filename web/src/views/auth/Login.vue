@@ -24,10 +24,10 @@
     <div
       class="error-message text-center mb-20"
       style="margin-top: -20px"
-      v-show="loginError.status"
+      v-show="authError.status"
     >
-      <span v-if="loginError.status === -1">Check your network connection.</span>
-      <span v-else-if="loginError.status !== 500">E-mail or password is wrong.</span>
+      <span v-if="authError.status === -1">Check your network connection.</span>
+      <span v-else-if="authError.status !== 500">E-mail or password is wrong.</span>
       <span v-else>Server error, please try again later.</span>
     </div>
 
@@ -63,7 +63,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('auth', ['loginError']),
+    ...mapState('auth', ['authError']),
   },
 
   methods: {

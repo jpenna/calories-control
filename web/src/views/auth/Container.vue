@@ -4,6 +4,24 @@
   </el-card>
 </template>
 
+<script lang="js">
+import Vue from 'vue';
+import { mapMutations } from 'vuex';
+
+export default {
+  name: 'UnauthorizedContainer',
+
+  beforeRouteUpdate(to, from, next) {
+    this.clearAuthError();
+    next();
+  },
+
+  methods: {
+    ...mapMutations('auth', ['clearAuthError']),
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 .container {
   min-width: 400px;

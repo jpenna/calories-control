@@ -10,9 +10,10 @@ export interface State {
   userId: string;
   isAuthenticating: boolean;
   isAuthenticated: boolean;
-  loginError: {
+  authError: {
     status?: number | null,
     message?: string,
+    code?: number,
   },
 }
 

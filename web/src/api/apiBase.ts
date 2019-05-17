@@ -5,6 +5,7 @@ declare module 'axios' {
     apiError: {
       status: number,
       message: string,
+      code?: number,
     }
   }
 }
@@ -31,6 +32,7 @@ axiosBase.interceptors.response.use(res => res,
       error.apiError = {
         status,
         message: (data || {}).success === false ? data.errorMessage : data,
+        code: (data || {}).code,
       };
     }
 

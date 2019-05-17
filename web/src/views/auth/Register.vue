@@ -32,6 +32,18 @@
       Register
     </el-button>
 
+    <div
+      class="error-message text-center mb-20"
+      style="margin-top: -20px"
+      v-show="authError.status"
+    >
+      <span v-if="authError.status === -1">Check your network connection.</span>
+      <span v-else-if="authError.code === 1">E-mail is already used.</span>
+      <span v-else-if="authError.code === 2">Validation error, please get in touch if the error persists.</span>
+      <span v-else-if="authError.code === 3">Server error, please try again later.</span>
+      <span v-else>Unknown error, please get in touch if the error persists.</span>
+    </div>
+
     <router-link :to="{ name: 'login' }" class="d-block text-center">
       <el-link type="info" :underline="false">I already have an account</el-link>
     </router-link>
@@ -42,7 +54,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import Header from '@/components/Header.vue';
 import ToS from './tos.vue';
@@ -84,6 +96,10 @@ export default Vue.extend({
     };
   },
 
+  computed: {
+    ...mapState('auth', ['authError']),
+  },
+
   methods: {
     ...mapActions('auth', ['doRegister']),
 
@@ -104,7 +120,7 @@ export default Vue.extend({
           name: this.form.name,
           email: this.form.email,
           password: this.form.password,
-          tos: this.form.tos,
+          acceptTos: this.form.acceptTos,
         });
       });
     },

@@ -17,7 +17,7 @@ const initialState: State = {
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
 
-  loginError: {},
+  authError: {},
 };
 
 const actions: ActionTree<State, RootInterface> = {
@@ -48,7 +48,7 @@ const mutations: MutationTree<State> = {
   // Login
   [types.LOGIN](state) {
     state.isAuthenticating = true;
-    state.loginError = {};
+    state.authError = {};
   },
   [types.LOGIN_DONE](state, data: api.DoLoginResInterface) {
     state.isAuthenticating = false;
@@ -59,15 +59,14 @@ const mutations: MutationTree<State> = {
     api.updateAuthHeader();
   },
   [types.LOGIN_FAIL](state, error: AxiosError) {
-    const { status, message } = error.apiError;
+    const { status, message, code } = error.apiError;
 
     state.isAuthenticating = false;
-    state.loginError = { status, message };
+    state.authError = { status, message, code };
   },
 
   // Register (same as Login)
   [types.REGISTER](state) {
-    state.isAuthenticating = true;
     mutations[types.LOGIN](state);
   },
   [types.REGISTER_DONE](state, data: api.DoRegisterResInterface) {
@@ -81,6 +80,9 @@ const mutations: MutationTree<State> = {
     api.logoutUser();
   },
 
+  clearAuthError(state) {
+    state.authError = {};
+  },
 };
 
 export default {
