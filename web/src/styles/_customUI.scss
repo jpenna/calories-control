@@ -49,3 +49,36 @@ label.el-checkbox {
   margin-top: -5px;
   background: none;
 }
+
+// Remove button style
+// This is an util, but has to be last, so I put it here...
+.no-button {
+  &,
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: transparent;
+    background: none;
+    color: $--color-primary;
+  }
+}
+
+// Align emoji and text inside button
+button {
+  img {
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+}
+
+// Smaller time input
+.el-date-editor .el-range-input {
+  width: 65px;
+}
+.el-date-editor--timerange.el-input__inner {
+  max-width: 210px;
+}
