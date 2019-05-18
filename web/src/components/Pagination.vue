@@ -35,9 +35,9 @@ export default {
     layout() {
       const layout = ['sizes'];
       if (this.total > this.size) {
-        layout.push('prev, pager, next, jumper');
+        layout.push('prev, pager, next');
       }
-      layout.push('->, total');
+      layout.push('->, jumper, total');
       return layout.join(',');
     },
   },
@@ -82,9 +82,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .pagination {
   padding: 15px;
   text-align: center;
+
+  // Pull pagination size to the left
+  .el-pagination__sizes {
+    float: left;
+  }
+
+  // Set jump apart from total
+  .el-pagination__jump {
+    margin-right: 20px;
+  }
 }
 </style>

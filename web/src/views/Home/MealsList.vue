@@ -8,51 +8,51 @@
     </div>
 
     <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card">
-      <div class="flex-split" style="align-items: flex-start">
-        <div>
+      <div>
+        <div class="flex-split" style="align-items: flex-start">
           <!-- Name -->
           <div class="fs-120 fw-600 mt-10">{{ meal.name }}</div>
 
-          <!-- User -->
-          <div class="icon-format mt-10">
-            <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
-            <span>{{ meal.userId }}</span>
-          </div>
+          <!-- Actions -->
+          <div>
+            <el-tooltip effect="light" content="Edit" :open-delay="500">
+              <el-button type="text">
+                <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
+              </el-button>
+            </el-tooltip>
 
-          <div class="fw-500 mt-10">
-            <!-- Calories -->
-            <span class="icon-format">
-              <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
-              <span>{{ meal.calories }} cal</span>
-            </span>
-            <!-- Time -->
-            <span class="ml-30 icon-format">
-              <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
-              <span>{{ meal.eatenAt | filterTime }}</span>
-            </span>
-          </div>
-          <!-- Notes -->
-          <div v-if="meal.notes" class="mt-10" style="font-style: italic">
-            {{ meal.notes }}
+            <el-tooltip effect="light" content="Delete" :open-delay="500">
+              <el-button type="text" class="ml-25">
+                <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
+              </el-button>
+            </el-tooltip>
           </div>
         </div>
 
-        <div>
-          <el-tooltip effect="light" content="Edit" :open-delay="500">
-            <el-button type="text">
-              <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
-            </el-button>
-          </el-tooltip>
+        <!-- User -->
+        <div class="icon-format mt-10">
+          <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
+          <span>{{ meal.userId }}</span>
+        </div>
 
-          <el-tooltip effect="light" content="Delete" :open-delay="500">
-            <el-button type="text" class="ml-25">
-              <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
-            </el-button>
-          </el-tooltip>
+        <div class="fw-500 mt-10">
+          <!-- Calories -->
+          <span class="icon-format">
+            <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
+            <span>{{ meal.calories }} cal</span>
+          </span>
+          <!-- Time -->
+          <span class="ml-30 icon-format">
+            <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
+            <span>{{ meal.eatenAt | filterTime }}</span>
+          </span>
+        </div>
+
+        <!-- Notes -->
+        <div v-if="meal.notes" class="mt-10" style="font-style: italic">
+          {{ meal.notes }}
         </div>
       </div>
-
-
     </el-card>
 
     <!-- Pagination -->
