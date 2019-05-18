@@ -54,8 +54,20 @@ export function setLastTime(date: Date) {
   return modDate;
 }
 
+// Adjust time so the ISOString date and hour is kept the same
+export function adjustTimezone(date: Date): Date {
+  const aDate = new Date(date);
+  const adjustedHours = aDate.getHours() - aDate.getTimezoneOffset() / 60;
+  aDate.setHours(adjustedHours);
+  return aDate;
+}
+
 export function getDayString(date: Date): string {
-  return (new Date(date)).toISOString().split('T')[0];
+  let aDate = new Date(date);
+  if (typeof date !== 'string') {
+    aDate = adjustTimezone(date);
+  }
+  return aDate.toISOString().split('T')[0];
 }
 
 export function timeBetween(date: Date, start: Date, end: Date): boolean {

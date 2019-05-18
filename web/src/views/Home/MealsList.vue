@@ -64,7 +64,7 @@
 
       <!-- Pagination -->
       <Pagination
-        v-show="total > mealsList.length"
+        v-show="mealsList.length"
         class="mt-30"
         settingsKey="meals-list"
         :startPage="0"
