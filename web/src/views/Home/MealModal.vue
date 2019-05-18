@@ -11,6 +11,7 @@
       :fullscreen="showFullScreen"
     >
       <h2 slot="title" class="mb-0 mt-0">
+        <img src="@/assets/emojis/delicious.png" class="mr-5" style="height: 2rem; vertical-align: sub" />
         What did you eat?
       </h2>
 
@@ -18,7 +19,8 @@
         ref="form"
         :model="form"
         :rules="rules"
-        label-position="top"
+        label-position="left"
+        label-width="90px"
         hide-required-asterisk
         @submit="submitNewMeal"
       >
@@ -34,6 +36,7 @@
             :clearable="false"
             type="date"
             format="MMMM, dd"
+            class="time-block"
           />
 
             <!-- Time -->
@@ -41,6 +44,7 @@
             v-model="time"
             :clearable="false"
             format="HH:mm"
+            class="time-block"
           />
         </el-form-item>
 
@@ -55,11 +59,11 @@
         </el-form-item>
 
         <!-- Notes -->
-        <el-form-item label="Notes" prop="notes">
+        <el-form-item label="Notes" prop="notes" class="mb-0">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2}"
-            placeholder="Anything you want to record..."
+            placeholder="Anything you want to record?"
             v-model="form.notes"
             show-word-limit
             :maxlength="100"
@@ -168,6 +172,15 @@ export default Vue.extend({
   @media screen and (min-width: 550px) {
     .el-dialog {
       min-width: 500px;
+    }
+  }
+
+  .time-block {
+    display: inline-block;
+    width: auto !important;
+
+    input {
+      border: none;
     }
   }
 }

@@ -14,8 +14,12 @@
 // Input label color primary
 .el-form-item__label {
   color: $--color-text-primary;
-  line-height: 1rem;
   font-weight: 500;
+}
+.el-form:not(.el-form--label-left) {
+  .el-form-item__label {
+    line-height: 1rem;
+  }
 }
 
 // Remove underline from <a>
