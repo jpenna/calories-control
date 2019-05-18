@@ -29,5 +29,6 @@ module.exports = {
     'max-len': ["error", { "code": 140 }],
     'import/prefer-default-export': 'off',
     'object-curly-newline': 'off',
+    "object-shorthand": ["error", "always"],
   },
 };

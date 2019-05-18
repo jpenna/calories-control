@@ -36,3 +36,12 @@ label.el-checkbox {
   font-size: .9rem;
   font-weight: 500;
 }
+
+// Fix position of counter below input
+.el-textarea .el-input__count {
+  position: static;
+  display: block;
+  text-align: right;
+  margin-top: -5px;
+  background: none;
+}
