@@ -38,13 +38,17 @@
         </div>
 
         <div>
-          <el-button type="text">
-            <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
-          </el-button>
+          <el-tooltip effect="light" content="Edit" :open-delay="500">
+            <el-button type="text">
+              <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
+            </el-button>
+          </el-tooltip>
 
-          <el-button type="text" class="ml-25">
-            <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
-          </el-button>
+          <el-tooltip effect="light" content="Delete" :open-delay="500">
+            <el-button type="text" class="ml-25">
+              <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
+            </el-button>
+          </el-tooltip>
         </div>
       </div>
 
