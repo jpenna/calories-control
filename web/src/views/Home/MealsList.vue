@@ -1,5 +1,12 @@
 <template>
   <div class="meals-list">
+    <div v-show="!mealsList.length" class="text-center fw-500 mt-50">
+      <img src="@/assets/emojis/relieved.png" style="height: 4rem" />
+      <div class="mt-5 fs-140">Looks like someone was fasting!</div>
+      <div class="mt-5">No meals for the selected period.</div>
+    </div>
+
+    <div v-show="mealsList.length">
     <div
       class="total-calories"
       :class="exceedGoal ? 'color-danger' : 'color-success'"
@@ -63,6 +70,7 @@
       :total="50"
     />
   </div>
+  </div>
 </template>
 
 <script lang="js">
@@ -78,7 +86,7 @@ export default Vue.extend({
   },
 
   props: {
-    mealsList: { type: Object, required: true },
+    mealsList: { type: Array, required: true },
   },
 
   filters: {

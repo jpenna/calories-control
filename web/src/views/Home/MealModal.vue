@@ -19,7 +19,7 @@
       label-position="left"
       label-width="90px"
       hide-required-asterisk
-      @submit="submitNewMeal"
+      @submit.native.prevent="submitNewMeal"
     >
       <!-- Name -->
       <el-form-item label="Name" prop="name">
@@ -70,15 +70,16 @@
           :maxlength="100"
         />
       </el-form-item>
+
+      <div class="dialog-footer text-right mt-20">
+        <el-button type="text" @click="$emit('update:show', false)" class="mr-30">Cancel</el-button>
+        <el-button type="primary" native-type="submit" @click="submitNewMeal" :loading="isSubmitting">
+          <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+          Eaten!
+        </el-button>
+      </div>
     </el-form>
 
-    <div slot="footer" class="dialog-footer text-right">
-      <el-button type="text" @click="$emit('update:show', false)" class="mr-30">Cancel</el-button>
-      <el-button type="primary" @click="submitNewMeal" :loading="isSubmitting">
-        <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
-        Eaten!
-      </el-button>
-    </div>
   </el-dialog>
 </template>
 
@@ -105,9 +106,9 @@ export default Vue.extend({
       form: {
         name: '',
         eatenAt: new Date(),
-        calories: undefined,
+        calories: 500,
         userId: this.userId,
-        notes: '',
+        notes: 'No notes for this one',
       },
 
       rules: {

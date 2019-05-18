@@ -64,9 +64,9 @@ export default Vue.extend({
         .reduce((acc, id) => {
           const meal = mealsDay[id];
           if (!utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
-          acc[id] = meal;
+          acc.push(meal);
           return acc;
-        }, {});
+        }, []);
     },
 
     dayString() {
