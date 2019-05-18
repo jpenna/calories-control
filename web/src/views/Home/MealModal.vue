@@ -1,89 +1,85 @@
 <template>
-  <div class="meal-modal">
-    <!-- Button -->
-    <el-button @click="show = true">
-      New Meal
-    </el-button>
+  <!-- Modal -->
+  <el-dialog
+    :visible="show"
+    :fullscreen="showFullScreen"
+    class="meal-modal"
+    @close="$emit('update:show', false)"
+    @closed="$refs.form.resetFields()"
+  >
+    <h2 slot="title" class="mb-0 mt-0">
+      <img src="@/assets/emojis/delicious.png" class="mr-5" style="height: 2rem; vertical-align: sub" />
+      What did you eat?
+    </h2>
 
-    <!-- Modal -->
-    <el-dialog
-      :visible.sync="show"
-      :fullscreen="showFullScreen"
+    <el-form
+      ref="form"
+      :model="form"
+      :rules="rules"
+      label-position="left"
+      label-width="90px"
+      hide-required-asterisk
+      @submit="submitNewMeal"
     >
-      <h2 slot="title" class="mb-0 mt-0">
-        <img src="@/assets/emojis/delicious.png" class="mr-5" style="height: 2rem; vertical-align: sub" />
-        What did you eat?
-      </h2>
+      <!-- Name -->
+      <el-form-item label="Name" prop="name">
+        <el-input placeholder="Meal name" v-model="form.name" />
+      </el-form-item>
 
-      <el-form
-        ref="form"
-        :model="form"
-        :rules="rules"
-        label-position="left"
-        label-width="90px"
-        hide-required-asterisk
-        @submit="submitNewMeal"
-      >
-        <!-- Name -->
-        <el-form-item label="Name" prop="name">
-          <el-input placeholder="Meal name" v-model="form.name" />
-        </el-form-item>
+      <!-- Date -->
+      <el-form-item label="Eaten on" prop="eatenAt">
+        <el-date-picker
+          v-model="date"
+          :clearable="false"
+          type="date"
+          format="MMMM, dd"
+          class="time-block"
+        />
 
-        <!-- Date -->
-        <el-form-item label="Eaten on" prop="eatenAt">
-          <el-date-picker
-            v-model="date"
-            :clearable="false"
-            type="date"
-            format="MMMM, dd"
-            class="time-block"
-          />
+          <!-- Time -->
+        <el-time-picker
+          v-model="time"
+          :clearable="false"
+          format="HH:mm"
+          class="time-block"
+        />
+      </el-form-item>
 
-            <!-- Time -->
-          <el-time-picker
-            v-model="time"
-            :clearable="false"
-            format="HH:mm"
-            class="time-block"
-          />
-        </el-form-item>
+      <!-- Calories -->
+      <el-form-item label="Calories" prop="calories">
+        <el-input-number
+          :controls="false"
+          :min="0"
+          placeholder="How many?"
+          class="calories-input"
+          v-model="form.calories"
+        />
+        <span v-show="form.calories" class="ml-10">
+          cal.
+        </span>
+      </el-form-item>
 
-        <!-- Calories -->
-        <el-form-item label="Calories" prop="calories">
-          <el-input-number
-            :controls="false"
-            :min="0"
-            placeholder="How many?"
-            class="calories-input"
-            v-model="form.calories"
-          />
-          <span v-show="form.calories" class="ml-10">
-            cal.
-          </span>
-        </el-form-item>
+      <!-- Notes -->
+      <el-form-item label="Notes" prop="notes" class="mb-0">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2}"
+          placeholder="Anything you want to record?"
+          v-model="form.notes"
+          show-word-limit
+          :maxlength="100"
+        />
+      </el-form-item>
+    </el-form>
 
-        <!-- Notes -->
-        <el-form-item label="Notes" prop="notes" class="mb-0">
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 2}"
-            placeholder="Anything you want to record?"
-            v-model="form.notes"
-            show-word-limit
-            :maxlength="100"
-          />
-        </el-form-item>
-      </el-form>
-
-      <div slot="footer" class="dialog-footer text-right">
-        <el-button type="text" @click="show = false" class="mr-30">Cancel</el-button>
-        <el-button type="primary" @click="submitNewMeal" :loading="isSubmitting">
-          <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
-          Eaten!
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
+    <div slot="footer" class="dialog-footer text-right">
+      <el-button type="text" @click="$emit('update:show', false)" class="mr-30">Cancel</el-button>
+      <el-button type="primary" @click="submitNewMeal" :loading="isSubmitting">
+        <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+        Eaten!
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script lang="js">
@@ -95,9 +91,12 @@ import * as utils from '@/helpers/utils';
 export default Vue.extend({
   name: 'EditMeal',
 
+  props: {
+    show: { type: Boolean, required: true },
+  },
+
   data() {
     return {
-      show: false,
       showFullScreen: utils.getWidth() <= 550,
 
       date: new Date(),
@@ -127,17 +126,10 @@ export default Vue.extend({
   },
 
   watch: {
-    show(show) {
-      if (!show) {
-        // Wait for modal to disappear before clearing
-        setTimeout(this.$refs.form.resetFields(), 200);
-      }
-    },
-
     isSubmitting(isSubmitting) {
       if (isSubmitting) return;
       if (!this.submitError.status) {
-        this.show = false;
+        this.$emit('update:show', false);
         this.$notify({
           title: 'New meal added!',
           message: `${this.form.name} - ${this.form.calories} calories`,

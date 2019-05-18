@@ -1,7 +1,10 @@
 <template>
   <div>
-    <MealModal />
-    <MealsFilter :date.sync="selectedDate" :timeRange.sync="timeRange" />
+    <ActionBar
+      :date.sync="selectedDate"
+      :timeRange.sync="timeRange"
+      :showMealModal.sync="showMealModal"
+    />
 
     <span v-show="isFetching.has(this.selectedDate)">
       <i class="el-icon-loading" />
@@ -9,6 +12,8 @@
     </span>
 
     <MealsList :mealsList="mealsList" />
+
+    <MealModal :show.sync="showMealModal" />
   </div>
 </template>
 
@@ -18,7 +23,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
-import MealsFilter from './MealsFilter.vue';
+import ActionBar from './ActionBar.vue';
 import MealsList from './MealsList.vue';
 import MealModal from './MealModal.vue';
 
@@ -26,9 +31,13 @@ export default Vue.extend({
   name: 'Home',
 
   components: {
-    MealsFilter,
+    ActionBar,
     MealsList,
     MealModal,
+  },
+
+  mounted() {
+    this.fetchMeals({ filters: { date: this.selectedDate } });
   },
 
   data() {
@@ -39,6 +48,8 @@ export default Vue.extend({
         utils.setFirstTime(selectedDate),
         utils.setLastTime(selectedDate),
       ],
+
+      showMealModal: false,
     };
   },
 
@@ -57,11 +68,7 @@ export default Vue.extend({
 
   watch: {
     dateString(date) {
-      this.fetchMeals({
-        filters: {
-          date,
-        },
-      });
+      this.fetchMeals({ filters: { date } });
     },
   },
 
