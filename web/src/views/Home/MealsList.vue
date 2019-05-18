@@ -7,7 +7,7 @@
       Eaten Calories: 400 / 3000
     </div>
 
-    <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card">
+    <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card separate-list">
       <div>
         <div class="flex-split" style="align-items: flex-start">
           <!-- Name -->
@@ -57,6 +57,7 @@
 
     <!-- Pagination -->
     <Pagination
+      class="mt-30"
       settingsKey="meals-list"
       :startPage="0"
       :total="50"
@@ -119,10 +120,6 @@ export default Vue.extend({
   .meal-card {
     .el-card__body {
       padding-top: 10px;
-    }
-
-    &:not(:last-of-type) {
-      margin-bottom: 30px;
     }
   }
 }

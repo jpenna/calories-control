@@ -12,7 +12,13 @@
     <h1 class="mb-50">Account</h1>
 
     <!-- Max Calories -->
-    <el-form ref="form" :model="form" label-position="left" label-width="100px" @submit="submitCalories">
+    <el-form
+      ref="form"
+      :model="form"
+      label-position="left"
+      label-width="100px"
+      @submit="submitCalories"
+    >
       <el-form-item label="Max Calories" class="d-inline-block">
         <el-input-number
           :controls="false"
@@ -21,6 +27,7 @@
           name="calories"
         />
         <i
+          :style="{ visibility: !isUpdatingAccount || 'hidden' }"
           class="ml-10 fs-150 v-align-middle"
           :class="{
             'el-icon-loading': isUpdatingAccount,
@@ -32,9 +39,9 @@
     </el-form>
 
     <!-- Users permissions -->
-    <!-- <UsersRoles /> -->
+    <UsersRoles style="max-width: 650px; margin: auto" class="mb-100"/>
 
-    <el-button type="danger" class="w-50 mt-50" @click="handleLogout">
+    <el-button type="danger" class="logout-button" @click="handleLogout">
       Logout
     </el-button>
 
@@ -45,13 +52,13 @@
 import Vue from 'vue';
 import { mapMutations } from 'vuex';
 
-// import UsersRoles from './UsersRoles.vue';
+import UsersRoles from './UsersRoles.vue';
 
 export default Vue.extend({
   name: 'Account',
 
   components: {
-    // UsersRoles,
+    UsersRoles,
   },
 
   data() {
@@ -81,3 +88,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss">
+.logout-button {
+  position: absolute;
+  bottom: 40px;
+  right: 0;
+  left: 0;
+  margin: auto !important;
+  width: 50%;
+  max-width: 300px;
+}
+</style>
