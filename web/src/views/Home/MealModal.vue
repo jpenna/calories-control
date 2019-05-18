@@ -19,7 +19,6 @@
       label-position="left"
       label-width="90px"
       hide-required-asterisk
-      @submit.native.prevent="submitNewMeal"
     >
       <!-- Name -->
       <el-form-item label="Name" prop="name">
@@ -100,12 +99,12 @@ export default Vue.extend({
     return {
       showFullScreen: utils.getWidth() <= 550,
 
-      date: new Date(),
-      time: new Date(),
+      date: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
+      time: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
 
       form: {
         name: '',
-        eatenAt: new Date(),
+        eatenAt: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
         calories: 500,
         userId: this.userId,
         notes: 'No notes for this one',

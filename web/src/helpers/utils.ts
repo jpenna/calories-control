@@ -54,8 +54,17 @@ export function setLastTime(date: Date) {
   return modDate;
 }
 
+// Change parameter
+export function discardTimezone(date: Date | string): string {
+  return date.toString().replace(/(\.| GMT).*/, '');
+}
+
 export function getDayString(date: Date): string {
-  return (new Date(date)).toISOString().split('T')[0];
+  let aDate = new Date(date);
+  if (typeof date !== 'string') {
+    aDate = new Date(discardTimezone(aDate));
+  }
+  return aDate.toISOString().split('T')[0];
 }
 
 export function timeBetween(date: Date, start: Date, end: Date): boolean {

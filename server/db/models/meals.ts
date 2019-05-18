@@ -54,6 +54,17 @@ const MealSchema = new mongoose.Schema({
   },
 });
 
+MealSchema.pre<MealInterface>('save', function (next): void {
+  const meal = this;
+  // only hash the password if it has been modified (or is new)
+  if (!meal.isModified('eatenAt')) return next();
+
+  // Discard timezone from date
+  const adjustedHours = meal.eatenAt.getHours() - meal.eatenAt.getTimezoneOffset() / 60;
+  meal.eatenAt = new Date(meal.eatenAt.setHours(adjustedHours));
+  next();
+});
+
 MealSchema.index({ user: 1, eatenAt: -1 });
 
 

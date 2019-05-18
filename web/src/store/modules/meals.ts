@@ -18,7 +18,7 @@ function mapMeal(meal: api.ApiMeal): Meals.MealInterface {
     name: meal.name,
     notes: meal.notes,
     calories: meal.calories,
-    eatenAt: new Date(meal.eatenAt),
+    eatenAt: new Date(utils.discardTimezone(meal.eatenAt)),
   };
 }
 
@@ -61,7 +61,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
   // New Meal
   async newMeal({ commit }, meal: Meals.MealInterface) {
     commit(types.NEW_MEAL);
-    const apiMeal = { ...meal, eatenAt: meal.eatenAt.toISOString() };
+    const apiMeal = { ...meal, eatenAt: utils.discardTimezone(meal.eatenAt) };
     api.newMeal(apiMeal)
       .then((data: api.NewMealRes) => {
         commit(types.NEW_MEAL_DONE, data);
