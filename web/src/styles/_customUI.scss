@@ -64,10 +64,13 @@ label.el-checkbox {
 }
 
 // Align emoji and text inside button
-button {
+button,
+.icon-format {
   img {
     vertical-align: middle;
-    margin-right: 10px;
+    & + span {
+      margin-left: 10px;
+    }
   }
 
   span {

@@ -139,8 +139,8 @@ export default Vue.extend({
   }
 
   @media screen and (max-width: 450px) and (min-width: 370px) {
-    .time-button img {
-      margin-right: 0;
+    .time-button span {
+      margin-left: 0;
     }
 
     .time-text {

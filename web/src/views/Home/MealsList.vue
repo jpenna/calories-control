@@ -7,14 +7,48 @@
       Eaten Calories: 400 / 3000
     </div>
 
-    <el-card v-for="meal in mealsList" :key="meal.id">
-      <el-button>Edit</el-button>
-      <el-button>Remove</el-button>
-      <div>{{ meal.name }}</div>
-      <div>{{ meal.eatenAt }}</div>
-      <div>{{ meal.calories }}</div>
-      <div>{{ meal.userId }}</div>
-      <div>{{ meal.notes }}</div>
+    <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card">
+      <div class="flex-split" style="align-items: flex-start">
+        <div>
+          <!-- Name -->
+          <div class="fs-120 fw-600 mt-10">{{ meal.name }}</div>
+
+          <!-- User -->
+          <div class="icon-format mt-10">
+            <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
+            <span>{{ meal.userId }}</span>
+          </div>
+
+          <div class="fw-500 mt-10">
+            <!-- Calories -->
+            <span class="icon-format">
+              <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
+              <span>{{ meal.calories }} cal</span>
+            </span>
+            <!-- Time -->
+            <span class="ml-30 icon-format">
+              <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
+              <span>{{ meal.eatenAt | filterTime }}</span>
+            </span>
+          </div>
+          <!-- Notes -->
+          <div v-if="meal.notes" class="mt-10" style="font-style: italic">
+            {{ meal.notes }}
+          </div>
+        </div>
+
+        <div>
+          <el-button type="text">
+            <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
+          </el-button>
+
+          <el-button type="text" class="ml-25">
+            <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
+          </el-button>
+        </div>
+      </div>
+
+
     </el-card>
 
     <!-- Pagination -->
@@ -40,6 +74,12 @@ export default Vue.extend({
 
   props: {
     mealsList: { type: Object, required: true },
+  },
+
+  filters: {
+    filterTime(date) {
+      return `${date.getHours()}:${date.getMinutes()}`;
+    },
   },
 
   data() {
@@ -70,6 +110,16 @@ export default Vue.extend({
     text-align: right;
     padding-right: 30px;
     margin: 5px (-$--card-padding) 20px;
+  }
+
+  .meal-card {
+    .el-card__body {
+      padding-top: 10px;
+    }
+
+    &:not(:last-of-type) {
+      margin-bottom: 30px;
+    }
   }
 }
 </style>
