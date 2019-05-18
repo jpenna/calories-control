@@ -62,14 +62,6 @@
         </div>
       </el-card>
 
-      <!-- Pagination -->
-      <Pagination
-        v-show="mealsList.length"
-        class="mt-30"
-        settingsKey="meals-list"
-        :startPage="0"
-        :total="total"
-      />
     </div>
   </div>
 </template>
@@ -77,18 +69,11 @@
 <script lang="js">
 import Vue from 'vue';
 
-import Pagination from '@/components/Pagination.vue';
-
 export default Vue.extend({
   name: 'MealsList',
 
-  components: {
-    Pagination,
-  },
-
   props: {
     mealsList: { type: Array, required: true },
-    total: { type: Number, required: true },
   },
 
   filters: {

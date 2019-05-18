@@ -81,7 +81,12 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
     commit(types.FETCH_MEALS, dayString);
 
     const { from, until } = prepareFetchTime(filters.date);
-    const apiFilters = { from, until };
+    const apiFilters = {
+      from,
+      until,
+      limit: filters.limit,
+      skip: filters.skip,
+    };
 
     api.listMeals(apiFilters)
       .then((data: api.ListMealsRes) => {

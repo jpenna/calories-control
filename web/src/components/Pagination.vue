@@ -72,7 +72,7 @@ export default {
         if (diff > 0) firstItem -= diff;
       }
 
-      return { firstItem, tableSize: this.size };
+      return { firstItem, size: this.size };
     },
 
     onChange() {

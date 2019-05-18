@@ -11,7 +11,18 @@
       Loading...
     </span>
 
-    <MealsList :mealsList="mealsList" :total="getTotalMealsForDate(selectedDate)" />
+    <MealsList
+      :mealsList="mealsList"
+    />
+
+    <Pagination
+      v-show="mealsList.length"
+      class="mt-30"
+      settingsKey="meals-list"
+      :startPage="0"
+      :total="getTotalMealsForDate(selectedDate)"
+      @change="updatePagination"
+    />
 
     <MealModal :show.sync="showMealModal" />
   </div>
@@ -26,6 +37,7 @@ import * as utils from '@/helpers/utils';
 import ActionBar from './ActionBar.vue';
 import MealsList from './MealsList.vue';
 import MealModal from './MealModal.vue';
+import Pagination from '@/components/Pagination.vue';
 
 export default Vue.extend({
   name: 'Home',
@@ -34,10 +46,11 @@ export default Vue.extend({
     ActionBar,
     MealsList,
     MealModal,
+    Pagination,
   },
 
   mounted() {
-    this.fetchMeals({ filters: { date: this.selectedDate } });
+    this.fetchMealsPag();
   },
 
   data() {
@@ -48,6 +61,9 @@ export default Vue.extend({
         utils.setFirstTime(selectedDate),
         utils.setLastTime(selectedDate),
       ],
+
+      firstItem: 0,
+      maxSize: 0,
 
       showMealModal: false,
     };
@@ -75,8 +91,8 @@ export default Vue.extend({
   },
 
   watch: {
-    dayString(date) {
-      this.fetchMeals({ filters: { date } });
+    dayString() {
+      this.fetchMealsPag();
     },
 
     selectedDate(selectedDate) {
@@ -89,6 +105,24 @@ export default Vue.extend({
 
   methods: {
     ...mapActions('meals', ['fetchMeals']),
+
+    fetchMealsPag(force) {
+      this.fetchMeals({
+        filters: {
+          date: this.dayString,
+          limit: this.maxSize,
+          skip: this.firstItem,
+        },
+        force,
+      });
+    },
+
+    updatePagination({ firstItem, size }) {
+      if (size >= this.getTotalMealsForDate(this.selectedDate)) return;
+      this.firstItem = firstItem;
+      this.maxSize = size;
+      this.fetchMealsPag(true);
+    },
   },
 });
 </script>
