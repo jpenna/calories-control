@@ -12,3 +12,8 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const NEW_MEAL = 'NEW_MEAL';
 export const NEW_MEAL_DONE = 'NEW_MEAL_DONE';
 export const NEW_MEAL_FAIL = 'NEW_MEAL_FAIL';
+
+// List meals
+export const FETCH_MEALS = 'FETCH_MEALS';
+export const FETCH_MEALS_DONE = 'FETCH_MEALS_DONE';
+export const FETCH_MEALS_FAIL = 'FETCH_MEALS_FAIL';

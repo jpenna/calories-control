@@ -18,40 +18,56 @@ export interface ApiError {
 }
 
 // Authentication
-export interface AuthState {
-  userId: string;
-  isAuthenticating: boolean;
-  isAuthenticated: boolean;
-  authError: ApiError;
-}
+export namespace Auth {
+  export interface AuthState {
+    userId: string;
+    isAuthenticating: boolean;
+    isAuthenticated: boolean;
+    authError: ApiError;
+  }
 
-export interface DoLoginActionArgs {
-  email: string;
-  password: string;
-}
+  export interface DoLoginActionArgs {
+    email: string;
+    password: string;
+  }
 
-export interface DoRegisterActionArgs {
-  name: string;
-  email: string;
-  password: string;
-  acceptTos: boolean;
+  export interface DoRegisterActionArgs {
+    name: string;
+    email: string;
+    password: string;
+    acceptTos: boolean;
+  }
 }
 
 // Meals
-export interface MealInterface {
-  id: string;
-  userId: string;
-  name: string;
-  notes: string;
-  calories: number;
-  eatenAt: Date;
-}
+export namespace Meals {
+  export interface MealInterface {
+    id: string;
+    userId: string;
+    name: string;
+    notes: string;
+    calories: number;
+    eatenAt: Date;
+  }
 
-export interface MealsState {
-  list: {
-    [key: string]: MealInterface,
-  },
+  export interface MealsState {
+    list: {
+      [date: string]: {
+        [id: string]: MealInterface,
+      },
+    };
 
-  isSubmitting: boolean,
-  submitError: ApiError;
+    isFetching: Set<string>;
+    fetchingError: Map<string, ApiError>;
+
+    isSubmitting: boolean;
+    submitError: ApiError;
+  }
+
+  export interface FiltersInterface {
+    userId?: string;
+    date: Date;
+    skip?: number;
+    limit?: number;
+  }
 }

@@ -8,9 +8,9 @@ import { ApiResponseError } from '@/api/apiBase';
 
 import * as utils from '@/helpers/utils';
 
-import { RootInterface, AuthState, DoLoginActionArgs, DoRegisterActionArgs } from './@types';
+import { RootInterface, Auth } from './@types';
 
-const initialState: AuthState = {
+const initialState: Auth.AuthState = {
   userId: '',
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
@@ -18,8 +18,8 @@ const initialState: AuthState = {
   authError: {},
 };
 
-const actions: ActionTree<AuthState, RootInterface> = {
-  async doLogin({ commit }, { email, password }: DoLoginActionArgs) {
+const actions: ActionTree<Auth.AuthState, RootInterface> = {
+  async doLogin({ commit }, { email, password }: Auth.DoLoginActionArgs) {
     commit(types.LOGIN);
     api.doLogin({ email, password })
       .then((data: api.DoLoginResInterface) => {
@@ -30,7 +30,7 @@ const actions: ActionTree<AuthState, RootInterface> = {
       });
   },
 
-  async doRegister({ commit }, { name, email, password, acceptTos }: DoRegisterActionArgs) {
+  async doRegister({ commit }, { name, email, password, acceptTos }: Auth.DoRegisterActionArgs) {
     commit(types.REGISTER);
     api.doRegister({ name, email, password, acceptTos })
       .then((data: api.DoRegisterResInterface) => {
@@ -42,7 +42,7 @@ const actions: ActionTree<AuthState, RootInterface> = {
   },
 };
 
-const mutations: MutationTree<AuthState> = {
+const mutations: MutationTree<Auth.AuthState> = {
   // Login
   [types.LOGIN](state) {
     state.isAuthenticating = true;
