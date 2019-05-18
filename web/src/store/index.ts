@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 // Types
-import RootInterface from './modules/@types/rootState';
+import { RootInterface } from './modules/@types';
 
 // Modules
 import auth from './modules/auth';
