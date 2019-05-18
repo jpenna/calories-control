@@ -54,6 +54,13 @@ export function setLastTime(date: Date) {
   return modDate;
 }
 
-export function getDateString(date: Date): string {
+export function getDayString(date: Date): string {
   return (new Date(date)).toISOString().split('T')[0];
+}
+
+export function timeBetween(date: Date, start: Date, end: Date): boolean {
+  const dateNum = date.getTime();
+  const startNum = start.getTime();
+  const endNum = end.getTime();
+  return dateNum >= startNum && dateNum <= endNum;
 }

@@ -30,13 +30,13 @@
         <el-form-item label="Time" v-show="useTimeFilter">
           <el-time-picker
             is-range
-            :value="timeRange"
+            v-model="localTimeRange"
             :clearable="false"
             range-separator="-"
             start-placeholder="Start time"
             end-placeholder="End time"
             format="HH:mm"
-            @input="$emit('update:timeRange', $event)"
+            @change="$emit('update:timeRange', $event)"
           />
         </el-form-item>
 
@@ -84,6 +84,8 @@ export default Vue.extend({
     return {
       useTimeFilter: false,
 
+      localTimeRange: this.timeRange,
+
       form: {
         user: 1,
       },
@@ -101,6 +103,13 @@ export default Vue.extend({
           utils.setFirstTime(this.date),
           utils.setLastTime(this.date),
         ]);
+      }
+    },
+
+    // To update parent only on submit. If parent cancel time, reset.
+    timeRange(timeRange) {
+      if (timeRange[0] !== this.localTimeRange[0] || timeRange[1] !== this.localTimeRange[1]) {
+        this.localTimeRange = timeRange;
       }
     },
   },

@@ -58,16 +58,24 @@ export default Vue.extend({
     ...mapState('meals', ['isFetching']),
 
     mealsList() {
-      return this.getMealsForDate(this.selectedDate);
+      const mealsDay = this.getMealsForDate(this.selectedDate);
+
+      return Object.keys(mealsDay)
+        .reduce((acc, id) => {
+          const meal = mealsDay[id];
+          if (!utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
+          acc[id] = meal;
+          return acc;
+        }, {});
     },
 
-    dateString() {
-      return utils.getDateString(this.selectedDate);
+    dayString() {
+      return utils.getDayString(this.selectedDate);
     },
   },
 
   watch: {
-    dateString(date) {
+    dayString(date) {
       this.fetchMeals({ filters: { date } });
     },
   },
