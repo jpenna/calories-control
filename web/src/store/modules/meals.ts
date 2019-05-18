@@ -22,10 +22,6 @@ function mapMeal(meal: api.ApiMeal): Meals.MealInterface {
   };
 }
 
-function cleanDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
 // Set the start and end time for the date
 function prepareFetchTime(original: Date): { from: string, until: string } {
   const date = new Date(original);
@@ -46,7 +42,10 @@ const initialState: Meals.MealsState = {
 
 const getters: GetterTree<Meals.MealsState, RootInterface> = {
   getMealsForDate(state) {
-    return (date: string) => state.list[date] || {};
+    return (date: string | Date) => {
+      const key = typeof date !== 'string' ? utils.getDateString(date) : date;
+      return state.list[key] || {};
+    };
   },
 };
 
@@ -66,7 +65,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 
   // fetch meals
   async fetchMeals({ commit, state }, { filters, force }: { filters: Meals.FiltersInterface, force: boolean }) {
-    const dateString = cleanDate(filters.date);
+    const dateString = utils.getDateString(filters.date);
     if (state.isFetching.has(dateString)) return;
     // Skip fetch if already have the data
     if (state.list[dateString] && !force) return;
@@ -78,7 +77,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 
     api.listMeals(apiFilters)
       .then((data: api.ListMealsRes) => {
-        commit(types.FETCH_MEALS_DONE, data);
+        commit(types.FETCH_MEALS_DONE, { data, dateString });
       })
       .catch((error: ApiResponseError) => {
         commit(types.FETCH_MEALS_FAIL, error);
@@ -95,7 +94,7 @@ const mutations: MutationTree<Meals.MealsState> = {
   [types.NEW_MEAL_DONE](state, data: api.NewMealRes) {
     state.isSubmitting = false;
     const meal = mapMeal(data.meal);
-    const mealDate = cleanDate(meal.eatenAt);
+    const mealDate = utils.getDateString(meal.eatenAt);
     const dateList = { ...state.list[mealDate], [meal.id]: meal };
     Vue.set(state.list, mealDate, dateList);
   },
@@ -107,23 +106,23 @@ const mutations: MutationTree<Meals.MealsState> = {
   },
 
   // Fetch Meals
-  [types.FETCH_MEALS](state, date: string) {
-    state.isFetching.add(date);
-    state.fetchingError.set(date, {});
+  [types.FETCH_MEALS](state, dateString: string) {
+    state.isFetching.add(dateString);
+    state.fetchingError.set(dateString, {});
   },
-  [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, date: string }) {
-    const { date, data: res } = payload;
-    state.isFetching.delete(date);
-    const dateList = res.meals.reduce((acc: { [id: string]: Meals.MealInterface }, meal) => {
+  [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, dateString: string }) {
+    const { dateString, data } = payload;
+    state.isFetching.delete(dateString);
+    const dateList = data.meals.reduce((acc: { [id: string]: Meals.MealInterface }, meal) => {
       const norm = mapMeal(meal);
       acc[norm.id] = norm;
       return acc;
     }, {});
-    Vue.set(state.list, date, dateList);
+    Vue.set(state.list, dateString, dateList);
   },
-  [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, date: string }) {
+  [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dateString: string }) {
     const { status, message, code } = payload.error.apiError;
-    state.isFetching.delete(payload.date);
+    state.isFetching.delete(payload.dateString);
     state.submitError = { status, message, code };
   },
 };

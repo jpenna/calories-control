@@ -2,13 +2,19 @@
   <div>
     <MealModal />
     <MealsFilter :date.sync="selectedDate" :timeRange.sync="timeRange" />
+
+    <span v-show="isFetching.has(this.selectedDate)">
+      <i class="el-icon-loading" />
+      Loading...
+    </span>
+
     <MealsList :mealsList="mealsList" />
   </div>
 </template>
 
 <script lang="js">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -38,11 +44,29 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters('meals', ['getMealsForDate']),
+    ...mapState('meals', ['isFetching']),
 
     mealsList() {
-      // return this.getMealsForDate()
-      return [];
+      return this.getMealsForDate(this.selectedDate);
     },
+
+    dateString() {
+      return utils.getDateString(this.selectedDate);
+    },
+  },
+
+  watch: {
+    dateString(date) {
+      this.fetchMeals({
+        filters: {
+          date,
+        },
+      });
+    },
+  },
+
+  methods: {
+    ...mapActions('meals', ['fetchMeals']),
   },
 });
 </script>

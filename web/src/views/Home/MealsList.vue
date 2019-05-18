@@ -36,7 +36,7 @@ export default Vue.extend({
   },
 
   props: {
-    mealsList: { type: Array, required: true },
+    mealsList: { type: Object, required: true },
   },
 });
 </script>

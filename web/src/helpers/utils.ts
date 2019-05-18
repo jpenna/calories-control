@@ -53,3 +53,7 @@ export function setLastTime(date: Date) {
   modDate.setSeconds(59);
   return modDate;
 }
+
+export function getDateString(date: Date): string {
+  return (new Date(date)).toISOString().split('T')[0];
+}
