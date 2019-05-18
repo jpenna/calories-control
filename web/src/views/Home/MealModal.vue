@@ -149,7 +149,7 @@ export default Vue.extend({
     date: {
       immediate: true,
       handler(date) {
-        this.form.eatenAt.setFullYear(date.getYear(), date.getMonth(), date.getDate());
+        this.form.eatenAt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
       },
     },
 
