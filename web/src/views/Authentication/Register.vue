@@ -97,7 +97,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('auth', ['authError']),
+    ...mapState('auth', ['authError', 'isAuthenticating']),
   },
 
   methods: {

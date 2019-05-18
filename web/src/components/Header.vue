@@ -1,10 +1,12 @@
 <template>
   <div class="flex-split">
-    <h1>CalControl</h1>
+    <router-link to="/">
+      <h1>CalControl</h1>
+    </router-link>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth">
-      <i class="el-icon-user" />
-      Account
+      <img src="@/assets/emojis/moyai.png" style="height: 2rem" />
+      <span class="fw-500 ml-5 color-regular">Account</span>
     </router-link>
   </div>
 </template>

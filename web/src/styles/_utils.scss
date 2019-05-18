@@ -66,6 +66,8 @@ $color-props: (
   .#{$name}-warning { #{$prop}: $--color-warning !important; };
   .#{$name}-danger { #{$prop}: $--color-danger !important; };
   .#{$name}-info { #{$prop}: $--color-info !important; };
+
+  .#{$name}-regular { #{$prop}: $--color-text-regular !important; };
 }
 
 $width: 25 50 75 100;

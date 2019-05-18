@@ -17,7 +17,6 @@ export default new Router({
   routes: [
     {
       path: '/login',
-      alias: '/',
       component: Container,
       children: [{
         path: '',
@@ -28,8 +27,10 @@ export default new Router({
         name: 'register',
         component: Register,
       }],
+
     }, {
       path: '/home',
+      alias: '/',
       props: { auth: true },
       component: Authenticated,
       children: [{

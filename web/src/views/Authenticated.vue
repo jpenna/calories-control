@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapState } from 'vuex';
 
 import Header from '@/components/Header.vue';
 
@@ -21,6 +22,14 @@ export default Vue.extend({
 
   components: {
     Header,
+  },
+
+  computed: {
+    ...mapState('auth', ['isAuthenticated']),
+  },
+
+  mounted() {
+    if (!this.isAuthenticated) this.$router.push({ name: 'login' });
   },
 });
 </script>

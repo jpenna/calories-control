@@ -21,7 +21,7 @@
     </el-form>
 
     <!-- Users permissions -->
-    <UsersRoles />
+    <!-- <UsersRoles /> -->
 
     <el-button @click="handleLogout">
       Logout
@@ -34,13 +34,13 @@
 import Vue from 'vue';
 import { mapMutations } from 'vuex';
 
-import UsersRoles from './UsersRoles.vue';
+// import UsersRoles from './UsersRoles.vue';
 
 export default Vue.extend({
   name: 'Account',
 
   components: {
-    UsersRoles,
+    // UsersRoles,
   },
 
   data() {

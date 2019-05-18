@@ -6,7 +6,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'UnauthorizedContainer',
@@ -18,6 +18,14 @@ export default {
 
   methods: {
     ...mapMutations('auth', ['clearAuthError']),
+  },
+
+  computed: {
+    ...mapState('auth', ['isAuthenticated']),
+  },
+
+  mounted() {
+    if (this.isAuthenticated) this.$router.push({ name: 'home' });
   },
 };
 </script>

@@ -15,13 +15,8 @@ export default Vue.extend({
   },
 
   watch: {
-    isAuthenticated: {
-      immediate: true,
-      handler(isAuthenticated: boolean): void {
-        if (this.$route.matched[0].path === '/home') { // Authenticated entry point
-          if (!isAuthenticated) this.$router.push({ name: 'login' });
-        } else if (isAuthenticated) this.$router.push({ name: 'home' });
-      },
+    isAuthenticated() {
+      this.$router.push('/');
     },
   },
 });
