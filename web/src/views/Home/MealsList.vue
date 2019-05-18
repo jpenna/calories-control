@@ -83,7 +83,8 @@ export default Vue.extend({
 
   filters: {
     filterTime(date) {
-      return `${date.getHours()}:${date.getMinutes()}`;
+      const [hours, minutes] = date.toTimeString().split(':');
+      return `${hours}:${minutes}`;
     },
   },
 
