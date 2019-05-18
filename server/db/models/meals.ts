@@ -54,7 +54,7 @@ const MealSchema = new mongoose.Schema({
   },
 });
 
-MealSchema.index({ eatenAt: -1, user: 1 });
+MealSchema.index({ user: 1, eatenAt: -1 });
 
 
 export default mongoose.model<MealInterface>('Meal', MealSchema);

@@ -41,12 +41,15 @@ export default express.Router()
         queryFilters.user = mealUserId || requester.id;
       }
 
-      const meals = await MealModel.find(queryFilters)
-        .limit(+limit || 20)
-        .skip(+skip || 0)
-        .sort({ eatenAt: 1 });
+      const [meals, count] = await Promise.all([
+        await MealModel.find(queryFilters)
+          .limit(+limit || 20)
+          .skip(+skip || 0)
+          .sort({ eatenAt: 1 }),
+        await MealModel.count(queryFilters),
+      ]);
 
-      res.sendSuccess({ meals });
+      res.sendSuccess({ meals, count, skipped: +skip || 0 });
     } catch (err) {
       res.sendError(500, err.message);
     }
