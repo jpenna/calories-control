@@ -16,7 +16,7 @@
       <el-form-item label="Password" prop="password">
         <el-input placeholder="Password" v-model="form.password" show-password />
       </el-form-item>
-      <el-button native-type="submit" type="primary" class="w-100 mb-40 mt-30">
+      <el-button :loading="isAuthenticating" native-type="submit" type="primary" class="w-100 mb-40 mt-30">
         Login
       </el-button>
     </el-form>
@@ -63,7 +63,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('auth', ['authError']),
+    ...mapState('auth', ['authError', 'isAuthenticating']),
   },
 
   methods: {

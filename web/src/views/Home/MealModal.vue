@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="meal-modal">
     <!-- Button -->
     <el-button @click="show = true">
       New Meal
@@ -8,9 +8,10 @@
     <!-- Modal -->
     <el-dialog
       title="New Meal"
-      :show-close="false"
       :center="true"
       :visible.sync="show"
+      :show-close="showFullScreen"
+      :fullscreen="showFullScreen"
     >
 
       <el-form ref="form" :model="form" label-position="top" @submit="submitNewMeal">
@@ -68,12 +69,15 @@
 <script lang="ts">
 import Vue from 'vue';
 
+import * as utils from '@/helpers/utils';
+
 export default Vue.extend({
   name: 'NewMeal',
 
   data() {
     return {
       show: false,
+      showFullScreen: utils.getWidth() <= 550,
 
       form: {
         name: '',
@@ -86,6 +90,12 @@ export default Vue.extend({
     };
   },
 
+  mounted() {
+    window.addEventListener('resize', () => {
+      this.showFullScreen = utils.getWidth() <= 550;
+    });
+  },
+
   methods: {
     submitNewMeal() {
       this.show = false;
@@ -93,3 +103,13 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss">
+.meal-modal {
+  @media screen and (min-width: 550px) {
+    .el-dialog {
+      min-width: 500px;
+    }
+  }
+}
+</style>

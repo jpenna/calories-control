@@ -28,7 +28,7 @@
 
     </el-form>
 
-    <el-button @click="handleRegister" type="primary" class="d-block w-100 mb-40 mt-5">
+    <el-button :loading="isAuthenticating" @click="handleRegister" type="primary" class="d-block w-100 mb-40 mt-5">
       Register
     </el-button>
 
