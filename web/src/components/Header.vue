@@ -1,6 +1,6 @@
 <template>
   <div class="flex-split">
-    <h1>CNAme</h1>
+    <h1>CalControl</h1>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth">
       <i class="el-icon-user" />
