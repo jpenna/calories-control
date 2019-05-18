@@ -37,3 +37,19 @@ export function getHeight() {
     document.documentElement.clientHeight,
   );
 }
+
+export function setFirstTime(date: Date) {
+  const modDate = new Date(date);
+  modDate.setHours(0);
+  modDate.setMinutes(0);
+  modDate.setSeconds(0);
+  return modDate;
+}
+
+export function setLastTime(date: Date) {
+  const modDate = new Date(date);
+  modDate.setHours(23);
+  modDate.setMinutes(59);
+  modDate.setSeconds(59);
+  return modDate;
+}

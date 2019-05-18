@@ -1,10 +1,12 @@
 <template>
-  <el-form ref="form" :model="form" label-position="top" :inline="true">
+  <el-form ref="form" :model="form" label-position="left">
     <!-- Date -->
     <el-form-item label="Date">
       <el-date-picker
-        v-model="form.date[0]"
+        :value="date"
+        :clearable="false"
         type="date"
+        @input="$emit('update:date', $event)"
       />
     </el-form-item>
 
@@ -12,15 +14,18 @@
     <el-form-item label="Time">
       <el-time-picker
         is-range
-        v-model="form.date"
+        :value="timeRange"
+        :clearable="false"
         range-separator="To"
         start-placeholder="Start time"
         end-placeholder="End time"
+        format="HH:mm"
+        @input="$emit('update:timeRange', $event)"
       />
     </el-form-item>
 
     <!-- User -->
-    <el-form-item label="User">
+    <!-- <el-form-item label="User">
       <el-select v-model="form.user">
         <el-option
           v-for="item in usersList"
@@ -29,7 +34,7 @@
           :value="item.value"
         />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
 
   </el-form>
 </template>
@@ -40,10 +45,14 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'FilterMeals',
 
+  props: {
+    date: { type: Date, required: true },
+    timeRange: { type: Array, required: true },
+  },
+
   data() {
     return {
       form: {
-        date: [new Date(), new Date()],
         user: 1,
       },
       usersList: [

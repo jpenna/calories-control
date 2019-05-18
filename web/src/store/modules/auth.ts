@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
+import { MutationTree, ActionTree } from 'vuex';
 
 import * as api from '@/api/auth';
 import * as types from '../types';

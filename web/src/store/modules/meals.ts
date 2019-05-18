@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { MutationTree, Module, ActionTree, GetterTree } from 'vuex';
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
 import Vue from 'vue';
 
 import * as api from '@/api/meals';
@@ -8,6 +8,8 @@ import * as types from '../types';
 
 import { RootInterface, Meals } from './@types';
 import { ApiResponseError } from '@/api/apiBase';
+
+import * as utils from '@/helpers/utils';
 
 function mapMeal(meal: api.ApiMeal): Meals.MealInterface {
   return {
@@ -27,17 +29,8 @@ function cleanDate(date: Date): string {
 // Set the start and end time for the date
 function prepareFetchTime(original: Date): { from: string, until: string } {
   const date = new Date(original);
-
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  const from = date.toISOString();
-
-  date.setHours(23);
-  date.setMinutes(59);
-  date.setSeconds(59);
-  const until = date.toISOString();
-
+  const from = utils.setFirstTime(date).toISOString();
+  const until = utils.setLastTime(date).toISOString();
   return { from, until };
 }
 
@@ -49,6 +42,12 @@ const initialState: Meals.MealsState = {
 
   isSubmitting: false,
   submitError: {},
+};
+
+const getters: GetterTree<Meals.MealsState, RootInterface> = {
+  getMealsForDate(state) {
+    return (date: string) => state.list[date] || {};
+  },
 };
 
 const actions: ActionTree<Meals.MealsState, RootInterface> = {
@@ -133,5 +132,6 @@ export default {
   namespaced: true,
   state: initialState,
   mutations,
+  getters,
   actions,
 };

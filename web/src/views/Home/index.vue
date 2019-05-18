@@ -1,13 +1,16 @@
 <template>
   <div>
     <MealModal />
-    <MealsFilter />
+    <MealsFilter :date.sync="selectedDate" :timeRange.sync="timeRange" />
     <MealsList :mealsList="mealsList" />
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue';
+import { mapGetters } from 'vuex';
+
+import * as utils from '@/helpers/utils';
 
 import MealsFilter from './MealsFilter.vue';
 import MealsList from './MealsList.vue';
@@ -23,16 +26,23 @@ export default Vue.extend({
   },
 
   data() {
+    const selectedDate = new Date();
     return {
-      mealsList: [{
-        userId: '5cd7e59e71b4dc90cded7f07',
-        name: 'rice',
-        notes: 'this wasn\'t good...',
-        calories: 500,
-        eatenAt: '2019-05-01T06:25:21.920Z',
-        id: '5cd83bc8dd2c79a61448a41f',
-      }],
+      selectedDate,
+      timeRange: [
+        utils.setFirstTime(selectedDate),
+        utils.setLastTime(selectedDate),
+      ],
     };
+  },
+
+  computed: {
+    ...mapGetters('meals', ['getMealsForDate']),
+
+    mealsList() {
+      // return this.getMealsForDate()
+      return [];
+    },
   },
 });
 </script>
