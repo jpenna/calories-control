@@ -6,6 +6,7 @@
     class="meal-modal"
     @close="$emit('update:show', false)"
     @closed="$refs.form.resetFields()"
+    @submit.prevent.native="submitMeal"
   >
     <h2 slot="title" class="mb-0 mt-0">
       <img src="@/assets/emojis/delicious.png" class="mr-5" style="height: 2rem; vertical-align: sub" />
@@ -72,7 +73,7 @@
 
       <div class="dialog-footer text-right mt-20">
         <el-button type="text" @click="$emit('update:show', false)" class="mr-30">Cancel</el-button>
-        <el-button type="primary" native-type="submit" @click="submitNewMeal" :loading="isSubmitting">
+        <el-button type="primary" native-type="submit" @click="submitMeal" :loading="isSubmitting">
           <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
           Eaten!
         </el-button>
@@ -99,12 +100,12 @@ export default Vue.extend({
     return {
       showFullScreen: utils.getWidth() <= 550,
 
-      date: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
-      time: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
+      date: new Date(),
+      time: new Date(),
 
       form: {
         name: '',
-        eatenAt: new Date('Sat May 18 2019 23:00:00 GMT+0800'),
+        eatenAt: new Date(),
         calories: 500,
         userId: this.userId,
         notes: 'No notes for this one',
@@ -164,7 +165,7 @@ export default Vue.extend({
   methods: {
     ...mapActions('meals', ['newMeal']),
 
-    submitNewMeal() {
+    submitMeal() {
       this.$refs.form.validate((valid) => {
         if (!valid) return;
         this.newMeal({

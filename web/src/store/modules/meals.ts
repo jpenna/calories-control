@@ -25,8 +25,8 @@ function mapMeal(meal: api.ApiMeal): Meals.MealInterface {
 // Set the start and end time for the date
 function prepareFetchTime(original: Date): { from: string, until: string } {
   const date = new Date(original);
-  const from = utils.setFirstTime(date).toISOString();
-  const until = utils.setLastTime(date).toISOString();
+  const from = utils.discardTimezone(utils.setFirstTime(date));
+  const until = utils.discardTimezone(utils.setLastTime(date));
   return { from, until };
 }
 

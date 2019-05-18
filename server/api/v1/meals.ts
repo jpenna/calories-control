@@ -1,5 +1,6 @@
 import express from 'express';
 
+import * as utils from '../../utils';
 import MealModel from '../../db/models/meals';
 import { MEALS_ALL } from '../../utils/permissions';
 
@@ -35,8 +36,8 @@ export default express.Router()
       }
 
       const queryFilters: { eatenAt?: { [key: string]: Date }; user?: string } = {};
-      if (from) queryFilters.eatenAt = { $gte: new Date(from) };
-      if (until) queryFilters.eatenAt = { ...queryFilters.eatenAt, $lte: new Date(until) };
+      if (from) queryFilters.eatenAt = { $gte: utils.adjustTimezone(from) };
+      if (until) queryFilters.eatenAt = { ...queryFilters.eatenAt, $lte: utils.adjustTimezone(until) };
       if (mealUserId || !requester.hasPermission(MEALS_ALL)) {
         queryFilters.user = mealUserId || requester.id;
       }

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import * as utils from '../../utils';
+
 interface MealInterface extends mongoose.Document {
   eatenAt: Date;
   name: string;
@@ -59,9 +61,7 @@ MealSchema.pre<MealInterface>('save', function (next): void {
   // only hash the password if it has been modified (or is new)
   if (!meal.isModified('eatenAt')) return next();
 
-  // Discard timezone from date
-  const adjustedHours = meal.eatenAt.getHours() - meal.eatenAt.getTimezoneOffset() / 60;
-  meal.eatenAt = new Date(meal.eatenAt.setHours(adjustedHours));
+  meal.eatenAt = utils.adjustTimezone(meal.eatenAt);
   next();
 });
 

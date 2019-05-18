@@ -78,6 +78,13 @@ export default Vue.extend({
     dayString(date) {
       this.fetchMeals({ filters: { date } });
     },
+
+    selectedDate(selectedDate) {
+      const adjusted = utils.adjustTimezone(selectedDate);
+      const [year, month, date] = adjusted.toISOString().split('T')[0].split('-');
+      this.timeRange[0].setFullYear(year, month - 1, date);
+      this.timeRange[1].setFullYear(year, month - 1, date);
+    },
   },
 
   methods: {
