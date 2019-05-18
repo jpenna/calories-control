@@ -53,8 +53,12 @@ export namespace Meals {
   export interface MealsState {
     list: {
       [date: string]: {
-        [id: string]: MealInterface,
+        [id: string]: MealInterface;
       },
+    };
+
+    listTotal: {
+      [date: string]: number;
     };
 
     isFetching: Set<string>;

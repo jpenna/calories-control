@@ -32,6 +32,7 @@ function prepareFetchTime(original: Date): { from: string, until: string } {
 
 const initialState: Meals.MealsState = {
   list: {},
+  listTotal: {},
 
   isFetching: new Set(),
   fetchingError: new Map(),
@@ -41,10 +42,17 @@ const initialState: Meals.MealsState = {
 };
 
 const getters: GetterTree<Meals.MealsState, RootInterface> = {
-  getMealsForDate(state) {
+  getMealsForDate(state): {} {
     return (date: string | Date) => {
       const key = typeof date !== 'string' ? utils.getDayString(date) : date;
       return state.list[key] || {};
+    };
+  },
+
+  getTotalMealsForDate(state) {
+    return (date: string | Date): number => {
+      const key = typeof date !== 'string' ? utils.getDayString(date) : date;
+      return state.listTotal[key] || 0;
     };
   },
 };
@@ -73,7 +81,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
     commit(types.FETCH_MEALS, dayString);
 
     const { from, until } = prepareFetchTime(filters.date);
-    const apiFilters = { ...filters, from, until };
+    const apiFilters = { from, until };
 
     api.listMeals(apiFilters)
       .then((data: api.ListMealsRes) => {
@@ -97,6 +105,8 @@ const mutations: MutationTree<Meals.MealsState> = {
     const mealDate = utils.getDayString(meal.eatenAt);
     const dateList = { ...state.list[mealDate], [meal.id]: meal };
     Vue.set(state.list, mealDate, dateList);
+    // Setting with Vue in case there was nothing fetched (offline mode)
+    Vue.set(state.listTotal, mealDate, (state.listTotal[mealDate] || 0) + 1);
   },
   [types.NEW_MEAL_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
@@ -118,6 +128,7 @@ const mutations: MutationTree<Meals.MealsState> = {
       acc[norm.id] = norm;
       return acc;
     }, {});
+    Vue.set(state.listTotal, dayString, data.count);
     Vue.set(state.list, dayString, dateList);
   },
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {

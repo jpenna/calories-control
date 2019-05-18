@@ -35,9 +35,9 @@ export default {
     layout() {
       const layout = ['sizes'];
       if (this.total > this.size) {
-        layout.push('prev, pager, next');
+        layout.push('prev, pager, next, ->, jumper');
       }
-      layout.push('->, jumper, total');
+      layout.push('->, total');
       return layout.join(',');
     },
   },

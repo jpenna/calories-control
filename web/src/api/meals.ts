@@ -36,6 +36,8 @@ interface ListMealsParams {
 export interface ListMealsRes {
   success: boolean;
   meals: ApiMeal[];
+  count: number;
+  skipped: number;
 }
 export function listMeals(params: ListMealsParams): Promise<ListMealsRes> {
   return apiBase

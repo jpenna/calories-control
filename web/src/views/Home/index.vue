@@ -11,7 +11,7 @@
       Loading...
     </span>
 
-    <MealsList :mealsList="mealsList" />
+    <MealsList :mealsList="mealsList" :total="getTotalMealsForDate(selectedDate)" />
 
     <MealModal :show.sync="showMealModal" />
   </div>
@@ -54,7 +54,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapGetters('meals', ['getMealsForDate']),
+    ...mapGetters('meals', ['getMealsForDate', 'getTotalMealsForDate']),
     ...mapState('meals', ['isFetching']),
 
     mealsList() {

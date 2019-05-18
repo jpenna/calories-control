@@ -7,69 +7,70 @@
     </div>
 
     <div v-show="mealsList.length">
-    <div
-      class="total-calories"
-      :class="exceedGoal ? 'color-danger' : 'color-success'"
-    >
-      Eaten Calories: 400 / 3000
-    </div>
+      <div
+        class="total-calories"
+        :class="exceedGoal ? 'color-danger' : 'color-success'"
+      >
+        Eaten Calories: 400 / 3000
+      </div>
 
-    <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card separate-list">
-      <div>
-        <div class="flex-split" style="align-items: flex-start">
-          <!-- Name -->
-          <div class="fs-120 fw-600 mt-10">{{ meal.name }}</div>
+      <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card separate-list">
+        <div>
+          <div class="flex-split" style="align-items: flex-start">
+            <!-- Name -->
+            <div class="fs-120 fw-600 mt-10">{{ meal.name }}</div>
 
-          <!-- Actions -->
-          <div>
-            <el-tooltip effect="light" content="Edit" :open-delay="500">
-              <el-button type="text">
-                <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
-              </el-button>
-            </el-tooltip>
+            <!-- Actions -->
+            <div>
+              <el-tooltip effect="light" content="Edit" :open-delay="500">
+                <el-button type="text">
+                  <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
+                </el-button>
+              </el-tooltip>
 
-            <el-tooltip effect="light" content="Delete" :open-delay="500">
-              <el-button type="text" class="ml-25">
-                <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
-              </el-button>
-            </el-tooltip>
+              <el-tooltip effect="light" content="Delete" :open-delay="500">
+                <el-button type="text" class="ml-25">
+                  <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
+                </el-button>
+              </el-tooltip>
+            </div>
+          </div>
+
+          <!-- User -->
+          <div class="icon-format">
+            <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
+            <span>{{ meal.userId }}</span>
+          </div>
+
+          <div class="fw-500 mt-10">
+            <!-- Calories -->
+            <span class="icon-format">
+              <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
+              <span>{{ meal.calories }} cal</span>
+            </span>
+            <!-- Time -->
+            <span class="ml-30 icon-format">
+              <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
+              <span>{{ meal.eatenAt | filterTime }}</span>
+            </span>
+          </div>
+
+          <!-- Notes -->
+          <div v-if="meal.notes" class="mt-10" style="font-style: italic">
+            {{ meal.notes }}
           </div>
         </div>
+      </el-card>
 
-        <!-- User -->
-        <div class="icon-format">
-          <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
-          <span>{{ meal.userId }}</span>
-        </div>
-
-        <div class="fw-500 mt-10">
-          <!-- Calories -->
-          <span class="icon-format">
-            <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
-            <span>{{ meal.calories }} cal</span>
-          </span>
-          <!-- Time -->
-          <span class="ml-30 icon-format">
-            <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
-            <span>{{ meal.eatenAt | filterTime }}</span>
-          </span>
-        </div>
-
-        <!-- Notes -->
-        <div v-if="meal.notes" class="mt-10" style="font-style: italic">
-          {{ meal.notes }}
-        </div>
-      </div>
-    </el-card>
-
-    <!-- Pagination -->
-    <Pagination
-      class="mt-30"
-      settingsKey="meals-list"
-      :startPage="0"
-      :total="50"
-    />
-  </div>
+      <!-- Pagination -->
+      <Pagination
+        v-show="total > mealsList.length"
+        class="mt-30"
+        settingsKey="meals-list"
+        :startPage="0"
+        :total="total"
+      />
+    </div>
   </div>
 </template>
 
@@ -87,6 +88,7 @@ export default Vue.extend({
 
   props: {
     mealsList: { type: Array, required: true },
+    total: { type: Number, required: true },
   },
 
   filters: {
