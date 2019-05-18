@@ -52,6 +52,6 @@ export interface MealsState {
     [key: string]: MealInterface,
   },
 
-  isAdding: boolean,
-  addError: ApiError;
+  isSubmitting: boolean,
+  submitError: ApiError;
 }

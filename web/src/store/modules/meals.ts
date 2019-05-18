@@ -10,20 +10,20 @@ import { ApiResponseError } from '@/api/apiBase';
 
 function mapMeal(meal: api.ApiMeal): MealInterface {
   return {
+    id: meal.id,
     userId: meal.user,
     name: meal.name,
     notes: meal.notes,
     calories: meal.calories,
     eatenAt: new Date(meal.eatenAt),
-    id: meal.id,
   };
 }
 
 const initialState: MealsState = {
   list: {},
 
-  isAdding: false,
-  addError: {},
+  isSubmitting: false,
+  submitError: {},
 };
 
 const actions: ActionTree<MealsState, RootInterface> = {
@@ -43,19 +43,19 @@ const actions: ActionTree<MealsState, RootInterface> = {
 const mutations: MutationTree<MealsState> = {
   // New Meal
   [types.NEW_MEAL](state) {
-    state.isAdding = true;
-    state.addError = {};
+    state.isSubmitting = true;
+    state.submitError = {};
   },
   [types.NEW_MEAL_DONE](state, data: api.NewMealRes) {
-    state.isAdding = false;
+    state.isSubmitting = false;
     const meal = mapMeal(data.meal);
     state.list = { ...state.list, [meal.id]: meal };
   },
   [types.NEW_MEAL_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
 
-    state.isAdding = false;
-    state.addError = { status, message, code };
+    state.isSubmitting = false;
+    state.submitError = { status, message, code };
   },
 };
 
