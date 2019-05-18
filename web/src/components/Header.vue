@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-split">
+  <div :class="isAuth ? 'flex-split' : 'text-center mb-30'" style="height: 100%">
     <router-link to="/">
-      <h1>CalControl</h1>
+      <img src="@/assets/logo.png" :width="isAuth ? '140px' : '200px'" />
     </router-link>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth">

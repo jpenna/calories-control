@@ -30,7 +30,7 @@
         </div>
 
         <!-- User -->
-        <div class="icon-format mt-10">
+        <div class="icon-format">
           <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
           <span>{{ meal.userId }}</span>
         </div>
