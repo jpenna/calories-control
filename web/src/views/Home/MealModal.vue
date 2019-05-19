@@ -19,7 +19,7 @@
       label-position="left"
       label-width="90px"
       hide-required-asterisk
-      @submit.native.prevent="handleSubmitMeal"
+      @submit.native.prevent
     >
       <!-- Name -->
       <el-form-item label="Name" prop="name">
@@ -36,7 +36,7 @@
           class="time-block"
         />
 
-          <!-- Time -->
+        <!-- Time -->
         <el-time-picker
           v-model="time"
           :clearable="false"
@@ -62,11 +62,11 @@
       <!-- Notes -->
       <el-form-item label="Notes" prop="notes" class="mb-0">
         <el-input
-          type="textarea"
-          :autosize="{ minRows: 2}"
-          placeholder="Anything you want to record?"
           v-model="form.notes"
+          type="textarea"
+          placeholder="Anything you want to record?"
           show-word-limit
+          :autosize="{ minRows: 2}"
           :maxlength="100"
         />
       </el-form-item>

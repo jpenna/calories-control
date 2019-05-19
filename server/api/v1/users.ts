@@ -27,7 +27,6 @@ export default express.Router()
     }
   })
 
-
   // User by ID
   .get('/roles', (req, res): void => {
     res.sendSuccess({ roles: ROLES });

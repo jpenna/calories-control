@@ -54,21 +54,21 @@
           </div>
 
           <!-- User -->
-          <div class="icon-format">
+          <div v-if="$hasRole('mealsAll', myself)" class="icon-format">
             <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
             <span>{{ usersList[meal.userId].name || meal.userId }}</span>
           </div>
 
           <div class="fw-500 mt-10">
-            <!-- Calories -->
-            <span class="icon-format">
-              <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
-              <span>{{ meal.calories }} cal</span>
-            </span>
             <!-- Time -->
-            <span class="ml-30 icon-format">
+            <span class="icon-format">
               <img src="@/assets/emojis/clock.png" style="height: 1.2rem" class="v-align-middle" />
               <span>{{ meal.eatenAt | filterTime }}</span>
+            </span>
+            <!-- Calories -->
+            <span class="ml-30 icon-format">
+              <img src="@/assets/emojis/fire.png" style="height: 1.2rem" class="v-align-middle" />
+              <span>{{ meal.calories }} cal</span>
             </span>
           </div>
 
