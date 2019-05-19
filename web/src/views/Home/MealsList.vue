@@ -11,7 +11,7 @@
 
       <!-- Calories -->
       <div
-        v-show="hasMeals && showCalories"
+        v-show="hasMeals && selectedUserId"
         class="total-calories"
         :class="exceedGoal ? 'color-danger' : 'color-success'"
       >
@@ -21,7 +21,7 @@
           style="height: 2rem; vertical-align: sub"
           class="mr-5"
         />
-        Eaten Calories: {{ caloriesTotal }} / {{ myself.dailyCalories }}
+        Eaten Calories: {{ caloriesTotal }} / {{ selectedUser.dailyCalories }}
       </div>
     </div>
 
@@ -105,7 +105,6 @@ export default Vue.extend({
     mealsList: { type: Object, required: true },
     caloriesTotal: { type: Number, required: true },
     isFetchingList: { type: Boolean, required: true },
-    showCalories: { type: Boolean, required: true },
     selectedUserId: { type: String, required: true },
   },
 
@@ -122,16 +121,19 @@ export default Vue.extend({
     ...mapGetters('users', ['myself']),
 
     exceedGoal() {
-      if (!this.showCalories) return;
-      const userId = Object.keys(this.mealsList)[0];
-      const calSum = this.mealsList[userId] // Only when 1 user
+      if (!this.selectedUserId) return;
+      const calSum = this.mealsList[this.selectedUserId] // Only when 1 user
         // eslint-disable-next-line no-return-assign, no-param-reassign
         .reduce((sum, meal) => sum += meal.calories, 0);
-      return this.myself.dailyCalories - calSum < 0;
+      return this.selectedUser.dailyCalories - calSum < 0;
     },
 
     hasMeals() {
       return Object.keys(this.mealsList).length;
+    },
+
+    selectedUser() {
+      return this.usersList[this.selectedUserId] || {};
     },
   },
 

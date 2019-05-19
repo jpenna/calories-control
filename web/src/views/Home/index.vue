@@ -12,16 +12,16 @@
       :mealsList="mealsList"
       :isFetchingList="isFetchingDate"
       :caloriesTotal="caloriesTotal"
-      :showCalories="!!selectedUserId"
+      :selectedUserId="selectedUserId"
       @editMeal="editMeal"
     />
 
     <Pagination
-      v-show="filteredList.length"
+      v-show="mealsFiltered.length"
       class="mt-30"
       settingsKey="meals-list"
       :startPage="0"
-      :total="totalForDay"
+      :total="mealsFiltered.length"
       @change="updatePagination"
     />
 
@@ -78,8 +78,7 @@ export default Vue.extend({
     ...mapGetters('meals', ['getMealsForDate', 'getTotalMealsForDate']),
     ...mapState('meals', ['isFetching']),
 
-    filteredList() {
-      console.log('get filtered');
+    mealsFiltered() {
       const mealsDay = this.getMealsForDate(this.selectedDate);
 
       return Object.keys(mealsDay)
@@ -100,39 +99,34 @@ export default Vue.extend({
         });
     },
 
-    mealsList() {
-      const grouped = this.filteredList
+    mealsGrouped() {
+      return this.mealsFiltered
         // Group
         .reduce((acc, meal, index) => {
           if (!acc[meal.userId]) acc[meal.userId] = [];
           acc[meal.userId].push(meal);
           return acc;
         }, {});
+    },
 
+    mealsList() {
       let count = 0;
-      return Object.keys(grouped).reduce((acc, userId) => {
+      return Object.keys(this.mealsGrouped).reduce((acc, userId) => {
         // Maximum count
-        console.log('---------------')
-        console.log(1, count)
         if (count >= this.firstItem + this.maxSize) return acc;
         // Skip some of group if pass
         const toSkip = this.firstItem - count;
-        count += grouped[userId].length;
+        count += this.mealsGrouped[userId].length;
         // Skip until page start
-        console.log(2, toSkip)
-        console.log(3, count)
-        console.log(4, this.firstItem)
         if (count <= this.firstItem) return acc;
 
-        let useGroup = grouped[userId];
+        let useGroup = this.mealsGrouped[userId];
 
         const excess = (this.firstItem + this.maxSize) - count;
-        console.log(5, excess)
         if (excess < 0) useGroup = useGroup.slice(0, excess);
 
         if (toSkip > 0) useGroup = useGroup.slice(toSkip);
 
-        console.log(6, useGroup)
         acc[userId] = useGroup;
         return acc;
       }, {});
@@ -142,13 +136,9 @@ export default Vue.extend({
       return utils.getDayString(this.selectedDate);
     },
 
-    totalForDay() {
-      return this.getTotalMealsForDate(this.selectedDate);
-    },
-
     caloriesTotal() {
-      const mealsDay = this.getMealsForDate(this.selectedDate);
-      return Object.keys(mealsDay).reduce((acc, id) => acc + mealsDay[id].calories, 0);
+      return (this.mealsGrouped[this.selectedUserId] || [])
+        .reduce((acc, meal) => acc + meal.calories, 0);
     },
 
     isFetchingDate() {
