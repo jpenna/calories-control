@@ -28,7 +28,7 @@ const initialState: Account.AccountState = {
 };
 
 const getters: GetterTree<Account.AccountState, RootInterface> = {
-  getMe(state, localGetters, rootState): Account.UserInterface {
+  myself(state, localGetters, rootState): Account.UserInterface {
     return state.usersList[rootState.auth.userId] || {};
   },
 };

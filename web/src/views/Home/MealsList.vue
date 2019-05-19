@@ -19,7 +19,7 @@
           style="height: 2rem; vertical-align: sub"
           class="mr-5"
         />
-        Eaten Calories: {{ caloriesTotal }} / 3000
+        Eaten Calories: {{ caloriesTotal }} / {{ myself.dailyCalories }}
       </div>
     </div>
 
@@ -85,7 +85,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -105,20 +105,16 @@ export default Vue.extend({
     },
   },
 
-  data() {
-    return {
-      caloriesGoal: 3000,
-    };
-  },
-
   computed: {
     ...mapState('meals', ['removingIds']),
+    ...mapGetters('account', ['myself']),
 
     exceedGoal() {
+      if (!this.myself.dailyCalories) return false;
       const calSum = Object.keys(this.mealsList)
         // eslint-disable-next-line no-return-assign, no-param-reassign
         .reduce((sum, k) => sum += this.mealsList[k].calories, 0);
-      return this.caloriesGoal - calSum < 0;
+      return this.myself.dailyCalories - calSum < 0;
     },
   },
 
