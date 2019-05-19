@@ -16,7 +16,16 @@
             :disabled="item.disabled"
           />
         </el-select>
-        <img v-if="!removingIds.includes(user.id)" src="@/assets/emojis/times.png" style="height: 1.2rem" />
+        <el-tooltip effect="light" content="Delete" :open-delay="500">
+          <el-button type="text" class="ml-10" @click="handleRemoveUser(user.id)">
+            <img
+              v-if="!removingUsersIds.includes(user.id)"
+              src="@/assets/emojis/times.png"
+              style="height: 1.2rem"
+            />
+            <i v-else class="el-icon-loading" />
+          </el-button>
+        </el-tooltip>
       </div>
     </div>
 
@@ -35,7 +44,7 @@
 import Vue from 'vue';
 
 import Pagination from '@/components/Pagination.vue';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default Vue.extend({
   name: 'UsersRoles',
@@ -58,7 +67,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('users', ['usersList', 'removingIds']),
+    ...mapState('users', ['usersList', 'removingUsersIds']),
     ...mapGetters('users', ['myself']),
 
     usersRolesList() {
@@ -66,6 +75,23 @@ export default Vue.extend({
         const role = 'admin';
         const user = this.usersList[id];
         return { name: user.name, email: user.email, role };
+      });
+    },
+  },
+
+  methods: {
+    ...mapActions('users', ['removeUser']),
+
+    handleRemoveUser(userId) {
+      const { name } = this.usersList[userId];
+      this.$confirm(`Remove "${name}" for sure?`, 'Warning', {
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }).then(() => {
+        this.removeUser(userId);
+      }).catch((err) => {
+        console.error(err);
       });
     },
   },

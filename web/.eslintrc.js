@@ -31,5 +31,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'object-curly-newline': 'off',
     "object-shorthand": ["error", "always"],
+    'arrow-body-style': 'off',
   },
 };

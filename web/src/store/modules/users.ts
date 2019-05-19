@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 
+import Vue from 'vue';
 import { MutationTree, ActionTree, GetterTree } from 'vuex';
 
 import * as api from '@/api/users';
@@ -41,7 +42,7 @@ const initialState: Users.UsersState = {
   isUpdatingCalories: false,
   updateError: {},
 
-  removingUsersId: [],
+  removingUsersIds: [],
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -72,6 +73,17 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
       })
       .catch((error: ApiResponseError) => {
         commit(types.UPDATE_CALORIES_FAIL, error);
+      });
+  },
+
+  async removeUser({ commit }, userId: string) {
+    commit(types.DELETE_USER, userId);
+    api.deleteUser(userId)
+      .then(() => {
+        commit(types.DELETE_USER_DONE, userId);
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.DELETE_USER_FAIL, { error, userId });
       });
   },
 };
@@ -115,6 +127,27 @@ const mutations: MutationTree<Users.UsersState> = {
     const { status, message, code } = error.apiError;
     state.isUpdatingCalories = false;
     state.updateError = { status, message, code };
+    window.$notifyGlobal({
+      title: 'Something went wrong',
+      message: `Error ${code || status}: ${message}`,
+      type: 'error',
+    });
+  },
+
+  // Update Calories
+  [types.DELETE_USER](state, userId) {
+    state.removingUsersIds.push(userId);
+  },
+  [types.DELETE_USER_DONE](state, userId: string) {
+    const { name } = state.usersList[userId];
+    Vue.delete(state.usersList, userId);
+    Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
+    window.$messageGlobal(`User "${name}" deleted!`);
+  },
+  [types.DELETE_USER_FAIL](state, params: { error: ApiResponseError, userId: string }) {
+    const { error, userId } = params;
+    const { status, message, code } = error.apiError;
+    Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
     window.$notifyGlobal({
       title: 'Something went wrong',
       message: `Error ${code || status}: ${message}`,

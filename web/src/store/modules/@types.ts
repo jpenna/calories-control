@@ -88,5 +88,7 @@ export namespace Users {
 
     isUpdatingCalories: boolean;
     updateError: ApiError;
+
+    removingUsersIds: string[];
   }
 }

@@ -32,3 +32,13 @@ export function updateUser(userId: string, update: UpdateUserParam): Promise<Upd
     .put(`/users/${userId}`, update)
     .then((res): UpdateUserRes => res.data);
 }
+
+export interface DeleteUserRes {
+  success: boolean;
+  userId: number;
+}
+export function deleteUser(userId: string): Promise<DeleteUserRes> {
+  return apiBase
+    .delete(`/users/${userId}`)
+    .then((res): DeleteUserRes => res.data);
+}

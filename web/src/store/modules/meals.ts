@@ -183,13 +183,13 @@ const mutations: MutationTree<Meals.MealsState> = {
   },
   [types.REMOVE_MEAL_DONE](state, payload: { mealId: string, dayString: string, update?: boolean }) {
     const { mealId, dayString, update } = payload;
+    const { name } = state.list[dayString][mealId];
     Vue.delete(state.list[dayString], mealId);
     state.listTotal[dayString] -= 1;
 
     // If it isn't update, continue the regular delete procedure
     if (!update) {
       Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
-      const { name } = state.list[dayString][mealId];
       window.$messageGlobal(`Meal "${name}" removed!`);
     }
   },
