@@ -1,6 +1,7 @@
 <template>
   <div class="meals-list">
-    <div class="flex-split">
+    <div class="flex-split mb-20">
+      <!-- Loading message -->
       <div>
         <div v-show="isFetchingList" class="fw-500 color-regular">
           <i class="el-icon-loading" />
@@ -8,8 +9,9 @@
         </div>
       </div>
 
+      <!-- Calories -->
       <div
-        v-show="mealsList.length"
+        v-show="mealsList.length && showCalories"
         class="total-calories"
         :class="exceedGoal ? 'color-danger' : 'color-success'"
       >
@@ -96,6 +98,7 @@ export default Vue.extend({
     mealsList: { type: Array, required: true },
     caloriesTotal: { type: Number, required: true },
     isFetchingList: { type: Boolean, required: true },
+    showCalories: { type: Boolean, required: true },
   },
 
   filters: {
@@ -147,8 +150,6 @@ export default Vue.extend({
     padding: 10px;
     font-weight: 600;
     text-align: right;
-    padding-right: 30px;
-    margin: 5px (-$--card-padding) 20px;
   }
 
   .meal-card {

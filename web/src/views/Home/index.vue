@@ -12,6 +12,7 @@
       :mealsList="mealsList"
       :isFetchingList="isFetchingDate"
       :caloriesTotal="caloriesTotal"
+      :showCalories="!!selectedUserId"
       @editMeal="editMeal"
     />
 
@@ -83,6 +84,7 @@ export default Vue.extend({
         .reduce((acc, id) => {
           const meal = mealsDay[id];
           if (this.useTimeFilter && !utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
+          if (this.selectedUserId && meal.userId !== this.selectedUserId) return acc;
           acc.push(meal);
           return acc;
         }, [])

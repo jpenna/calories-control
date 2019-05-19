@@ -15,7 +15,7 @@
         </el-form-item>
 
         <!-- User -->
-        <el-form-item label="User" class="ml-20 mr-20">
+        <el-form-item v-if="$hasRole('mealsAll', myself)" label="User" class="ml-20 mr-20">
           <el-select :value="userId" @change="$emit('update:userId', $event)">
             <el-option
               v-for="item in optionsUsers"
@@ -74,7 +74,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -97,6 +97,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState('users', ['usersList']),
+    ...mapGetters('users', ['myself']),
 
     optionsUsers() {
       return Object.keys(this.usersList).reduce((acc, id) => {
