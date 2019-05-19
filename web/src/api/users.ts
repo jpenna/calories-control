@@ -32,13 +32,3 @@ export function updateUser(userId: string, update: UpdateUserParam): Promise<Upd
     .put(`/users/${userId}`, update)
     .then((res): UpdateUserRes => res.data);
 }
-
-export interface FetchRolesRes {
-  success: boolean;
-  roles: { [id: string]: string[] };
-}
-export function fetchRoles(): Promise<FetchRolesRes> {
-  return apiBase
-    .put('/users/roles')
-    .then((res): FetchRolesRes => res.data);
-}

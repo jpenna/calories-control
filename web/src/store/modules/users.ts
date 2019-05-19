@@ -25,16 +25,12 @@ function mapUser(user: api.UserRes): Users.UserInterface {
 
 const initialState: Users.UsersState = {
   usersList: {},
-  rolesList: {},
 
   isFetchingUsers: false,
   usersError: {},
 
   isUpdatingCalories: false,
   updateError: {},
-
-  isFetchingRoles: false,
-  rolesError: {},
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -67,17 +63,6 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
         commit(types.UPDATE_CALORIES_FAIL, error);
       });
   },
-
-  async fetchRoles({ commit }) {
-    commit(types.FETCH_ROLES);
-    api.fetchRoles()
-      .then((data: api.FetchRolesRes) => {
-        commit(types.FETCH_ROLES_DONE, data.roles);
-      })
-      .catch((error: ApiResponseError) => {
-        commit(types.FETCH_ROLES_FAIL, error);
-      });
-  },
 };
 
 const mutations: MutationTree<Users.UsersState> = {
@@ -98,21 +83,6 @@ const mutations: MutationTree<Users.UsersState> = {
     const { status, message, code } = error.apiError;
     state.isFetchingUsers = false;
     state.usersError = { status, message, code };
-  },
-
-  // Roles
-  [types.FETCH_ROLES](state) {
-    state.isFetchingRoles = true;
-    state.rolesError = {};
-  },
-  [types.FETCH_ROLES_DONE](state, roles: api.FetchRolesRes['roles']) {
-    state.isFetchingRoles = false;
-    state.rolesList = roles;
-  },
-  [types.FETCH_ROLES_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
-    state.isFetchingRoles = false;
-    state.rolesError = { status, message, code };
   },
 
   // Update Calories

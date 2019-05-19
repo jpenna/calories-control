@@ -81,15 +81,11 @@ export namespace Users {
   }
   export interface UsersState {
     usersList: { [id: string]: UserInterface };
-    rolesList: { [id: string]: string[] }
 
     isFetchingUsers: boolean;
     usersError: ApiError;
 
     isUpdatingCalories: boolean;
     updateError: ApiError;
-
-    isFetchingRoles: boolean;
-    rolesError: ApiError;
   }
 }

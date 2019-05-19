@@ -62,7 +62,7 @@ export default Vue.extend({
   },
 
   computed: {
-    ...mapState('users', ['usersList', 'rolesList']),
+    ...mapState('users', ['usersList']),
     ...mapGetters('users', ['myself']),
 
     usersRolesList() {
