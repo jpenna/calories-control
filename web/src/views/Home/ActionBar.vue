@@ -19,7 +19,7 @@
           round
           class="time-button"
           :class="{ 'no-button': !useTimeFilter }"
-          @click="useTimeFilter = !useTimeFilter"
+          @click="$emit('update:useTimeFilter', !useTimeFilter)"
           size="mini"
         >
           <img src="@/assets/emojis/clock.png" style="height: 1.2rem" />
@@ -78,12 +78,11 @@ export default Vue.extend({
     date: { type: Date, required: true },
     timeRange: { type: Array, required: true },
     showMealModal: { type: Boolean, required: true },
+    useTimeFilter: { type: Boolean, required: true },
   },
 
   data() {
     return {
-      useTimeFilter: false,
-
       localTimeRange: this.timeRange,
 
       form: {

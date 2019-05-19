@@ -4,6 +4,7 @@
       :date.sync="selectedDate"
       :timeRange.sync="timeRange"
       :showMealModal.sync="showMealModal"
+      :useTimeFilter.sync="useTimeFilter"
     />
 
     <span v-show="isFetching.has(this.selectedDate)">
@@ -20,7 +21,7 @@
       class="mt-30"
       settingsKey="meals-list"
       :startPage="0"
-      :total="getTotalMealsForDate(selectedDate)"
+      :total="totalForDay"
       @change="updatePagination"
     />
 
@@ -49,14 +50,11 @@ export default Vue.extend({
     Pagination,
   },
 
-  mounted() {
-    this.fetchMealsPag();
-  },
-
   data() {
     const selectedDate = new Date();
     return {
       selectedDate,
+      useTimeFilter: false,
       timeRange: [
         utils.setFirstTime(selectedDate),
         utils.setLastTime(selectedDate),
@@ -79,14 +77,19 @@ export default Vue.extend({
       return Object.keys(mealsDay)
         .reduce((acc, id) => {
           const meal = mealsDay[id];
-          if (!utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
+          if (this.useTimeFilter && !utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
           acc.push(meal);
           return acc;
-        }, []);
+        }, [])
+        .slice(this.firstItem, this.firstItem + this.maxSize);
     },
 
     dayString() {
       return utils.getDayString(this.selectedDate);
+    },
+
+    totalForDay() {
+      return this.getTotalMealsForDate(this.selectedDate);
     },
   },
 
@@ -101,24 +104,32 @@ export default Vue.extend({
       this.timeRange[0].setFullYear(year, month - 1, date);
       this.timeRange[1].setFullYear(year, month - 1, date);
     },
+
+    timeRange(timeRange) {
+      const mealsDay = this.getMealsForDate(this.selectedDate);
+
+      if (Object.keys(mealsDay).length < this.totalForDay) {
+        this.fetchMealsPag(true, this.timeRange);
+      }
+    },
   },
 
   methods: {
     ...mapActions('meals', ['fetchMeals']),
 
-    fetchMealsPag(force) {
+    fetchMealsPag(force, timeRange) {
       this.fetchMeals({
         filters: {
           date: this.dayString,
           limit: this.maxSize,
           skip: this.firstItem,
+          timeRange,
         },
         force,
       });
     },
 
     updatePagination({ firstItem, size }) {
-      if (size >= this.getTotalMealsForDate(this.selectedDate)) return;
       this.firstItem = firstItem;
       this.maxSize = size;
       this.fetchMealsPag(true);

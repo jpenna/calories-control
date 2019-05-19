@@ -23,11 +23,11 @@ function mapMeal(meal: api.ApiMeal): Meals.MealInterface {
 }
 
 // Set the start and end time for the date
-function prepareFetchTime(original: Date): { from: string, until: string } {
+function prepareFetchTime(original: Date): [string, string] {
   const date = new Date(original);
   const from = utils.setFirstTime(date).toISOString();
   const until = utils.setLastTime(date).toISOString();
-  return { from, until };
+  return [from, until];
 }
 
 const initialState: Meals.MealsState = {
@@ -80,7 +80,17 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 
     commit(types.FETCH_MEALS, dayString);
 
-    const { from, until } = prepareFetchTime(filters.date);
+    let from;
+    let until;
+    if (filters.timeRange) {
+      from = filters.timeRange[0].toISOString();
+      until = filters.timeRange[1].toISOString();
+    } else {
+      const [fromIso, untilIso] = prepareFetchTime(filters.date);
+      from = fromIso;
+      until = untilIso;
+    }
+
     const apiFilters = {
       from,
       until,
@@ -128,13 +138,15 @@ const mutations: MutationTree<Meals.MealsState> = {
   [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, dayString: string }) {
     const { dayString, data } = payload;
     state.isFetching.delete(dayString);
-    const dateList = data.meals.reduce((acc: { [id: string]: Meals.MealInterface }, meal) => {
+
+    if (!state.list[dayString]) Vue.set(state.list, dayString, {});
+
+    data.meals.forEach((meal) => {
       const norm = mapMeal(meal);
-      acc[norm.id] = norm;
-      return acc;
-    }, {});
+      Vue.set(state.list[dayString], norm.id, norm);
+    });
+
     Vue.set(state.listTotal, dayString, data.count);
-    Vue.set(state.list, dayString, dateList);
   },
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
     const { status, message, code } = payload.error.apiError;

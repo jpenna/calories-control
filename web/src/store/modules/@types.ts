@@ -71,6 +71,7 @@ export namespace Meals {
   export interface FiltersInterface {
     userId?: string;
     date: Date;
+    timeRange?: [Date, Date];
     skip?: number;
     limit?: number;
   }

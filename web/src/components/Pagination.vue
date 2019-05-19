@@ -18,9 +18,9 @@ import { updateUserSettings, getUserSettings } from '@/helpers/utils';
 
 export default {
   props: {
-    settingsKey: { type: String, default: '' },
-    startPage: { type: Number, default: 0 },
-    total: { type: Number, default: null },
+    settingsKey: { type: String, required: true },
+    startPage: { type: Number, required: true },
+    total: { type: Number, required: true },
   },
 
   data() {
