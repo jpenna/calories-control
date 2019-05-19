@@ -25,7 +25,7 @@ function getRole(permissions: string[]) {
   if (!length) return 'user';
   if (length === 2) return 'admin';
   if (length === 1 && permissions[0] === 'users_edit') return 'manager';
-  return 'custom';
+  return 'Custom Permissions';
 }
 
 function mapUser(user: api.UserRes): Users.UserInterface {
@@ -73,8 +73,8 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
   },
 
   async updateUser({ commit, rootState }, params) {
-    commit(types.UPDATE_USER);
     const { userId, role, ...update } = params;
+    commit(types.UPDATE_USER, userId);
     if (role) update.permissions = rolesMap.get(role);
     api.updateUser(userId, update)
       .then((data: api.UpdateUserRes) => {

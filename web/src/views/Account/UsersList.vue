@@ -3,16 +3,22 @@
     <h2>Users</h2>
 
     <!-- User List -->
-    <div class="d-table w-100 pl-20">
+    <table>
 
-      <div v-for="user of usersList" :key="user.email" class="user-item separate-list">
-        <div>{{ user.name }}</div>
-        <div>{{ user.email }}</div>
-        <div class="text-center">{{ user.dailyCalories }} cal.</div>
-        <div class="text-right pr-30">
+      <tr
+        v-for="user of usersList"
+        :key="user.email"
+        :class="{ 'pb-5': user.id === myself.id }"
+        class="user-item"
+      >
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td class="text-center">{{ user.dailyCalories }} cal.</td>
+        <td class="text-right">
           <el-select
-            v-model="usersRole[user.id]"
             v-loading="updatingUsers[user.id]"
+            v-model="usersRole[user.id]"
+            :disabled="user.id === myself.id"
             @change="updateRole(user.id, $event)"
           >
             <el-option
@@ -24,13 +30,13 @@
             />
           </el-select>
 
-          <el-tooltip effect="light" content="Edit" :open-delay="500">
-            <el-button type="text" class="ml-15" @click="$emit('editMeal', meal.id)">
+          <el-tooltip v-if="user.id !== myself.id" effect="light" content="Edit" :open-delay="500">
+            <el-button type="text" class="ml-15" @click="handleEditMember(user.id)">
               <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
             </el-button>
           </el-tooltip>
 
-          <el-tooltip effect="light" content="Delete" :open-delay="500">
+          <el-tooltip v-if="user.id !== myself.id" effect="light" content="Delete" :open-delay="500">
             <el-button type="text" class="ml-15" @click="handleRemoveUser(user.id)">
               <img
                 v-if="!removingUsersIds.includes(user.id)"
@@ -40,10 +46,13 @@
               <i v-else class="el-icon-loading" />
             </el-button>
           </el-tooltip>
-        </div>
-      </div>
+        </td>
 
-    </div>
+      </tr>
+
+    </table>
+
+    <EditMembers :show.sync="showEditMember" :member="selectedMember" />
   </div>
 </template>
 
@@ -52,12 +61,21 @@ import Vue from 'vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 
+import EditMembers from './EditMembers.vue';
+
 export default Vue.extend({
   name: 'UsersList',
+
+  components: {
+    EditMembers,
+  },
 
   data() {
     return {
       isUpdatingRole: false,
+
+      showEditMember: false,
+      selectedMember: {},
 
       usersRole: {},
 
@@ -65,13 +83,12 @@ export default Vue.extend({
         { label: 'Admin', value: 'admin' },
         { label: 'Manager', value: 'manager' },
         { label: 'User', value: 'user' },
-        { label: 'Custom Permissions', value: 'custom', disabled: true },
       ],
     };
   },
 
   computed: {
-    ...mapState('users', ['usersList', 'removingUsersIds']),
+    ...mapState('users', ['usersList', 'removingUsersIds', 'updatingUsers']),
     ...mapGetters('users', ['myself']),
   },
 
@@ -88,7 +105,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('users', ['removeUser', 'updatingUsers', 'updateUser']),
+    ...mapActions('users', ['removeUser', 'updateUser']),
 
     handleRemoveUser(userId) {
       const { name } = this.usersList[userId];
@@ -103,12 +120,13 @@ export default Vue.extend({
       });
     },
 
+    handleEditMember(userId) {
+      this.showEditMember = true;
+      this.selectedMember = this.usersList[userId];
+    },
+
     updateRole(userId, role) {
-      console.log(userId, role)
-      this.updateUser({
-        userId,
-        role,
-      });
+      this.updateUser({ userId, role });
     },
   },
 });
@@ -116,13 +134,11 @@ export default Vue.extend({
 
 <style lang="scss">
 .users-list {
-  .user-item {
-    display: table-row;
-    text-align: left;
-
-    > div {
-      display: table-cell;
-    }
+  table {
+    width: 100%;
+    padding: 0 20px;
+    border-collapse: separate;
+    border-spacing: 10px 20px;
   }
 }
 </style>
