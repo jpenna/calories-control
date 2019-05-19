@@ -17,7 +17,7 @@
     />
 
     <Pagination
-      v-show="mealsList.length"
+      v-show="filteredList.length"
       class="mt-30"
       settingsKey="meals-list"
       :startPage="0"
@@ -67,6 +67,7 @@ export default Vue.extend({
 
       firstItem: 0,
       maxSize: 0,
+      mealsLength: 0,
 
       showMealModal: false,
       selectedMeal: {},
@@ -77,7 +78,8 @@ export default Vue.extend({
     ...mapGetters('meals', ['getMealsForDate', 'getTotalMealsForDate']),
     ...mapState('meals', ['isFetching']),
 
-    mealsList() {
+    filteredList() {
+      console.log('get filtered');
       const mealsDay = this.getMealsForDate(this.selectedDate);
 
       return Object.keys(mealsDay)
@@ -89,21 +91,51 @@ export default Vue.extend({
           acc.push(meal);
           return acc;
         }, [])
-        // Slice
-        .slice(this.firstItem, this.firstItem + this.maxSize)
-        // Sort
+        // Sort (now to keep the list ordered for pagination and grouping)
         .sort(({ eatenAt: a }, { eatenAt: b }) => {
           const aTime = a.getTime();
           const bTime = b.getTime();
           if (aTime === bTime) return 0;
           return aTime < bTime ? -1 : 1;
-        })
+        });
+    },
+
+    mealsList() {
+      const grouped = this.filteredList
         // Group
-        .reduce((acc, meal) => {
+        .reduce((acc, meal, index) => {
           if (!acc[meal.userId]) acc[meal.userId] = [];
           acc[meal.userId].push(meal);
           return acc;
         }, {});
+
+      let count = 0;
+      return Object.keys(grouped).reduce((acc, userId) => {
+        // Maximum count
+        console.log('---------------')
+        console.log(1, count)
+        if (count >= this.firstItem + this.maxSize) return acc;
+        // Skip some of group if pass
+        const toSkip = this.firstItem - count;
+        count += grouped[userId].length;
+        // Skip until page start
+        console.log(2, toSkip)
+        console.log(3, count)
+        console.log(4, this.firstItem)
+        if (count <= this.firstItem) return acc;
+
+        let useGroup = grouped[userId];
+
+        const excess = (this.firstItem + this.maxSize) - count;
+        console.log(5, excess)
+        if (excess < 0) useGroup = useGroup.slice(0, excess);
+
+        if (toSkip > 0) useGroup = useGroup.slice(toSkip);
+
+        console.log(6, useGroup)
+        acc[userId] = useGroup;
+        return acc;
+      }, {});
     },
 
     dayString() {

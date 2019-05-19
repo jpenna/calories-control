@@ -34,6 +34,8 @@
     <div v-show="hasMeals">
       <!-- Grouped by User -->
       <div v-for="(userMeals, id) in mealsList" :key="id" class="separate-list">
+        <h4 class="color-regular">{{ usersList[id].name }}</h4>
+
         <!-- List Meals -->
         <el-card v-for="meal in userMeals" :key="meal.id" class="meal-card separate-list">
           <div>
@@ -83,9 +85,10 @@
             </div>
           </div>
         </el-card>
-      </div>
 
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -103,6 +106,7 @@ export default Vue.extend({
     caloriesTotal: { type: Number, required: true },
     isFetchingList: { type: Boolean, required: true },
     showCalories: { type: Boolean, required: true },
+    selectedUserId: { type: String, required: true },
   },
 
   filters: {
@@ -119,9 +123,10 @@ export default Vue.extend({
 
     exceedGoal() {
       if (!this.showCalories) return;
-      const calSum = Object.keys(this.mealsList)[0] // Only when 1 user
+      const userId = Object.keys(this.mealsList)[0];
+      const calSum = this.mealsList[userId] // Only when 1 user
         // eslint-disable-next-line no-return-assign, no-param-reassign
-        .reduce((sum, k) => sum += this.mealsList[k].calories, 0);
+        .reduce((sum, meal) => sum += meal.calories, 0);
       return this.myself.dailyCalories - calSum < 0;
     },
 
