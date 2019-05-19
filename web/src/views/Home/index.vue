@@ -112,7 +112,7 @@ export default Vue.extend({
 
   watch: {
     dayString() {
-      this.fetchMealsPag();
+      this.doFetchMeals();
     },
 
     selectedDate(selectedDate) {
@@ -121,35 +121,26 @@ export default Vue.extend({
       this.timeRange[0].setFullYear(year, month - 1, date);
       this.timeRange[1].setFullYear(year, month - 1, date);
     },
+  },
 
-    timeRange(timeRange) {
-      const mealsDay = this.getMealsForDate(this.selectedDate);
-
-      if (Object.keys(mealsDay).length < this.totalForDay) {
-        this.fetchMealsPag(true, this.timeRange);
-      }
-    },
+  created() {
+    this.doFetchMeals({
+      filters: { date: this.dayString },
+    });
   },
 
   methods: {
     ...mapActions('meals', ['fetchMeals']),
 
-    fetchMealsPag(force, timeRange) {
+    doFetchMeals() {
       this.fetchMeals({
-        filters: {
-          date: this.dayString,
-          limit: this.maxSize,
-          skip: this.firstItem,
-          timeRange,
-        },
-        force,
+        filters: { date: this.dayString },
       });
     },
 
     updatePagination({ firstItem, size }) {
       this.firstItem = firstItem;
       this.maxSize = size;
-      this.fetchMealsPag(true);
     },
 
     editMeal(mealId) {
