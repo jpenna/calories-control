@@ -34,13 +34,13 @@ const initialState: Meals.MealsState = {
   list: {},
   listTotal: {},
 
-  isFetching: new Set(),
+  isFetching: [],
   fetchingError: new Map(),
 
   isSubmitting: false,
   submitError: {},
 
-  removingIds: new Set(),
+  removingIds: [],
 };
 
 const getters: GetterTree<Meals.MealsState, RootInterface> = {
@@ -63,7 +63,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
   // fetch meals
   async fetchMeals({ commit, state }, { filters, force }: { filters: Meals.FiltersInterface, force: boolean }) {
     const dayString = utils.getDayString(filters.date);
-    if (state.isFetching.has(dayString)) return;
+    if (state.isFetching.includes(dayString)) return;
     // Skip fetch if already have the data
     if (state.list[dayString] && !force) return;
 
@@ -114,7 +114,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
   // Delete meal
   async removeMeal({ commit }, params: { mealId: string, dayString: string }) {
     const { mealId, dayString } = params;
-    commit(types.REMOVE_MEAL);
+    commit(types.REMOVE_MEAL, mealId);
     api.deleteMeal(mealId)
       .then(() => {
         commit(types.REMOVE_MEAL_DONE, { mealId, dayString });
@@ -128,12 +128,12 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 const mutations: MutationTree<Meals.MealsState> = {
   // Fetch Meals
   [types.FETCH_MEALS](state, dayString: string) {
-    state.isFetching.add(dayString);
+    state.isFetching.push(dayString);
     state.fetchingError.set(dayString, {});
   },
   [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, dayString: string }) {
     const { dayString, data } = payload;
-    state.isFetching.delete(dayString);
+    Vue.delete(state.isFetching, state.isFetching.findIndex(date => date === dayString));
 
     if (!state.list[dayString]) Vue.set(state.list, dayString, {});
 
@@ -146,7 +146,7 @@ const mutations: MutationTree<Meals.MealsState> = {
   },
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
     const { status, message, code } = payload.error.apiError;
-    state.isFetching.delete(payload.dayString);
+    Vue.delete(state.isFetching, state.isFetching.findIndex(date => date === payload.dayString));
     state.submitError = { status, message, code };
   },
 
@@ -173,7 +173,7 @@ const mutations: MutationTree<Meals.MealsState> = {
 
   // Remove Meal
   [types.REMOVE_MEAL](state, mealId: string) {
-    state.removingIds.add(mealId);
+    state.removingIds.push(mealId);
     state.submitError = {};
   },
   [types.REMOVE_MEAL_DONE](state, params: { mealId: string, dayString: string }) {

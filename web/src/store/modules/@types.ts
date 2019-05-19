@@ -61,13 +61,13 @@ export namespace Meals {
       [date: string]: number;
     };
 
-    isFetching: Set<string>;
+    isFetching: string[];
     fetchingError: Map<string, ApiError>;
 
     isSubmitting: boolean;
     submitError: ApiError;
 
-    removingIds: Set<string>;
+    removingIds: string[];
   }
 
   export interface FiltersInterface {

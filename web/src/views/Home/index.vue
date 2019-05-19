@@ -7,7 +7,7 @@
       :useTimeFilter.sync="useTimeFilter"
     />
 
-    <span v-show="isFetching.has(this.selectedDate)">
+    <span v-show="isFetching.includes(this.selectedDate)">
       <i class="el-icon-loading" />
       Loading...
     </span>

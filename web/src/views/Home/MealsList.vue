@@ -30,7 +30,8 @@
 
               <el-tooltip effect="light" content="Delete" :open-delay="500">
                 <el-button type="text" class="ml-25" @click="handleRemoveMeal(meal.id, meal.eatenAt)">
-                  <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
+                  <img v-if="!removingIds.includes(meal.id)" src="@/assets/emojis/times.png" style="height: 1.2rem" />
+                  <i v-else class="el-icon-loading" />
                 </el-button>
               </el-tooltip>
             </div>
@@ -68,7 +69,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -93,6 +94,8 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapState('meals', ['removingIds']),
+
     exceedGoal() {
       const calSum = Object.keys(this.mealsList)
         // eslint-disable-next-line no-return-assign, no-param-reassign
