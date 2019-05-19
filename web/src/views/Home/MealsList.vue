@@ -29,7 +29,7 @@
               </el-tooltip>
 
               <el-tooltip effect="light" content="Delete" :open-delay="500">
-                <el-button type="text" class="ml-25">
+                <el-button type="text" class="ml-25" @click="handleRemoveMeal(meal.id, meal.eatenAt)">
                   <img src="@/assets/emojis/times.png" style="height: 1.2rem" />
                 </el-button>
               </el-tooltip>
@@ -68,6 +68,9 @@
 
 <script lang="js">
 import Vue from 'vue';
+import { mapActions } from 'vuex';
+
+import * as utils from '@/helpers/utils';
 
 export default Vue.extend({
   name: 'MealsList',
@@ -95,6 +98,23 @@ export default Vue.extend({
         // eslint-disable-next-line no-return-assign, no-param-reassign
         .reduce((sum, k) => sum += this.mealsList[k].calories, 0);
       return this.caloriesGoal - calSum < 0;
+    },
+  },
+
+  methods: {
+    ...mapActions('meals', ['removeMeal']),
+
+    handleRemoveMeal(mealId, eatenAt) {
+      this.$confirm('Remove it for sure?', 'Warning', {
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      }).then(() => {
+        const dayString = utils.getDayString(eatenAt);
+        this.removeMeal({ mealId, dayString });
+      }).catch((err) => {
+        console.error(err);
+      });
     },
   },
 });

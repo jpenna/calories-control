@@ -52,3 +52,13 @@ export function listMeals(params: ListMealsParams): Promise<ListMealsRes> {
     })
     .then((res): ListMealsRes => res.data);
 }
+
+export interface DeleteMealRes {
+  success: boolean;
+  mealId: number;
+}
+export function deleteMeal(id: string): Promise<DeleteMealRes> {
+  return apiBase
+    .delete(`/meals/${id}`)
+    .then((res): DeleteMealRes => res.data);
+}

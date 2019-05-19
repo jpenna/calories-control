@@ -39,6 +39,8 @@ const initialState: Meals.MealsState = {
 
   isSubmitting: false,
   submitError: {},
+
+  removingIds: new Set(),
 };
 
 const getters: GetterTree<Meals.MealsState, RootInterface> = {
@@ -58,21 +60,6 @@ const getters: GetterTree<Meals.MealsState, RootInterface> = {
 };
 
 const actions: ActionTree<Meals.MealsState, RootInterface> = {
-  // New Meal
-  async submitMeal({ commit }, meal: Meals.MealInterface) {
-    commit(types.SUBMIT_MEAL);
-    const apiMeal = { ...meal, eatenAt: meal.eatenAt.toISOString() };
-    const method = meal.id ? api.updateMeal : api.newMeal;
-    method(apiMeal)
-      .then((data: api.SubmitMealRes) => {
-        // if (meal.id) commit(types.REMOVE_MEAL_DONE, meal.id) add remove first, because of date
-        commit(types.SUBMIT_MEAL_DONE, data);
-      })
-      .catch((error: ApiResponseError) => {
-        commit(types.SUBMIT_MEAL_FAIL, error);
-      });
-  },
-
   // fetch meals
   async fetchMeals({ commit, state }, { filters, force }: { filters: Meals.FiltersInterface, force: boolean }) {
     const dayString = utils.getDayString(filters.date);
@@ -108,30 +95,37 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
         commit(types.FETCH_MEALS_FAIL, error);
       });
   },
+
+  // Submit Meal (new or update)
+  async submitMeal({ commit }, meal: Meals.MealInterface) {
+    commit(types.SUBMIT_MEAL);
+    const apiMeal = { ...meal, eatenAt: meal.eatenAt.toISOString() };
+    const method = meal.id ? api.updateMeal : api.newMeal;
+    method(apiMeal)
+      .then((data: api.SubmitMealRes) => {
+        // if (meal.id) commit(types.REMOVE_MEAL_DONE, meal.id) add remove first, because of date
+        commit(types.SUBMIT_MEAL_DONE, data);
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.SUBMIT_MEAL_FAIL, error);
+      });
+  },
+
+  // Delete meal
+  async removeMeal({ commit }, params: { mealId: string, dayString: string }) {
+    const { mealId, dayString } = params;
+    commit(types.REMOVE_MEAL);
+    api.deleteMeal(mealId)
+      .then(() => {
+        commit(types.REMOVE_MEAL_DONE, { mealId, dayString });
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.REMOVE_MEAL_FAIL, error);
+      });
+  },
 };
 
 const mutations: MutationTree<Meals.MealsState> = {
-  // New Meal
-  [types.SUBMIT_MEAL](state) {
-    state.isSubmitting = true;
-    state.submitError = {};
-  },
-  [types.SUBMIT_MEAL_DONE](state, data: api.SubmitMealRes) {
-    state.isSubmitting = false;
-    const meal = mapMeal(data.meal);
-    const mealDate = utils.getDayString(meal.eatenAt);
-    const dateList = { ...state.list[mealDate], [meal.id]: meal };
-    Vue.set(state.list, mealDate, dateList);
-    // Setting with Vue in case there was nothing fetched (offline mode)
-    Vue.set(state.listTotal, mealDate, (state.listTotal[mealDate] || 0) + 1);
-  },
-  [types.SUBMIT_MEAL_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
-
-    state.isSubmitting = false;
-    state.submitError = { status, message, code };
-  },
-
   // Fetch Meals
   [types.FETCH_MEALS](state, dayString: string) {
     state.isFetching.add(dayString);
@@ -153,6 +147,44 @@ const mutations: MutationTree<Meals.MealsState> = {
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
     const { status, message, code } = payload.error.apiError;
     state.isFetching.delete(payload.dayString);
+    state.submitError = { status, message, code };
+  },
+
+  // New Meal
+  [types.SUBMIT_MEAL](state) {
+    state.isSubmitting = true;
+    state.submitError = {};
+  },
+  [types.SUBMIT_MEAL_DONE](state, data: api.SubmitMealRes) {
+    state.isSubmitting = false;
+    const meal = mapMeal(data.meal);
+    const mealDate = utils.getDayString(meal.eatenAt);
+    const dateList = { ...state.list[mealDate], [meal.id]: meal };
+    Vue.set(state.list, mealDate, dateList);
+    // Setting with Vue in case there was nothing fetched (offline mode)
+    Vue.set(state.listTotal, mealDate, (state.listTotal[mealDate] || 0) + 1);
+  },
+  [types.SUBMIT_MEAL_FAIL](state, error: ApiResponseError) {
+    const { status, message, code } = error.apiError;
+
+    state.isSubmitting = false;
+    state.submitError = { status, message, code };
+  },
+
+  // Remove Meal
+  [types.REMOVE_MEAL](state, mealId: string) {
+    state.removingIds.add(mealId);
+    state.submitError = {};
+  },
+  [types.REMOVE_MEAL_DONE](state, params: { mealId: string, dayString: string }) {
+    const { mealId, dayString } = params;
+    Vue.delete(state.list[dayString], mealId);
+    state.listTotal[dayString] -= 1;
+  },
+  [types.REMOVE_MEAL_FAIL](state, error: ApiResponseError) {
+    const { status, message, code } = error.apiError;
+
+    state.isSubmitting = false;
     state.submitError = { status, message, code };
   },
 };

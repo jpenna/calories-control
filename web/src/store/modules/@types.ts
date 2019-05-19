@@ -66,6 +66,8 @@ export namespace Meals {
 
     isSubmitting: boolean;
     submitError: ApiError;
+
+    removingIds: Set<string>;
   }
 
   export interface FiltersInterface {

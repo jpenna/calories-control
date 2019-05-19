@@ -17,3 +17,8 @@ export const SUBMIT_MEAL_FAIL = 'SUBMIT_MEAL_FAIL';
 export const FETCH_MEALS = 'FETCH_MEALS';
 export const FETCH_MEALS_DONE = 'FETCH_MEALS_DONE';
 export const FETCH_MEALS_FAIL = 'FETCH_MEALS_FAIL';
+
+// Remove meals
+export const REMOVE_MEAL = 'REMOVE_MEAL';
+export const REMOVE_MEAL_DONE = 'REMOVE_MEAL_DONE';
+export const REMOVE_MEAL_FAIL = 'REMOVE_MEAL_FAIL';
