@@ -5,8 +5,8 @@
     </router-link>
 
     <router-link :to="{ name: 'account' }" v-if="isAuth" class="mr-30 icon-format">
-      <img src="@/assets/emojis/smile.png" style="height: 1.5rem" />
-      <span class="fw-500 ml-5 color-regular">Account</span>
+      <img src="@/assets/emojis/wrench.png" style="height: 1.5rem" />
+      <span class="fw-500 ml-5 color-regular">Settings</span>
     </router-link>
   </div>
 </template>

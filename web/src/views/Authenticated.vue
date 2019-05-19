@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="authenticated">
     <el-header height="80px">
       <Header />
     </el-header>
@@ -42,18 +42,22 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/styles/_variables.scss';
 
-.el-container {
+.authenticated {
   background: white;
   max-width: 900px;
   margin: auto;
   box-shadow: 0 0 5px transparentize(black, 0.8);
   min-height: 100vh;
-}
 
-.el-header {
-  background: darken($background-color, 10);
+  .el-main {
+    padding: 20px 50px;
+  }
+
+  .el-header {
+    background: darken($background-color, 10);
+  }
 }
 </style>

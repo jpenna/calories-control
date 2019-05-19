@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-50" style="position: relative">
+  <div class="pb-50">
 
     <!-- Back link -->
     <div>
@@ -17,9 +17,11 @@
     <!-- Users permissions -->
     <UsersList v-if="$hasRole('usersEdit', myself)" style="margin: auto" class="mt-50 mb-100"/>
 
-    <el-button type="danger" class="logout-button" @click="handleLogout">
-      Logout
-    </el-button>
+    <div class="text-center mt-100">
+      <el-button type="danger" class="logout-button" @click="handleLogout">
+        Logout
+      </el-button>
+    </div>
 
   </div>
 </template>
@@ -62,11 +64,6 @@ export default Vue.extend({
 
 <style lang="scss">
 .logout-button {
-  position: absolute;
-  bottom: 40px;
-  right: 0;
-  left: 0;
-  margin: auto !important;
   width: 50%;
   max-width: 300px;
 }
