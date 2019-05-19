@@ -2,7 +2,7 @@
   <div class="action-bar">
     <div class="flex-split" style="align-items: flex-start">
 
-      <el-form ref="form" :model="form" label-position="left" class="filters-side">
+      <el-form label-position="left" class="filters-side" inline>
         <!-- Date -->
         <el-form-item label="Date" class="date-item">
           <el-date-picker
@@ -14,43 +14,49 @@
           />
         </el-form-item>
 
-        <el-button
-          type="primary"
-          round
-          class="time-button"
-          :class="{ 'no-button': !useTimeFilter }"
-          @click="$emit('update:useTimeFilter', !useTimeFilter)"
-          size="mini"
-        >
-          <img src="@/assets/emojis/clock.png" style="height: 1.2rem" />
-          <span class="time-text">Time filter</span>
-        </el-button>
-
-        <!-- Time -->
-        <el-form-item label="Time" v-show="useTimeFilter">
-          <el-time-picker
-            is-range
-            v-model="localTimeRange"
-            :clearable="false"
-            range-separator="-"
-            start-placeholder="Start time"
-            end-placeholder="End time"
-            format="HH:mm"
-            @change="$emit('update:timeRange', $event)"
-          />
-        </el-form-item>
-
         <!-- User -->
-        <!-- <el-form-item label="User">
-          <el-select v-model="form.user">
+        <el-form-item label="User" class="ml-20 mr-20">
+          <el-select :value="userId" @change="$emit('update:userId', $event)">
             <el-option
-              v-for="item in usersList"
+              v-for="item in optionsUsers"
+              :class="{ 'fw-700': !item.value }"
               :key="item.value"
               :label="item.label"
               :value="item.value"
             />
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
+
+        <!-- So it won't grow when the input is visible -->
+        <div style="min-height: 42px">
+          <el-button
+            type="primary"
+            round
+            class="time-button"
+            style="vertical-align: top"
+            :class="{ 'no-button': !useTimeFilter }"
+            @click="$emit('update:useTimeFilter', !useTimeFilter)"
+            size="mini"
+          >
+            <img src="@/assets/emojis/clock.png" style="height: 1.2rem" />
+            <span>Time filter</span>
+          </el-button>
+
+          <!-- Time -->
+          <el-form-item class="d-inline-block ml-15 mb-0">
+            <el-time-picker
+              is-range
+              v-show="useTimeFilter"
+              v-model="localTimeRange"
+              :clearable="false"
+              range-separator="-"
+              start-placeholder="Start time"
+              end-placeholder="End time"
+              format="HH:mm"
+              @change="$emit('update:timeRange', $event)"
+            />
+          </el-form-item>
+        </div>
 
       </el-form>
 
@@ -68,6 +74,7 @@
 
 <script lang="js">
 import Vue from 'vue';
+import { mapState } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -79,20 +86,24 @@ export default Vue.extend({
     timeRange: { type: Array, required: true },
     showMealModal: { type: Boolean, required: true },
     useTimeFilter: { type: Boolean, required: true },
+    userId: { type: String, required: true },
   },
 
   data() {
     return {
       localTimeRange: this.timeRange,
-
-      form: {
-        user: 1,
-      },
-      usersList: [
-        { label: 'User 1', value: 1 },
-        { label: 'User 2', value: 2 },
-      ],
     };
+  },
+
+  computed: {
+    ...mapState('users', ['usersList']),
+
+    optionsUsers() {
+      return Object.keys(this.usersList).reduce((acc, id) => {
+        acc.push({ label: this.usersList[id].name, value: this.usersList[id].id });
+        return acc;
+      }, [{ label: 'All', value: '' }]);
+    },
   },
 
   watch: {
@@ -127,7 +138,7 @@ export default Vue.extend({
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 790px) {
     .new-meal-side {
       order: 1;
       text-align: right;
@@ -147,18 +158,20 @@ export default Vue.extend({
   }
 
   @media screen and (max-width: 450px) and (min-width: 370px) {
-    .time-button span {
-      margin-left: 0;
-    }
-
-    .time-text {
-      display: none;
+    .time-button {
+      margin-bottom: 10px;
     }
   }
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: 600px) {
     .filters-side {
       text-align: center;
+      width: 100%;
+    }
+
+    .new-meal-side {
+      text-align: center;
+      width: 100%;
     }
 
     .time-button {

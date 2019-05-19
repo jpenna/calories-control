@@ -5,6 +5,7 @@
       :timeRange.sync="timeRange"
       :showMealModal.sync="showMealModal"
       :useTimeFilter.sync="useTimeFilter"
+      :userId.sync="selectedUserId"
     />
 
     <MealsList
@@ -61,6 +62,7 @@ export default Vue.extend({
         utils.setFirstTime(selectedDate),
         utils.setLastTime(selectedDate),
       ],
+      selectedUserId: '',
 
       firstItem: 0,
       maxSize: 0,
