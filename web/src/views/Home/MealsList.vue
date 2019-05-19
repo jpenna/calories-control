@@ -23,7 +23,7 @@
             <!-- Actions -->
             <div>
               <el-tooltip effect="light" content="Edit" :open-delay="500">
-                <el-button type="text">
+                <el-button type="text" @click="$emit('editMeal', meal.id)">
                   <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
                 </el-button>
               </el-tooltip>

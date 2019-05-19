@@ -5,7 +5,7 @@
     :fullscreen="showFullScreen"
     class="meal-modal"
     @close="$emit('update:show', false)"
-    @closed="$refs.form.resetFields()"
+    @closed="onModalClosed"
   >
     <h2 slot="title" class="mb-0 mt-0">
       <img src="@/assets/emojis/delicious.png" class="mr-5" style="height: 2rem; vertical-align: sub" />
@@ -94,6 +94,7 @@ export default Vue.extend({
 
   props: {
     show: { type: Boolean, required: true },
+    selectedMeal: { type: Object, required: true },
   },
 
   data() {
@@ -104,11 +105,12 @@ export default Vue.extend({
       time: new Date(),
 
       form: {
+        id: '',
         name: '',
         eatenAt: new Date(),
-        calories: 500,
+        calories: undefined,
         userId: this.userId,
-        notes: 'No notes for this one',
+        notes: '',
       },
 
       rules: {
@@ -154,6 +156,20 @@ export default Vue.extend({
         this.form.eatenAt.setSeconds(0);
       },
     },
+
+    selectedMeal(meal) {
+      if (!meal.id) return;
+      this.form = {
+        id: meal.id,
+        name: meal.name,
+        eatenAt: meal.eatenAt, // Just for completeness. It will be calculated next
+        calories: meal.calories,
+        userId: meal.userId,
+        notes: meal.notes,
+      };
+      this.date = meal.eatenAt;
+      this.time = meal.eatenAt;
+    },
   },
 
   mounted() {
@@ -168,8 +184,8 @@ export default Vue.extend({
     submitNewMeal() {
       this.$refs.form.validate((valid) => {
         if (!valid) return;
+        if (this.form.id) return console.log('update');
         this.newMeal({
-          id: '',
           userId: this.userId,
           name: this.form.name,
           notes: this.form.notes,
@@ -177,6 +193,11 @@ export default Vue.extend({
           eatenAt: this.form.eatenAt,
         });
       });
+    },
+
+    onModalClosed() {
+      this.$refs.form.resetFields();
+      this.$emit('close');
     },
   },
 });

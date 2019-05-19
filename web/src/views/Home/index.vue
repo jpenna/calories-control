@@ -14,6 +14,7 @@
 
     <MealsList
       :mealsList="mealsList"
+      @editMeal="editMeal"
     />
 
     <Pagination
@@ -25,7 +26,11 @@
       @change="updatePagination"
     />
 
-    <MealModal :show.sync="showMealModal" />
+    <MealModal
+      :show.sync="showMealModal"
+      :selectedMeal="selectedMeal"
+      @close="clearSelectedMeal"
+    />
   </div>
 </template>
 
@@ -64,6 +69,7 @@ export default Vue.extend({
       maxSize: 0,
 
       showMealModal: false,
+      selectedMeal: {},
     };
   },
 
@@ -133,6 +139,15 @@ export default Vue.extend({
       this.firstItem = firstItem;
       this.maxSize = size;
       this.fetchMealsPag(true);
+    },
+
+    editMeal(mealId) {
+      this.showMealModal = true;
+      this.selectedMeal = this.getMealsForDate(this.selectedDate)[mealId];
+    },
+
+    clearSelectedMeal() {
+      this.selectedMeal = {};
     },
   },
 });
