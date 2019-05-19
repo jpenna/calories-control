@@ -80,6 +80,10 @@ export default express.Router()
         return res.sendError(403, 'You can only edit your own account');
       }
 
+      if (req.body.password) {
+        return res.sendError(400, 'Password can\'t be updated on this route. Use /users/change-password instead.');
+      }
+
       const user = await UserModel.findById(req.params.id);
       if (!user) return res.sendError(404, 'User not found');
 
