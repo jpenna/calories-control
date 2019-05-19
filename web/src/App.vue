@@ -25,7 +25,7 @@ export default Vue.extend({
     Vue.prototype.$hasRole = (role: string, user: Users.UserInterface) => (user.permissions || []).includes(role);
 
     window.$notifyGlobal = (params) => {
-      const message = typeof params === 'string' ? params : params.message;
+      const message = typeof params === 'string' ? params : (params.message || '');
       const { title, type } = params as any;
 
       this.$notify({ title, message, type });

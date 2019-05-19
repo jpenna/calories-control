@@ -38,12 +38,19 @@
         />
       </el-form-item>
 
-      <div class="text-right">
-        <el-button type="text" @click="resetFields" class="mr-30" :disabled="isUpdatingUser">Cancel</el-button>
-        <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="isUpdatingUser">
-          <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
-          Submit
+      <div class="flex-split">
+        <el-button @click="showUpdatePassword = true">
+          <img src="@/assets/emojis/key.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+          Change Password
         </el-button>
+
+        <div class="buttons-side">
+          <el-button type="text" @click="resetFields" class="mr-30" :disabled="isUpdatingUser">Cancel</el-button>
+          <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="isUpdatingUser">
+            <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+            Submit
+          </el-button>
+        </div>
       </div>
     </el-form>
 
@@ -54,6 +61,8 @@
       Logout
     </el-button>
 
+    <ChangePwdModal :show.sync="showUpdatePassword" />
+
   </div>
 </template>
 
@@ -62,16 +71,20 @@ import Vue from 'vue';
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex';
 
 import UsersList from './UsersList.vue';
+import ChangePwd from './ChangePwd.vue';
 
 export default Vue.extend({
   name: 'Account',
 
   components: {
     UsersList,
+    ChangePwdModal: ChangePwd,
   },
 
   data() {
     return {
+      showUpdatePassword: false,
+
       form: {
         name: '',
         email: '',
@@ -137,5 +150,13 @@ export default Vue.extend({
   margin: auto !important;
   width: 50%;
   max-width: 300px;
+}
+
+@media screen and (max-width: 430px) {
+  .buttons-side {
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+  }
 }
 </style>

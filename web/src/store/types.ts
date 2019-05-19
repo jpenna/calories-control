@@ -28,12 +28,17 @@ export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USERS_DONE = 'FETCH_USERS_DONE';
 export const FETCH_USERS_FAIL = 'FETCH_USERS_FAIL';
 
-// Calories
-export const UPDATE_CALORIES = 'UPDATE_CALORIES';
-export const UPDATE_CALORIES_DONE = 'UPDATE_CALORIES_DONE';
-export const UPDATE_CALORIES_FAIL = 'UPDATE_CALORIES_FAIL';
+// Update user
+export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_USER_DONE = 'UPDATE_USER_DONE';
+export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL';
 
 // Delete Users
 export const DELETE_USER = 'DELETE_USER';
 export const DELETE_USER_DONE = 'DELETE_USER_DONE';
 export const DELETE_USER_FAIL = 'DELETE_USER_FAIL';
+
+// Change password
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const CHANGE_PASSWORD_DONE = 'CHANGE_PASSWORD_DONE';
+export const CHANGE_PASSWORD_FAIL = 'CHANGE_PASSWORD_FAIL';

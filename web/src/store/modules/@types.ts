@@ -90,5 +90,8 @@ export namespace Users {
     updateError: ApiError;
 
     removingUsersIds: string[];
+
+    isChangingPassword: boolean;
+    passwordError: ApiError;
   }
 }

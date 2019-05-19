@@ -43,6 +43,9 @@ const initialState: Users.UsersState = {
   updateError: {},
 
   removingUsersIds: [],
+
+  isChangingPassword: false,
+  passwordError: {},
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -64,14 +67,25 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
   },
 
   async updateUser({ commit }, params) {
-    commit(types.UPDATE_CALORIES);
+    commit(types.UPDATE_USER);
     const { userId, ...update } = params;
     api.updateUser(userId, update)
       .then((data: api.UpdateUserRes) => {
-        commit(types.UPDATE_CALORIES_DONE, data.user);
+        commit(types.UPDATE_USER_DONE, data.user);
       })
       .catch((error: ApiResponseError) => {
-        commit(types.UPDATE_CALORIES_FAIL, error);
+        commit(types.UPDATE_USER_FAIL, error);
+      });
+  },
+
+  async changePassword({ commit }, params) {
+    commit(types.CHANGE_PASSWORD);
+    api.changePassword(params)
+      .then(() => {
+        commit(types.CHANGE_PASSWORD_DONE);
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.CHANGE_PASSWORD_FAIL, error);
       });
   },
 
@@ -108,11 +122,11 @@ const mutations: MutationTree<Users.UsersState> = {
   },
 
   // Update User
-  [types.UPDATE_CALORIES](state) {
+  [types.UPDATE_USER](state) {
     state.isUpdatingUser = true;
     state.updateError = {};
   },
-  [types.UPDATE_CALORIES_DONE](state, user: api.UserRes) {
+  [types.UPDATE_USER_DONE](state, user: api.UserRes) {
     state.isUpdatingUser = false;
     const mapped = mapUser(user);
     state.usersList[mapped.id] = mapped;
@@ -121,7 +135,7 @@ const mutations: MutationTree<Users.UsersState> = {
       type: 'success',
     });
   },
-  [types.UPDATE_CALORIES_FAIL](state, error: ApiResponseError) {
+  [types.UPDATE_USER_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
     state.isUpdatingUser = false;
     state.updateError = { status, message, code };
@@ -132,7 +146,7 @@ const mutations: MutationTree<Users.UsersState> = {
     });
   },
 
-  // Update Calories
+  // Delete User
   [types.DELETE_USER](state, userId) {
     state.removingUsersIds.push(userId);
   },
@@ -146,6 +160,24 @@ const mutations: MutationTree<Users.UsersState> = {
     const { error, userId } = params;
     const { status, message, code } = error.apiError;
     Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
+    window.$notifyGlobal({
+      title: 'Something went wrong',
+      message: `Error ${code || status}: ${message}`,
+      type: 'error',
+    });
+  },
+
+  // Change Password
+  [types.CHANGE_PASSWORD](state) {
+    state.isChangingPassword = true;
+  },
+  [types.CHANGE_PASSWORD_DONE](state) {
+    state.isChangingPassword = false;
+  },
+  [types.CHANGE_PASSWORD_FAIL](state, error: ApiResponseError) {
+    const { status, message, code } = error.apiError;
+    state.isChangingPassword = false;
+    state.passwordError = { status, message, code };
     window.$notifyGlobal({
       title: 'Something went wrong',
       message: `Error ${code || status}: ${message}`,

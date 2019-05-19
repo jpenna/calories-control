@@ -42,3 +42,12 @@ export function deleteUser(userId: string): Promise<DeleteUserRes> {
     .delete(`/users/${userId}`)
     .then((res): DeleteUserRes => res.data);
 }
+
+export interface ChangePasswordRes {
+  success: boolean;
+}
+export function changePassword(params: { password: string, newPassword: string }): Promise<ChangePasswordRes> {
+  return apiBase
+    .put('/users/changePassword', params)
+    .then((res): ChangePasswordRes => res.data);
+}
