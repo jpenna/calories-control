@@ -7,7 +7,7 @@ import { RootInterface } from './modules/@types';
 // Modules
 import auth from './modules/auth';
 import meals from './modules/meals';
-import account from './modules/account';
+import users from './modules/users';
 
 Vue.use(Vuex);
 
@@ -16,6 +16,6 @@ export default new Vuex.Store<RootInterface>({
   modules: {
     auth,
     meals,
-    account,
+    users,
   },
 });

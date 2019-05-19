@@ -107,7 +107,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState('meals', ['removingIds']),
-    ...mapGetters('account', ['myself']),
+    ...mapGetters('users', ['myself']),
 
     exceedGoal() {
       if (!this.myself.dailyCalories) return false;

@@ -8,9 +8,9 @@ import { ApiResponseError } from '@/api/apiBase';
 
 import * as utils from '@/helpers/utils';
 
-import { RootInterface, Account } from './@types';
+import { RootInterface, Users } from './@types';
 
-function mapUser(user: api.UserRes): Account.UserInterface {
+function mapUser(user: api.UserRes): Users.UserInterface {
   return {
     id: user.id,
     name: user.name,
@@ -20,20 +20,20 @@ function mapUser(user: api.UserRes): Account.UserInterface {
   };
 }
 
-const initialState: Account.AccountState = {
+const initialState: Users.UsersState = {
   usersList: {},
 
   isFetchingMe: false,
   usersError: {},
 };
 
-const getters: GetterTree<Account.AccountState, RootInterface> = {
-  myself(state, localGetters, rootState): Account.UserInterface {
+const getters: GetterTree<Users.UsersState, RootInterface> = {
+  myself(state, localGetters, rootState): Users.UserInterface {
     return state.usersList[rootState.auth.userId] || {};
   },
 };
 
-const actions: ActionTree<Account.AccountState, RootInterface> = {
+const actions: ActionTree<Users.UsersState, RootInterface> = {
   async fetchUsersList({ commit }) {
     commit(types.FETCH_USERS);
     api.fetchUsersList()
@@ -46,7 +46,7 @@ const actions: ActionTree<Account.AccountState, RootInterface> = {
   },
 };
 
-const mutations: MutationTree<Account.AccountState> = {
+const mutations: MutationTree<Users.UsersState> = {
   // Me
   [types.FETCH_USERS](state) {
     state.isFetchingMe = true;
@@ -54,7 +54,7 @@ const mutations: MutationTree<Account.AccountState> = {
   },
   [types.FETCH_USERS_DONE](state, users: api.FetchUsersRes['users']) {
     state.isFetchingMe = false;
-    state.usersList = users.reduce((acc: { [id:string]: Account.UserInterface }, user) => {
+    state.usersList = users.reduce((acc: { [id:string]: Users.UserInterface }, user) => {
       const norm = mapUser(user);
       acc[norm.id] = norm;
       return acc;

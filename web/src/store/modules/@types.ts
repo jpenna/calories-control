@@ -71,7 +71,7 @@ export namespace Meals {
   }
 }
 
-export namespace Account {
+export namespace Users {
   export interface UserInterface {
     id: string;
     name: string;
@@ -79,7 +79,7 @@ export namespace Account {
     permissions: ['users_edit'?, 'meals_all'?];
     dailyCalories: number;
   }
-  export interface AccountState {
+  export interface UsersState {
     usersList: { [id: string]: UserInterface };
 
     isFetchingMe: boolean;

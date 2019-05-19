@@ -29,7 +29,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('account', ['fetchUsersList']),
+    ...mapActions('users', ['fetchUsersList']),
   },
 
   mounted() {
