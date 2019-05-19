@@ -47,7 +47,6 @@ export interface ChangePasswordRes {
   success: boolean;
 }
 export function changePassword(params: { password: string, newPassword: string }): Promise<ChangePasswordRes> {
-  console.log(params)
   return apiBase
     .put('/users/change-password', params)
     .then((res): ChangePasswordRes => res.data);

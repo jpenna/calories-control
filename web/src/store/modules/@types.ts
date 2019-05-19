@@ -86,7 +86,7 @@ export namespace Users {
     isFetchingUsers: boolean;
     usersError: ApiError;
 
-    isUpdatingUser: boolean;
+    updatingUsers: { [id: string]: boolean };
     updateError: ApiError;
 
     removingUsersIds: string[];

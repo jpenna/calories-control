@@ -8,8 +8,13 @@
       <div v-for="user of usersList" :key="user.email" class="user-item separate-list">
         <div>{{ user.name }}</div>
         <div>{{ user.email }}</div>
+        <div class="text-center">{{ user.dailyCalories }} cal.</div>
         <div class="text-right pr-30">
-          <el-select v-model="user.role">
+          <el-select
+            v-model="usersRole[user.id]"
+            v-loading="updatingUsers[user.id]"
+            @change="updateRole(user.id, $event)"
+          >
             <el-option
               v-for="item in roles"
               :key="item.value"
@@ -19,8 +24,14 @@
             />
           </el-select>
 
+          <el-tooltip effect="light" content="Edit" :open-delay="500">
+            <el-button type="text" class="ml-15" @click="$emit('editMeal', meal.id)">
+              <img src="@/assets/emojis/pencil.png" style="height: 1.2rem" />
+            </el-button>
+          </el-tooltip>
+
           <el-tooltip effect="light" content="Delete" :open-delay="500">
-            <el-button type="text" class="ml-10" @click="handleRemoveUser(user.id)">
+            <el-button type="text" class="ml-15" @click="handleRemoveUser(user.id)">
               <img
                 v-if="!removingUsersIds.includes(user.id)"
                 src="@/assets/emojis/times.png"
@@ -48,6 +59,8 @@ export default Vue.extend({
     return {
       isUpdatingRole: false,
 
+      usersRole: {},
+
       roles: [
         { label: 'Admin', value: 'admin' },
         { label: 'Manager', value: 'manager' },
@@ -60,18 +73,22 @@ export default Vue.extend({
   computed: {
     ...mapState('users', ['usersList', 'removingUsersIds']),
     ...mapGetters('users', ['myself']),
+  },
 
-    usersRolesList() {
-      return Object.keys(this.usersList).map((id) => {
-        const role = 'admin';
-        const user = this.usersList[id];
-        return { name: user.name, email: user.email, role };
-      });
+  watch: {
+    usersList: {
+      immediate: true,
+      handler(usersList) {
+        Object.keys(usersList).forEach((id) => {
+          const user = usersList[id];
+          this.$set(this.usersRole, id, user.role);
+        });
+      },
     },
   },
 
   methods: {
-    ...mapActions('users', ['removeUser']),
+    ...mapActions('users', ['removeUser', 'updatingUsers']),
 
     handleRemoveUser(userId) {
       const { name } = this.usersList[userId];
@@ -84,6 +101,10 @@ export default Vue.extend({
       }).catch((err) => {
         console.error(err);
       });
+    },
+
+    updateRole(userId, value) {
+      console.log(userId, value)
     },
   },
 });

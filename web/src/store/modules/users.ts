@@ -39,7 +39,7 @@ const initialState: Users.UsersState = {
   isFetchingUsers: false,
   usersError: {},
 
-  isUpdatingUser: false,
+  updatingUsers: {},
   updateError: {},
 
   removingUsersIds: [],
@@ -122,22 +122,23 @@ const mutations: MutationTree<Users.UsersState> = {
   },
 
   // Update User
-  [types.UPDATE_USER](state) {
-    state.isUpdatingUser = true;
+  [types.UPDATE_USER](state, userId) {
+    Vue.set(state.updatingUsers, userId, true);
     state.updateError = {};
   },
   [types.UPDATE_USER_DONE](state, user: api.UserRes) {
-    state.isUpdatingUser = false;
     const mapped = mapUser(user);
+    Vue.set(state.updatingUsers, mapped.id, false);
     state.usersList[mapped.id] = mapped;
     window.$notifyGlobal({
       title: 'Profile updated!',
       type: 'success',
     });
   },
-  [types.UPDATE_USER_FAIL](state, error: ApiResponseError) {
+  [types.UPDATE_USER_FAIL](state, params: { error: ApiResponseError, userId: string }) {
+    const { error, userId } = params;
     const { status, message, code } = error.apiError;
-    state.isUpdatingUser = false;
+    Vue.set(state.updatingUsers, userId, false);
     state.updateError = { status, message, code };
     window.$notifyGlobal({
       title: 'Something went wrong',

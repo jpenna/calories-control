@@ -45,8 +45,8 @@
         </el-button>
 
         <div class="buttons-side">
-          <el-button type="text" @click="resetFields" class="mr-30" :disabled="isUpdatingUser">Cancel</el-button>
-          <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="isUpdatingUser">
+          <el-button type="text" @click="resetFields" class="mr-30" :disabled="updatingUsers[myself.id]">Cancel</el-button>
+          <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="updatingUsers[myself.id]">
             <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
             Submit
           </el-button>
@@ -101,7 +101,7 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters('users', ['myself']),
-    ...mapState('users', ['isUpdatingUser']),
+    ...mapState('users', ['updatingUsers']),
   },
 
   watch: {
