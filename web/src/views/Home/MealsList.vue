@@ -1,14 +1,6 @@
 <template>
   <div class="meals-list">
     <div class="flex-split mb-20">
-      <!-- Loading message -->
-      <div>
-        <div v-show="isFetchingList" class="fw-500 color-regular">
-          <i class="el-icon-loading" />
-          Loading...
-        </div>
-      </div>
-
       <!-- Calories -->
       <div
         v-show="hasMeals && selectedUserId"

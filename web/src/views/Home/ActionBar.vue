@@ -62,10 +62,19 @@
 
       <!-- New Meal -->
       <div class="new-meal-side">
-        <el-button type="primary" @click="$emit('update:showMealModal', true)">
-          <img src="@/assets/emojis/salad.png" style="height: 1.2rem" />
-          <span>New Meal</span>
-        </el-button>
+        <div class="mb-10">
+          <el-button type="primary" @click="$emit('update:showMealModal', true)">
+            <img src="@/assets/emojis/salad.png" style="height: 1.2rem" />
+            <span>New Meal</span>
+          </el-button>
+        </div>
+
+        <el-tooltip effect="light" content="Force list refresh" :open-delay="500">
+          <el-button @click="$emit('forceRefresh')" :loading="isRefreshing">
+            <img src="@/assets/emojis/drink.png" style="height: 1.2rem" />
+            <span>{{ isRefreshing ? 'Loading' : 'Refresh'}}</span>
+          </el-button>
+        </el-tooltip>
       </div>
 
     </div>
@@ -86,6 +95,7 @@ export default Vue.extend({
     timeRange: { type: Array, required: true },
     showMealModal: { type: Boolean, required: true },
     useTimeFilter: { type: Boolean, required: true },
+    isRefreshing: { type: Boolean, required: true },
     userId: { type: String, required: true },
   },
 
@@ -139,17 +149,30 @@ export default Vue.extend({
     }
   }
 
-  @media screen and (max-width: 790px) {
+  .new-meal-side {
+    text-align: right;
+  }
+
+  @media screen and (max-width: 820px) {
     .new-meal-side {
-      order: 1;
-      text-align: right;
+      text-align: center;
       width: 100%;
       margin-bottom: 20px;
+
+      div {
+        display: inline-block;
+
+        button {
+          margin-right: 15px;
+        }
+      }
     }
 
     .filters-side {
-      order: 2;
+      order: 1;
       margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
 
       .date-item {
         margin-right: 10px;
@@ -164,7 +187,7 @@ export default Vue.extend({
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 400px) {
     .filters-side {
       text-align: center;
       width: 100%;
@@ -173,6 +196,14 @@ export default Vue.extend({
     .new-meal-side {
       text-align: center;
       width: 100%;
+
+      div {
+        display: block;
+
+        button {
+          margin-right: 0;
+        }
+      }
     }
 
     .time-button {

@@ -6,6 +6,8 @@
       :showMealModal.sync="showMealModal"
       :useTimeFilter.sync="useTimeFilter"
       :userId.sync="selectedUserId"
+      :isRefreshing="isFetchingDate"
+      @forceRefresh="doFetchMeals(true)"
     />
 
     <MealsList
@@ -170,9 +172,10 @@ export default Vue.extend({
   methods: {
     ...mapActions('meals', ['fetchMeals']),
 
-    doFetchMeals() {
+    doFetchMeals(force) {
       this.fetchMeals({
         filters: { date: this.dayString },
+        force,
       });
     },
 
