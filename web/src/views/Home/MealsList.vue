@@ -56,7 +56,7 @@
           <!-- User -->
           <div class="icon-format">
             <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
-            <span>{{ meal.userId }}</span>
+            <span>{{ usersList[meal.userId].name || meal.userId }}</span>
           </div>
 
           <div class="fw-500 mt-10">
@@ -107,6 +107,7 @@ export default Vue.extend({
 
   computed: {
     ...mapState('meals', ['removingIds']),
+    ...mapState('users', ['usersList']),
     ...mapGetters('users', ['myself']),
 
     exceedGoal() {
