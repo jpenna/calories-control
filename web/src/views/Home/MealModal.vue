@@ -5,6 +5,7 @@
     :fullscreen="showFullScreen"
     class="meal-modal"
     :close-on-click-modal="false"
+    @open="form.userId = form.userId || myself.id"
     @close="$emit('update:show', false)"
     @closed="onModalClosed"
   >
@@ -22,6 +23,18 @@
       hide-required-asterisk
       @submit.native.prevent
     >
+      <!-- User -->
+      <el-form-item v-if="$hasRole('mealsAll', myself)" label="User">
+        <el-select v-model="form.userId">
+          <el-option
+            v-for="item in usersList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+
       <!-- Name -->
       <el-form-item label="Name" prop="name">
         <el-input placeholder="Meal name" v-model="form.name" />
@@ -86,7 +99,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
@@ -107,10 +120,10 @@ export default Vue.extend({
 
       form: {
         id: '',
+        userId: '',
         name: '',
         eatenAt: new Date(),
         calories: undefined,
-        userId: this.userId,
         notes: '',
       },
 
@@ -118,15 +131,15 @@ export default Vue.extend({
         name: [{ required: true, type: 'string', trigger: 'submit', message: 'Please insert the dish name.' }],
         eatenAt: [{ required: true, type: 'date', trigger: 'submit', message: 'Select a valid time and date.' }],
         calories: [{ required: true, type: 'number', min: 0, trigger: 'submit', message: 'Calories is required.' }],
-        userId: [{ required: true, trigger: 'submit', message: 'Select a user.' }],
         notes: [{ trigger: 'submit', max: 100, message: 'Maximum of 100 characters.' }],
       },
     };
   },
 
   computed: {
-    ...mapState('auth', ['userId']),
     ...mapState('meals', ['isSubmitting', 'submitError']),
+    ...mapState('users', ['usersList']),
+    ...mapGetters('users', ['myself']),
   },
 
   watch: {
@@ -162,10 +175,10 @@ export default Vue.extend({
       if (!meal.id) return;
       this.form = {
         id: meal.id,
+        userId: meal.userId,
         name: meal.name,
         eatenAt: new Date(),
         calories: meal.calories,
-        userId: meal.userId,
         notes: meal.notes,
       };
       this.date = meal.eatenAt;
@@ -190,7 +203,7 @@ export default Vue.extend({
           dayString,
           meal: {
             id: this.form.id,
-            userId: this.userId,
+            userId: this.form.userId,
             name: this.form.name,
             notes: this.form.notes,
             calories: this.form.calories,
