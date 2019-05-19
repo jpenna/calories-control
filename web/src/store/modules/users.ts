@@ -78,7 +78,7 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
       });
   },
 
-  async changePassword({ commit }, params) {
+  async changePassword({ commit }, params: { password: string, newPassword: string }) {
     commit(types.CHANGE_PASSWORD);
     api.changePassword(params)
       .then(() => {
@@ -170,6 +170,7 @@ const mutations: MutationTree<Users.UsersState> = {
   // Change Password
   [types.CHANGE_PASSWORD](state) {
     state.isChangingPassword = true;
+    state.passwordError = {};
   },
   [types.CHANGE_PASSWORD_DONE](state) {
     state.isChangingPassword = false;

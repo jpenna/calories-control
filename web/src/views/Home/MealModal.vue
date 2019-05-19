@@ -4,6 +4,7 @@
     :visible="show"
     :fullscreen="showFullScreen"
     class="meal-modal"
+    :close-on-click-modal="false"
     @close="$emit('update:show', false)"
     @closed="onModalClosed"
   >

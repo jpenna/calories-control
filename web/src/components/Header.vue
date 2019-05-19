@@ -4,8 +4,8 @@
       <img src="@/assets/logo.png" :width="isAuth ? '140px' : '200px'" />
     </router-link>
 
-    <router-link :to="{ name: 'account' }" v-if="isAuth">
-      <img src="@/assets/emojis/moyai.png" style="height: 2rem" />
+    <router-link :to="{ name: 'account' }" v-if="isAuth" class="mr-30 icon-format">
+      <img src="@/assets/emojis/smile.png" style="height: 1.5rem" />
       <span class="fw-500 ml-5 color-regular">Account</span>
     </router-link>
   </div>

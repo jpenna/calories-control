@@ -4,6 +4,7 @@
     :visible="show"
     :fullscreen="showFullScreen"
     class="password-modal"
+    :close-on-click-modal="false"
     @close="$emit('update:show', false)"
     @closed="$refs.form.resetFields()"
   >
@@ -117,8 +118,8 @@ export default Vue.extend({
       this.$refs.form.validate((valid) => {
         if (!valid) return;
         this.changePassword({
-          currentPassword: this.currentPassword,
-          newPassword: this.newPassword,
+          password: this.form.currentPassword,
+          newPassword: this.form.newPassword,
         });
       });
     },

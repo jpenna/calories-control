@@ -47,6 +47,29 @@ export default express.Router()
     }
   })
 
+  // Change password
+  .put('/change-password', async (req, res): Promise<void> => {
+    try {
+      // Validate permissions
+      const requester = req.user;
+
+      const user = await UserModel.findById(requester.id);
+      if (!user) return res.sendError(404, 'User not found');
+
+      if (!await user.verifyPassword(req.body.password)) {
+        return res.sendError(403, 'Current password doesn\'t match.');
+      }
+
+      // Only allowed users can edit permissions
+      user.set({ password: req.body.newPassword });
+
+      await user.save();
+      res.sendSuccess({});
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
+  })
+
   // Update
   .put('/:id', async (req, res): Promise<void> => {
     try {
