@@ -25,6 +25,7 @@ const initialState: Users.UsersState = {
   usersError: {},
 
   isUpdatingCalories: false,
+  updateError: {},
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -82,16 +83,27 @@ const mutations: MutationTree<Users.UsersState> = {
   // Me
   [types.UPDATE_CALORIES](state) {
     state.isUpdatingCalories = true;
+    state.updateError = {};
   },
   [types.UPDATE_CALORIES_DONE](state, user: api.UserRes) {
     state.isUpdatingCalories = false;
     const mapped = mapUser(user);
     state.usersList[mapped.id] = mapped;
+    window.$notifyGlobal({
+      title: 'Calories updated!',
+      message: `Your daily maximum is ${mapped.dailyCalories} now.`,
+      type: 'success',
+    });
   },
   [types.UPDATE_CALORIES_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
     state.isUpdatingCalories = false;
     state.updateError = { status, message, code };
+    window.$notifyGlobal({
+      title: 'Something went wrong',
+      message: `Error ${code || status}: ${message}`,
+      type: 'error',
+    });
   },
 };
 

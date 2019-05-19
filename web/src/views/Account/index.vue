@@ -21,20 +21,12 @@
     >
       <el-form-item label="Max Calories" class="d-inline-block">
         <el-input-number
+          v-loading="isUpdatingCalories"
           :controls="false"
           :min="0"
           v-model="form.calories"
           name="calories"
           @input="debounceSubmit"
-        />
-        <i
-          :style="{ visibility: !isUpdatingAccount || 'hidden' }"
-          class="ml-10 fs-150 v-align-middle"
-          :class="{
-            'el-icon-loading': isUpdatingAccount,
-            'el-icon-success color-success': !isUpdatingAccount, // and no error
-            'el-icon-error color-danger': !isUpdatingAccount, // and error
-          }"
         />
       </el-form-item>
     </el-form>
@@ -51,7 +43,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapMutations, mapGetters, mapActions } from 'vuex';
+import { mapMutations, mapGetters, mapActions, mapState } from 'vuex';
 
 import UsersRoles from './UsersRoles.vue';
 
@@ -72,10 +64,7 @@ export default Vue.extend({
 
   computed: {
     ...mapGetters('users', ['myself']),
-
-    isUpdatingAccount() {
-      return false;
-    },
+    ...mapState('users', ['isUpdatingCalories']),
   },
 
   watch: {
