@@ -35,7 +35,7 @@ const initialState: Meals.MealsState = {
   listTotal: {},
 
   isFetching: [],
-  fetchingError: new Map(),
+  fetchingError: {},
 
   isSubmitting: false,
   submitError: {},
@@ -129,7 +129,7 @@ const mutations: MutationTree<Meals.MealsState> = {
   // Fetch Meals
   [types.FETCH_MEALS](state, dayString: string) {
     state.isFetching.push(dayString);
-    state.fetchingError.set(dayString, {});
+    Vue.set(state.fetchingError, dayString, {});
   },
   [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, dayString: string }) {
     const { dayString, data } = payload;
@@ -147,7 +147,7 @@ const mutations: MutationTree<Meals.MealsState> = {
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
     const { status, message, code } = payload.error.apiError;
     Vue.delete(state.isFetching, state.isFetching.findIndex(date => date === payload.dayString));
-    state.submitError = { status, message, code };
+    state.fetchingError[payload.dayString] = { status, message, code };
   },
 
   // New Meal

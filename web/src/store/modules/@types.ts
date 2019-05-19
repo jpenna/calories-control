@@ -62,7 +62,7 @@ export namespace Meals {
     };
 
     isFetching: string[];
-    fetchingError: Map<string, ApiError>;
+    fetchingError: { [date: string]: ApiError };
 
     isSubmitting: boolean;
     submitError: ApiError;
