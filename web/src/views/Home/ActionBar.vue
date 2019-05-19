@@ -139,6 +139,8 @@ export default Vue.extend({
 
 
 <style lang="scss">
+@import '@/styles/_variables.scss';
+
 .action-bar {
   .date-item {
     display: inline-block;
@@ -153,7 +155,7 @@ export default Vue.extend({
     text-align: right;
   }
 
-  @media screen and (max-width: 820px) {
+  @media screen and (max-width: $break-center) {
     .new-meal-side {
       text-align: center;
       width: 100%;

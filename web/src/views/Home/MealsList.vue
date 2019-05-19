@@ -1,20 +1,18 @@
 <template>
   <div class="meals-list">
-    <div class="flex-split mb-20">
-      <!-- Calories -->
-      <div
-        v-show="hasMeals && selectedUserId"
-        class="total-calories"
-        :class="exceedGoal ? 'color-danger' : 'color-success'"
-      >
-        <img
-          v-show="exceedGoal"
-          src="@/assets/emojis/crying.png"
-          style="height: 2rem; vertical-align: sub"
-          class="mr-5"
-        />
-        Eaten Calories: {{ caloriesTotal }} / {{ selectedUser.dailyCalories }}
-      </div>
+    <!-- Calories -->
+    <div
+      v-show="hasMeals && selectedUserId"
+      class="total-calories"
+      :class="exceedGoal ? 'color-danger' : 'color-success'"
+    >
+      <img
+        v-show="exceedGoal"
+        src="@/assets/emojis/crying.png"
+        style="height: 2rem; vertical-align: sub"
+        class="mr-15"
+      />
+      Eaten Calories: {{ caloriesTotal }} / {{ selectedUser.dailyCalories }}
     </div>
 
     <div v-show="!hasMeals && !isFetchingList" class="text-center fw-500 mt-50 mb-100">
@@ -113,7 +111,7 @@ export default Vue.extend({
     ...mapGetters('users', ['myself']),
 
     exceedGoal() {
-      if (!this.selectedUserId) return;
+      if (!this.mealsList[this.selectedUserId]) return;
       const calSum = this.mealsList[this.selectedUserId] // Only when 1 user
         // eslint-disable-next-line no-return-assign, no-param-reassign
         .reduce((sum, meal) => sum += meal.calories, 0);
@@ -157,6 +155,14 @@ export default Vue.extend({
     padding: 10px;
     font-weight: 600;
     text-align: right;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    @media screen and (max-width: $break-center) {
+      justify-content: center;
+    }
   }
 
   .meal-card {
