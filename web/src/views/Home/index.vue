@@ -7,13 +7,15 @@
       :useTimeFilter.sync="useTimeFilter"
     />
 
-    <span v-show="isFetching.includes(this.selectedDate)">
+    <span v-show="isFetchingDate">
       <i class="el-icon-loading" />
       Loading...
     </span>
 
     <MealsList
       :mealsList="mealsList"
+      :isFetchingList="isFetchingDate"
+      :caloriesTotal="caloriesTotal"
       @editMeal="editMeal"
     />
 
@@ -96,6 +98,15 @@ export default Vue.extend({
 
     totalForDay() {
       return this.getTotalMealsForDate(this.selectedDate);
+    },
+
+    caloriesTotal() {
+      const mealsDay = this.getMealsForDate(this.selectedDate);
+      return Object.keys(mealsDay).reduce((acc, id) => acc + mealsDay[id].calories, 0);
+    },
+
+    isFetchingDate() {
+      return this.isFetching.includes(this.selectedDate);
     },
   },
 

@@ -1,6 +1,6 @@
 <template>
   <div class="meals-list">
-    <div v-show="!mealsList.length" class="text-center fw-500 mt-50">
+    <div v-show="!mealsList.length && !isFetchingList" class="text-center fw-500 mt-50">
       <img src="@/assets/emojis/relieved.png" style="height: 4rem" />
       <div class="mt-5 fs-140">Looks like someone was fasting!</div>
       <div class="mt-5">No meals for the selected period.</div>
@@ -11,7 +11,13 @@
         class="total-calories"
         :class="exceedGoal ? 'color-danger' : 'color-success'"
       >
-        Eaten Calories: 400 / 3000
+        <img
+          v-show="exceedGoal"
+          src="@/assets/emojis/crying.png"
+          style="height: 2rem; vertical-align: sub"
+          class="mr-5"
+        />
+        Eaten Calories: {{ caloriesTotal }} / 3000
       </div>
 
       <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card separate-list">
@@ -78,6 +84,8 @@ export default Vue.extend({
 
   props: {
     mealsList: { type: Array, required: true },
+    caloriesTotal: { type: Number, required: true },
+    isFetchingList: { type: Boolean, required: true },
   },
 
   filters: {
