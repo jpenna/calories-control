@@ -52,7 +52,7 @@
 
     </table>
 
-    <EditMembers :show.sync="showEditMember" :member="selectedMember" />
+    <MemberModal :show.sync="showEditMember" :member="selectedMember" @close="handleMemberClose" />
   </div>
 </template>
 
@@ -61,13 +61,13 @@ import Vue from 'vue';
 
 import { mapState, mapGetters, mapActions } from 'vuex';
 
-import EditMembers from './EditMembers.vue';
+import MemberModal from './MemberModal.vue';
 
 export default Vue.extend({
   name: 'UsersList',
 
   components: {
-    EditMembers,
+    MemberModal,
   },
 
   data() {
@@ -127,6 +127,11 @@ export default Vue.extend({
 
     updateRole(userId, role) {
       this.updateUser({ userId, role });
+    },
+
+    handleMemberClose() {
+      this.showEditMember = false;
+      this.selectedMember = {};
     },
   },
 });
