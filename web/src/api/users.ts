@@ -4,7 +4,7 @@ export interface UserRes {
   id: string;
   name: string;
   email: string;
-  permissions: ['users_edit'?, 'meals_all'?];
+  permissions: string[]
   dailyCalories: number;
 }
 export interface FetchUsersRes {
@@ -20,7 +20,7 @@ export function fetchUsersList(): Promise<FetchUsersRes> {
 export interface UpdateUserParam {
   name?: string;
   email?: string;
-  permissions?: ['users_edit'?, 'meals_all'?];
+  permissions?: string[];
   dailyCalories?: number;
 }
 export interface UpdateUserRes {
@@ -31,4 +31,14 @@ export function updateUser(userId: string, update: UpdateUserParam): Promise<Upd
   return apiBase
     .put(`/users/${userId}`, update)
     .then((res): UpdateUserRes => res.data);
+}
+
+export interface FetchRolesRes {
+  success: boolean;
+  roles: { [id: string]: string[] };
+}
+export function fetchRoles(): Promise<FetchRolesRes> {
+  return apiBase
+    .put('/users/roles')
+    .then((res): FetchRolesRes => res.data);
 }

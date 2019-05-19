@@ -37,10 +37,11 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import Vue from 'vue';
 
 import Pagination from '@/components/Pagination.vue';
+import { mapState, mapGetters } from 'vuex';
 
 export default Vue.extend({
   name: 'UsersRoles',
@@ -53,16 +54,24 @@ export default Vue.extend({
     return {
       isUpdatingRole: false,
 
-      usersList: [
-        { name: 'John', email: 'john@me.com', role: 'admin' },
-        { name: 'Mary', email: 'mary@me.com', role: 'manager' },
-      ],
-
       roles: [
         { label: 'Admin', value: 'admin' },
         { label: 'Manager', value: 'manager' },
       ],
     };
+  },
+
+  computed: {
+    ...mapState('users', ['usersList', 'rolesList']),
+    ...mapGetters('users', ['myself']),
+
+    usersRolesList() {
+      return Object.keys(this.usersList).map((id) => {
+        const role = 'admin';
+        const user = this.usersList[id];
+        return { name: user.name, email: user.email, role };
+      });
+    },
   },
 });
 </script>

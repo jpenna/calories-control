@@ -76,16 +76,20 @@ export namespace Users {
     id: string;
     name: string;
     email: string;
-    permissions: ['users_edit'?, 'meals_all'?];
+    permissions: string[];
     dailyCalories: number;
   }
   export interface UsersState {
     usersList: { [id: string]: UserInterface };
+    rolesList: { [id: string]: string[] }
 
     isFetchingUsers: boolean;
     usersError: ApiError;
 
     isUpdatingCalories: boolean;
     updateError: ApiError;
+
+    isFetchingRoles: boolean;
+    rolesError: ApiError;
   }
 }

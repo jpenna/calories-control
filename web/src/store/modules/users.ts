@@ -8,24 +8,33 @@ import { ApiResponseError } from '@/api/apiBase';
 
 import { RootInterface, Users } from './@types';
 
+const permissionMap = new Map([
+  ['users_edit', 'usersEdit'],
+  ['meals_all', 'mealsAll'],
+]);
+
 function mapUser(user: api.UserRes): Users.UserInterface {
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    permissions: user.permissions,
+    permissions: user.permissions.map(p => permissionMap.get(p) || p),
     dailyCalories: user.dailyCalories,
   };
 }
 
 const initialState: Users.UsersState = {
   usersList: {},
+  rolesList: {},
 
   isFetchingUsers: false,
   usersError: {},
 
   isUpdatingCalories: false,
   updateError: {},
+
+  isFetchingRoles: false,
+  rolesError: {},
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -58,10 +67,21 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
         commit(types.UPDATE_CALORIES_FAIL, error);
       });
   },
+
+  async fetchRoles({ commit }) {
+    commit(types.FETCH_ROLES);
+    api.fetchRoles()
+      .then((data: api.FetchRolesRes) => {
+        commit(types.FETCH_ROLES_DONE, data.roles);
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.FETCH_ROLES_FAIL, error);
+      });
+  },
 };
 
 const mutations: MutationTree<Users.UsersState> = {
-  // Me
+  // Users List
   [types.FETCH_USERS](state) {
     state.isFetchingUsers = true;
     state.usersError = {};
@@ -80,7 +100,22 @@ const mutations: MutationTree<Users.UsersState> = {
     state.usersError = { status, message, code };
   },
 
-  // Me
+  // Roles
+  [types.FETCH_ROLES](state) {
+    state.isFetchingRoles = true;
+    state.rolesError = {};
+  },
+  [types.FETCH_ROLES_DONE](state, roles: api.FetchRolesRes['roles']) {
+    state.isFetchingRoles = false;
+    state.rolesList = roles;
+  },
+  [types.FETCH_ROLES_FAIL](state, error: ApiResponseError) {
+    const { status, message, code } = error.apiError;
+    state.isFetchingRoles = false;
+    state.rolesError = { status, message, code };
+  },
+
+  // Update Calories
   [types.UPDATE_CALORIES](state) {
     state.isUpdatingCalories = true;
     state.updateError = {};
