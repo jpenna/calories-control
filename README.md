@@ -15,5 +15,5 @@ Enter each project directory and follow the instructions locally.
 Run this command in MongoDB changing the ID to the user ID.
 
 ```js
-db.users.update({ _id: ObjectId("5cdeaa8888847a14df5397ef") }, { $set: { permissions: ["user_edit", "meals_all"] } });
+db.users.update({ _id: ObjectId("5cdeaa8888847a14df5397ef") }, { $set: { permissions: ["users_edit", "meals_all"] } });
 ```

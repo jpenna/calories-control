@@ -82,7 +82,10 @@ export namespace Users {
   export interface UsersState {
     usersList: { [id: string]: UserInterface };
 
-    isFetchingMe: boolean;
+    isFetchingUsers: boolean;
     usersError: ApiError;
+
+    isUpdatingCalories: boolean;
+    updateError: ApiError;
   }
 }

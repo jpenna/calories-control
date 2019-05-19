@@ -17,7 +17,7 @@
       :model="form"
       label-position="left"
       label-width="100px"
-      @submit="submitCalories"
+      @submit.native.prevent="submitCalories"
     >
       <el-form-item label="Max Calories" class="d-inline-block">
         <el-input-number
@@ -25,6 +25,7 @@
           :min="0"
           v-model="form.calories"
           name="calories"
+          @input="debounceSubmit"
         />
         <i
           :style="{ visibility: !isUpdatingAccount || 'hidden' }"
@@ -50,7 +51,7 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 import UsersRoles from './UsersRoles.vue';
 
@@ -70,16 +71,33 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapGetters('users', ['myself']),
+
     isUpdatingAccount() {
       return false;
     },
   },
 
+  watch: {
+    myself(myself) {
+      this.form.calories = myself.dailyCalories;
+    },
+  },
+
+  mounted() {
+    this.form.calories = this.myself.dailyCalories;
+  },
+
   methods: {
     ...mapMutations('auth', ['doLogout']),
+    ...mapActions('users', ['updateCalories']),
+
+    debounceSubmit() {
+      console.log('submit on change');
+    },
 
     submitCalories() {
-      console.log('submit');
+      this.updateCalories({ userId: this.myself.id, calories: this.form.calories });
     },
 
     handleLogout() {

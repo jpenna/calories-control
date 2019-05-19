@@ -2,11 +2,9 @@
 
 import { MutationTree, ActionTree, GetterTree } from 'vuex';
 
-import * as api from '@/api/account';
+import * as api from '@/api/users';
 import * as types from '../types';
 import { ApiResponseError } from '@/api/apiBase';
-
-import * as utils from '@/helpers/utils';
 
 import { RootInterface, Users } from './@types';
 
@@ -23,8 +21,10 @@ function mapUser(user: api.UserRes): Users.UserInterface {
 const initialState: Users.UsersState = {
   usersList: {},
 
-  isFetchingMe: false,
+  isFetchingUsers: false,
   usersError: {},
+
+  isUpdatingCalories: false,
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {
@@ -44,16 +44,29 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
         commit(types.FETCH_USERS_FAIL, error);
       });
   },
+
+  async updateCalories({ commit }, params: { userId: string, calories: number }) {
+    commit(types.UPDATE_CALORIES);
+    const { calories, userId } = params;
+    const update = { dailyCalories: calories };
+    api.updateUser(userId, update)
+      .then((data: api.UpdateUserRes) => {
+        commit(types.UPDATE_CALORIES_DONE, data.user);
+      })
+      .catch((error: ApiResponseError) => {
+        commit(types.UPDATE_CALORIES_FAIL, error);
+      });
+  },
 };
 
 const mutations: MutationTree<Users.UsersState> = {
   // Me
   [types.FETCH_USERS](state) {
-    state.isFetchingMe = true;
+    state.isFetchingUsers = true;
     state.usersError = {};
   },
   [types.FETCH_USERS_DONE](state, users: api.FetchUsersRes['users']) {
-    state.isFetchingMe = false;
+    state.isFetchingUsers = false;
     state.usersList = users.reduce((acc: { [id:string]: Users.UserInterface }, user) => {
       const norm = mapUser(user);
       acc[norm.id] = norm;
@@ -62,8 +75,23 @@ const mutations: MutationTree<Users.UsersState> = {
   },
   [types.FETCH_USERS_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
-    state.isFetchingMe = false;
+    state.isFetchingUsers = false;
     state.usersError = { status, message, code };
+  },
+
+  // Me
+  [types.UPDATE_CALORIES](state) {
+    state.isUpdatingCalories = true;
+  },
+  [types.UPDATE_CALORIES_DONE](state, user: api.UserRes) {
+    state.isUpdatingCalories = false;
+    const mapped = mapUser(user);
+    state.usersList[mapped.id] = mapped;
+  },
+  [types.UPDATE_CALORIES_FAIL](state, error: ApiResponseError) {
+    const { status, message, code } = error.apiError;
+    state.isUpdatingCalories = false;
+    state.updateError = { status, message, code };
   },
 };
 
