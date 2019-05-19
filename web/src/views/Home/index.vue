@@ -81,6 +81,7 @@ export default Vue.extend({
       const mealsDay = this.getMealsForDate(this.selectedDate);
 
       return Object.keys(mealsDay)
+        // Filter
         .reduce((acc, id) => {
           const meal = mealsDay[id];
           if (this.useTimeFilter && !utils.timeBetween(meal.eatenAt, this.timeRange[0], this.timeRange[1])) return acc;
@@ -88,7 +89,21 @@ export default Vue.extend({
           acc.push(meal);
           return acc;
         }, [])
-        .slice(this.firstItem, this.firstItem + this.maxSize);
+        // Slice
+        .slice(this.firstItem, this.firstItem + this.maxSize)
+        // Sort
+        .sort(({ eatenAt: a }, { eatenAt: b }) => {
+          const aTime = a.getTime();
+          const bTime = b.getTime();
+          if (aTime === bTime) return 0;
+          return aTime < bTime ? -1 : 1;
+        })
+        // Group
+        .reduce((acc, meal) => {
+          if (!acc[meal.userId]) acc[meal.userId] = [];
+          acc[meal.userId].push(meal);
+          return acc;
+        }, {});
     },
 
     dayString() {
