@@ -142,7 +142,7 @@ const mutations: MutationTree<Users.UsersState> = {
     const { name } = state.usersList[userId];
     Vue.delete(state.usersList, userId);
     Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
-    window.$messageGlobal(`User "${name}" deleted!`);
+    window.$messageGlobal(`User "${name}" removed!`);
   },
   [types.DELETE_USER_FAIL](state, params: { error: ApiResponseError, userId: string }) {
     const { error, userId } = params;

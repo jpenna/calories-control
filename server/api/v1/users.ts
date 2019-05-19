@@ -70,4 +70,23 @@ export default express.Router()
     } catch (err) {
       res.sendError(500, err.message);
     }
+  })
+
+  .delete('/:id', async (req, res): Promise<void> => {
+    try {
+      // Validate permissions
+      const requester = req.user;
+      const canEditUsers = requester.hasPermission(USERS_EDIT);
+      if (requester.id !== req.params.id && !canEditUsers) {
+        return res.sendError(403, 'You can not delete accounts');
+      }
+
+      const user = await UserModel.findByIdAndRemove(req.params.id);
+      console.dir(user);
+      if (!user) return res.sendError(404, 'User not found');
+
+      res.sendSuccess({ userId: req.params.id });
+    } catch (err) {
+      res.sendError(500, err.message);
+    }
   });
