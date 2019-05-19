@@ -88,7 +88,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('users', ['removeUser', 'updatingUsers']),
+    ...mapActions('users', ['removeUser', 'updatingUsers', 'updateUser']),
 
     handleRemoveUser(userId) {
       const { name } = this.usersList[userId];
@@ -103,8 +103,12 @@ export default Vue.extend({
       });
     },
 
-    updateRole(userId, value) {
-      console.log(userId, value)
+    updateRole(userId, role) {
+      console.log(userId, role)
+      this.updateUser({
+        userId,
+        role,
+      });
     },
   },
 });

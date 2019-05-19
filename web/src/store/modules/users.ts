@@ -14,6 +14,12 @@ const permissionMap = new Map([
   ['meals_all', 'mealsAll'],
 ]);
 
+const rolesMap = new Map([
+  ['admin', ['users_edit', 'meals_all']],
+  ['manager', ['users_edit']],
+  ['user', []],
+]);
+
 function getRole(permissions: string[]) {
   const { length } = permissions;
   if (!length) return 'user';
@@ -66,12 +72,16 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
       });
   },
 
-  async updateUser({ commit }, params) {
+  async updateUser({ commit, rootState }, params) {
     commit(types.UPDATE_USER);
-    const { userId, ...update } = params;
+    const { userId, role, ...update } = params;
+    if (role) update.permissions = rolesMap.get(role);
     api.updateUser(userId, update)
       .then((data: api.UpdateUserRes) => {
-        commit(types.UPDATE_USER_DONE, data.user);
+        commit(types.UPDATE_USER_DONE, {
+          user: data.user,
+          isMember: rootState.auth.id !== userId,
+        });
       })
       .catch((error: ApiResponseError) => {
         commit(types.UPDATE_USER_FAIL, error);
@@ -126,12 +136,14 @@ const mutations: MutationTree<Users.UsersState> = {
     Vue.set(state.updatingUsers, userId, true);
     state.updateError = {};
   },
-  [types.UPDATE_USER_DONE](state, user: api.UserRes) {
+  [types.UPDATE_USER_DONE](state, payload: { user: api.UserRes, isMember: boolean }) {
+    const { user, isMember } = payload;
     const mapped = mapUser(user);
     Vue.set(state.updatingUsers, mapped.id, false);
     state.usersList[mapped.id] = mapped;
     window.$notifyGlobal({
-      title: 'Profile updated!',
+      title: isMember ? 'User updated!' : 'Profile updated!',
+      message: isMember ? `User ${mapped.name} updated.` : '',
       type: 'success',
     });
   },
