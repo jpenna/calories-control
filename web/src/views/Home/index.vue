@@ -30,6 +30,7 @@
     <MealModal
       :show.sync="showMealModal"
       :selectedMeal="selectedMeal"
+      :selectedDate="selectedDate"
       @close="clearSelectedMeal"
     />
   </div>

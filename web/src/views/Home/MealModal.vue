@@ -5,7 +5,7 @@
     :fullscreen="showFullScreen"
     class="meal-modal"
     :close-on-click-modal="false"
-    @open="form.userId = form.userId || myself.id"
+    @open="onModalOpen"
     @close="$emit('update:show', false)"
     @closed="onModalClosed"
   >
@@ -109,6 +109,7 @@ export default Vue.extend({
   props: {
     show: { type: Boolean, required: true },
     selectedMeal: { type: Object, required: true },
+    selectedDate: { type: Date, required: true },
   },
 
   data() {
@@ -211,6 +212,11 @@ export default Vue.extend({
           },
         });
       });
+    },
+
+    onModalOpen() {
+      this.form.userId = this.form.userId || this.myself.id;
+      this.date = new Date(this.selectedDate);
     },
 
     onModalClosed() {
