@@ -40,6 +40,8 @@ const initialState: Users.UsersState = {
 
   isUpdatingCalories: false,
   updateError: {},
+
+  removingUsersId: [],
 };
 
 const getters: GetterTree<Users.UsersState, RootInterface> = {

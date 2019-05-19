@@ -32,7 +32,7 @@
     </el-form>
 
     <!-- Users permissions -->
-    <UsersRoles style="max-width: 650px; margin: auto" class="mb-100"/>
+    <UsersRoles v-if="$hasRole('usersEdit', myself)" style="max-width: 650px; margin: auto" class="mb-100"/>
 
     <el-button type="danger" class="logout-button" @click="handleLogout">
       Logout

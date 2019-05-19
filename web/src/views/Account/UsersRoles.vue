@@ -13,16 +13,10 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="item.disabled"
           />
         </el-select>
-        <i
-          class="ml-10 fs-150 v-align-middle"
-          :class="{
-            'el-icon-loading': isUpdatingRole,
-            'el-icon-success color-success': !isUpdatingRole, // and no error
-            'el-icon-error color-danger': !isUpdatingRole, // and error
-          }"
-        />
+        <img v-if="!removingIds.includes(user.id)" src="@/assets/emojis/times.png" style="height: 1.2rem" />
       </div>
     </div>
 
@@ -57,12 +51,14 @@ export default Vue.extend({
       roles: [
         { label: 'Admin', value: 'admin' },
         { label: 'Manager', value: 'manager' },
+        { label: 'User', value: 'user' },
+        { label: 'Custom Permissions', value: 'custom', disabled: true },
       ],
     };
   },
 
   computed: {
-    ...mapState('users', ['usersList']),
+    ...mapState('users', ['usersList', 'removingIds']),
     ...mapGetters('users', ['myself']),
 
     usersRolesList() {
