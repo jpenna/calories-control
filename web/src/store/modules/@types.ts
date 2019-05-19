@@ -1,12 +1,3 @@
-// export interface User {
-//   permissions: ['users_edit'?, 'meals_all'?],
-//   dailyCalories: number,
-//   name: string,
-//   email: string,
-//   id: string,
-// }
-
-
 export interface RootInterface {
   // in case something is included in the root state in the future
 }
@@ -76,5 +67,22 @@ export namespace Meals {
     timeRange?: [Date, Date];
     skip?: number;
     limit?: number;
+  }
+}
+
+export namespace Account {
+  export interface UserInterface {
+    id: string;
+    name: string;
+    email: string;
+    permissions: ['users_edit'?, 'meals_all'?];
+    dailyCalories: number;
+  }
+
+  export interface AccountState {
+    user: UserInterface;
+
+    isFetchingMe: boolean;
+    meError: ApiError;
   }
 }
