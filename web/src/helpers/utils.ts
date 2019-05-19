@@ -7,9 +7,14 @@ export function getUserSettings(key: string): {} {
   return JSON.parse(localStorage.getItem(key) || '{}');
 }
 
-export function jwtDecode(token: string): { exp: number } {
+export function jwtDecode(token: string): { exp: number, userId: string } {
   const [, payload] = token.split('.');
   return JSON.parse(window.atob(payload));
+}
+
+export function readUserId(): string {
+  if (!localStorage.token) return '';
+  return jwtDecode(localStorage.token).userId;
 }
 
 export function isAuthenticated(): boolean {

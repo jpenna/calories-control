@@ -24,6 +24,6 @@ export const REMOVE_MEAL_DONE = 'REMOVE_MEAL_DONE';
 export const REMOVE_MEAL_FAIL = 'REMOVE_MEAL_FAIL';
 
 // Me
-export const FETCH_ME = 'FETCH_ME';
-export const FETCH_ME_DONE = 'FETCH_ME_DONE';
-export const FETCH_ME_FAIL = 'FETCH_ME_FAIL';
+export const FETCH_USERS = 'FETCH_USERS';
+export const FETCH_USERS_DONE = 'FETCH_USERS_DONE';
+export const FETCH_USERS_FAIL = 'FETCH_USERS_FAIL';

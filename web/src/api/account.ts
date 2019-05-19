@@ -7,12 +7,12 @@ export interface UserRes {
   permissions: ['users_edit'?, 'meals_all'?];
   dailyCalories: number;
 }
-export interface FetchMeRes {
+export interface FetchUsersRes {
   success: boolean;
-  user: UserRes;
+  users: UserRes[];
 }
-export function fetchMe(): Promise<FetchMeRes> {
+export function fetchUsersList(): Promise<FetchUsersRes> {
   return apiBase
-    .get('/users/me')
-    .then((res): FetchMeRes => res.data);
+    .get('/users/list')
+    .then((res): FetchUsersRes => res.data);
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { MutationTree, ActionTree } from 'vuex';
+import { MutationTree, ActionTree, GetterTree } from 'vuex';
 
 import * as api from '@/api/account';
 import * as types from '../types';
@@ -21,51 +21,56 @@ function mapUser(user: api.UserRes): Account.UserInterface {
 }
 
 const initialState: Account.AccountState = {
-  user: {
-    id: '',
-    name: '',
-    email: '',
-    permissions: [],
-    dailyCalories: 0,
-  },
+  usersList: {},
 
   isFetchingMe: false,
-  meError: {},
+  usersError: {},
+};
+
+const getters: GetterTree<Account.AccountState, RootInterface> = {
+  getMe(state, localGetters, rootState): Account.UserInterface {
+    return state.usersList[rootState.auth.userId] || {};
+  },
 };
 
 const actions: ActionTree<Account.AccountState, RootInterface> = {
-  async fetchMe({ commit }) {
-    commit(types.FETCH_ME);
-    api.fetchMe()
-      .then((data: api.FetchMeRes) => {
-        commit(types.FETCH_ME_DONE, data.user);
+  async fetchUsersList({ commit }) {
+    commit(types.FETCH_USERS);
+    api.fetchUsersList()
+      .then((data: api.FetchUsersRes) => {
+        commit(types.FETCH_USERS_DONE, data.users);
       })
       .catch((error: ApiResponseError) => {
-        commit(types.FETCH_ME_FAIL, error);
+        commit(types.FETCH_USERS_FAIL, error);
       });
   },
 };
 
 const mutations: MutationTree<Account.AccountState> = {
   // Me
-  [types.FETCH_ME](state) {
+  [types.FETCH_USERS](state) {
     state.isFetchingMe = true;
-    state.meError = {};
+    state.usersError = {};
   },
-  [types.FETCH_ME_DONE](state, user: api.UserRes) {
+  [types.FETCH_USERS_DONE](state, users: api.FetchUsersRes['users']) {
     state.isFetchingMe = false;
-    state.user = mapUser(user);
+    state.usersList = users.reduce((acc: { [id:string]: Account.UserInterface }, user) => {
+      const norm = mapUser(user);
+      acc[norm.id] = norm;
+      return acc;
+    }, {});
   },
-  [types.FETCH_ME_FAIL](state, error: ApiResponseError) {
+  [types.FETCH_USERS_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
     state.isFetchingMe = false;
-    state.meError = { status, message, code };
+    state.usersError = { status, message, code };
   },
 };
 
 export default {
   namespaced: true,
   state: initialState,
+  getters,
   mutations,
   actions,
 };

@@ -11,7 +11,7 @@ import * as utils from '@/helpers/utils';
 import { RootInterface, Auth } from './@types';
 
 const initialState: Auth.AuthState = {
-  userId: '',
+  userId: utils.readUserId(),
   isAuthenticating: false,
   isAuthenticated: utils.isAuthenticated(),
 

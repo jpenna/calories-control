@@ -1,5 +1,6 @@
 export interface RootInterface {
   // in case something is included in the root state in the future
+  [module: string]: any;
 }
 
 export interface ApiError {
@@ -78,11 +79,10 @@ export namespace Account {
     permissions: ['users_edit'?, 'meals_all'?];
     dailyCalories: number;
   }
-
   export interface AccountState {
-    user: UserInterface;
+    usersList: { [id: string]: UserInterface };
 
     isFetchingMe: boolean;
-    meError: ApiError;
+    usersError: ApiError;
   }
 }

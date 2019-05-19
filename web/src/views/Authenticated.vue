@@ -29,7 +29,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('account', ['fetchMe']),
+    ...mapActions('account', ['fetchUsersList']),
   },
 
   mounted() {
@@ -37,7 +37,7 @@ export default Vue.extend({
       this.$router.push({ name: 'login' });
       return;
     }
-    this.fetchMe();
+    this.fetchUsersList();
   },
 });
 </script>
