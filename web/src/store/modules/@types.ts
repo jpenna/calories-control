@@ -77,6 +77,7 @@ export namespace Users {
     name: string;
     email: string;
     permissions: string[];
+    role: string;
     dailyCalories: number;
   }
   export interface UsersState {

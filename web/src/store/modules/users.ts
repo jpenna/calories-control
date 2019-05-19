@@ -13,12 +13,21 @@ const permissionMap = new Map([
   ['meals_all', 'mealsAll'],
 ]);
 
+function getRole(permissions: string[]) {
+  const { length } = permissions;
+  if (!length) return 'user';
+  if (length === 2) return 'admin';
+  if (length === 1 && permissions[0] === 'users_edit') return 'manager';
+  return 'custom';
+}
+
 function mapUser(user: api.UserRes): Users.UserInterface {
   return {
     id: user.id,
     name: user.name,
     email: user.email,
     permissions: user.permissions.map(p => permissionMap.get(p) || p),
+    role: getRole(user.permissions),
     dailyCalories: user.dailyCalories,
   };
 }
