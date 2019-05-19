@@ -19,5 +19,18 @@ export default Vue.extend({
       this.$router.push('/');
     },
   },
+
+  created() {
+    window.$notifyGlobal = (params) => {
+      const message = typeof params === 'string' ? params : params.message;
+      const { title, type } = params;
+
+      this.$notify({ title, message, type });
+    };
+
+    window.$messageGlobal = (message, type = 'success') => {
+      this.$message({ message, type });
+    };
+  },
 });
 </script>

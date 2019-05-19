@@ -120,7 +120,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
         commit(types.REMOVE_MEAL_DONE, { mealId, dayString });
       })
       .catch((error: ApiResponseError) => {
-        commit(types.REMOVE_MEAL_FAIL, error);
+        commit(types.REMOVE_MEAL_FAIL, { mealId, dayString, error });
       });
   },
 };
@@ -176,16 +176,25 @@ const mutations: MutationTree<Meals.MealsState> = {
     state.removingIds.push(mealId);
     state.submitError = {};
   },
-  [types.REMOVE_MEAL_DONE](state, params: { mealId: string, dayString: string }) {
-    const { mealId, dayString } = params;
+  [types.REMOVE_MEAL_DONE](state, payload: { mealId: string, dayString: string }) {
+    const { mealId, dayString } = payload;
+    const { name } = state.list[dayString][mealId];
     Vue.delete(state.list[dayString], mealId);
+    Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
     state.listTotal[dayString] -= 1;
+    window.$messageGlobal(`Meal "${name}" removed!`);
   },
-  [types.REMOVE_MEAL_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
+  [types.REMOVE_MEAL_FAIL](state, payload: { error: ApiResponseError, mealId: string, dayString: string }) {
+    const { mealId, dayString, error } = payload;
+    // const { status, message, code } = error.apiError;
+    Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
 
-    state.isSubmitting = false;
-    state.submitError = { status, message, code };
+    const { name } = state.list[dayString][mealId];
+    window.$notifyGlobal({
+      title: 'Error deleting meal =(',
+      message: `Meal "${name}" couldn't be removed`,
+      type: 'error',
+    });
   },
 };
 
