@@ -166,9 +166,13 @@ const mutations: MutationTree<Meals.MealsState> = {
   },
   [types.SUBMIT_MEAL_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
-
     state.isSubmitting = false;
     state.submitError = { status, message, code };
+    window.$notifyGlobal({
+      title: 'Something went wrong',
+      message: `Error ${code || status}: ${message}`,
+      type: 'error',
+    });
   },
 
   // Remove Meal
