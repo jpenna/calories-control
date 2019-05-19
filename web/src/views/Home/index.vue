@@ -7,11 +7,6 @@
       :useTimeFilter.sync="useTimeFilter"
     />
 
-    <span v-show="isFetchingDate">
-      <i class="el-icon-loading" />
-      Loading...
-    </span>
-
     <MealsList
       :mealsList="mealsList"
       :isFetchingList="isFetchingDate"
@@ -106,7 +101,9 @@ export default Vue.extend({
     },
 
     isFetchingDate() {
-      return this.isFetching.includes(this.selectedDate);
+      const fetching = this.isFetching[this.dayString];
+      if (fetching === undefined) return true;
+      return fetching;
     },
   },
 

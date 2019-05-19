@@ -61,7 +61,7 @@ export namespace Meals {
       [date: string]: number;
     };
 
-    isFetching: string[];
+    isFetching: { [date: string]: boolean };
     fetchingError: { [date: string]: ApiError };
 
     isSubmitting: boolean;

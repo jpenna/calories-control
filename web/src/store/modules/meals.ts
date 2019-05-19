@@ -34,7 +34,7 @@ const initialState: Meals.MealsState = {
   list: {},
   listTotal: {},
 
-  isFetching: [],
+  isFetching: {},
   fetchingError: {},
 
   isSubmitting: false,
@@ -64,7 +64,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
   async fetchMeals({ commit, state }, { filters, force }: { filters: Meals.FiltersInterface, force: boolean }) {
     const dayString = utils.getDayString(filters.date);
     // Skip fetch if it is currently fetching
-    if (state.isFetching.includes(dayString)) return;
+    if (state.isFetching[dayString]) return;
     // Skip fetch if already have the data AND is not force fetch
     if (state.list[dayString] && !force) return;
 
@@ -123,12 +123,12 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 const mutations: MutationTree<Meals.MealsState> = {
   // Fetch Meals
   [types.FETCH_MEALS](state, dayString: string) {
-    state.isFetching.push(dayString);
+    Vue.set(state.isFetching, dayString, true);
     Vue.set(state.fetchingError, dayString, {});
   },
   [types.FETCH_MEALS_DONE](state, payload: { data: api.ListMealsRes, dayString: string }) {
     const { dayString, data } = payload;
-    Vue.delete(state.isFetching, state.isFetching.findIndex(date => date === dayString));
+    state.isFetching[dayString] = false;
 
     const mealsList = data.meals.reduce((acc: { [id:string]: Meals.MealInterface }, meal) => {
       const norm = mapMeal(meal);
@@ -141,7 +141,7 @@ const mutations: MutationTree<Meals.MealsState> = {
   },
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
     const { status, message, code } = payload.error.apiError;
-    Vue.delete(state.isFetching, state.isFetching.findIndex(date => date === payload.dayString));
+    state.isFetching[payload.dayString] = false;
     state.fetchingError[payload.dayString] = { status, message, code };
   },
 

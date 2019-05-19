@@ -1,13 +1,15 @@
 <template>
   <div class="meals-list">
-    <div v-show="!mealsList.length && !isFetchingList" class="text-center fw-500 mt-50">
-      <img src="@/assets/emojis/relieved.png" style="height: 4rem" />
-      <div class="mt-5 fs-140">Looks like someone was fasting!</div>
-      <div class="mt-5">No meals for the selected period.</div>
-    </div>
+    <div class="flex-split">
+      <div>
+        <div v-show="isFetchingList" class="fw-500 color-regular">
+          <i class="el-icon-loading" />
+          Loading...
+        </div>
+      </div>
 
-    <div v-show="mealsList.length">
       <div
+        v-show="mealsList.length"
         class="total-calories"
         :class="exceedGoal ? 'color-danger' : 'color-success'"
       >
@@ -19,7 +21,15 @@
         />
         Eaten Calories: {{ caloriesTotal }} / 3000
       </div>
+    </div>
 
+    <div v-show="!mealsList.length && !isFetchingList" class="text-center fw-500 mt-50 mb-100">
+      <img src="@/assets/emojis/relieved.png" style="height: 4rem" />
+      <div class="mt-5 fs-140">Looks like someone was fasting!</div>
+      <div class="mt-5">No meals for the selected period.</div>
+    </div>
+
+    <div v-show="mealsList.length">
       <el-card v-for="meal in mealsList" :key="meal.id" class="meal-card separate-list">
         <div>
           <div class="flex-split" style="align-items: flex-start">
