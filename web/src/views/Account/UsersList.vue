@@ -1,6 +1,6 @@
 <template>
-  <div class="user-roles">
-    <h2>Roles</h2>
+  <div>
+    <h2>Users</h2>
 
     <!-- User List -->
     <div v-for="user of usersList" :key="user.email" class="flex-split separate-list">
@@ -28,30 +28,16 @@
         </el-tooltip>
       </div>
     </div>
-
-    <!-- Pagination -->
-    <Pagination
-      class="mt-30"
-      settingsKey="users-list"
-      :startPage="0"
-      :total="50"
-    />
-
   </div>
 </template>
 
 <script lang="js">
 import Vue from 'vue';
 
-import Pagination from '@/components/Pagination.vue';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default Vue.extend({
-  name: 'UsersRoles',
-
-  components: {
-    Pagination,
-  },
+  name: 'UsersList',
 
   data() {
     return {

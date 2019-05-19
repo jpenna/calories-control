@@ -32,7 +32,7 @@
     </el-form>
 
     <!-- Users permissions -->
-    <UsersRoles v-if="$hasRole('usersEdit', myself)" style="max-width: 650px; margin: auto" class="mb-100"/>
+    <UsersList v-if="$hasRole('usersEdit', myself)" style="max-width: 650px; margin: auto" class="mb-100"/>
 
     <el-button type="danger" class="logout-button" @click="handleLogout">
       Logout
@@ -45,13 +45,13 @@
 import Vue from 'vue';
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex';
 
-import UsersRoles from './UsersRoles.vue';
+import UsersList from './UsersList.vue';
 
 export default Vue.extend({
   name: 'Account',
 
   components: {
-    UsersRoles,
+    UsersList,
   },
 
   data() {
