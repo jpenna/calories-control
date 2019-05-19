@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center">
+  <div class="text-left">
 
     <!-- Back link -->
     <div class="text-left">
@@ -15,20 +15,36 @@
     <el-form
       ref="form"
       :model="form"
+      :rules="rules"
       label-position="left"
-      label-width="100px"
-      @submit.native.prevent="submitCalories"
+      label-width="120px"
+      hide-required-asterisk
+      @submit.native.prevent
     >
-      <el-form-item label="Max Calories" class="d-inline-block">
+      <el-form-item label="Name" prop="name">
+        <el-input placeholder="name" v-model="form.name" />
+      </el-form-item>
+
+      <el-form-item label="E-mail" prop="email">
+        <el-input placeholder="example@mail.com" v-model="form.email" />
+      </el-form-item>
+
+      <el-form-item label="Max Calories">
         <el-input-number
-          v-loading="isUpdatingCalories"
           :controls="false"
           :min="0"
           v-model="form.calories"
           name="calories"
-          @input="debounceSubmit"
         />
       </el-form-item>
+
+      <div class="text-right">
+        <el-button type="text" @click="resetFields" class="mr-30" :disabled="isUpdatingUser">Cancel</el-button>
+        <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="isUpdatingUser">
+          <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+          Submit
+        </el-button>
+      </div>
     </el-form>
 
     <!-- Users permissions -->
@@ -57,40 +73,56 @@ export default Vue.extend({
   data() {
     return {
       form: {
+        name: '',
+        email: '',
         calories: 0,
+      },
+
+      rules: {
+        email: [{ required: true, type: 'email', trigger: 'submit', message: 'Please insert a valid e-mail.' }],
+        name: [{ required: true, type: 'string', trigger: 'submit', min: 3, message: 'Name should have at least 3 characters.' }],
+        calories: [{ required: true, type: 'number', trigger: 'submit', min: 0, message: 'Input a valid amount.' }],
       },
     };
   },
 
   computed: {
     ...mapGetters('users', ['myself']),
-    ...mapState('users', ['isUpdatingCalories']),
+    ...mapState('users', ['isUpdatingUser']),
   },
 
   watch: {
     myself(myself) {
-      this.form.calories = myself.dailyCalories;
+      this.resetFields();
     },
   },
 
   mounted() {
-    this.form.calories = this.myself.dailyCalories;
+    this.resetFields();
   },
 
   methods: {
     ...mapMutations('auth', ['doLogout']),
-    ...mapActions('users', ['updateCalories']),
+    ...mapActions('users', ['updateUser']),
 
-    debounceSubmit() {
-      console.log('submit on change');
-    },
-
-    submitCalories() {
-      this.updateCalories({ userId: this.myself.id, calories: this.form.calories });
+    handleSubmitUpdate() {
+      this.updateUser({
+        userId: this.myself.id,
+        dailyCalories: this.form.calories,
+        name: this.form.name,
+        email: this.form.email,
+      });
     },
 
     handleLogout() {
       this.doLogout();
+    },
+
+    resetFields() {
+      this.$refs.form.resetFields();
+      this.form.calories = this.myself.dailyCalories;
+      this.form.name = this.myself.name;
+      this.form.email = this.myself.email;
     },
   },
 });

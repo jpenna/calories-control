@@ -86,7 +86,7 @@ export namespace Users {
     isFetchingUsers: boolean;
     usersError: ApiError;
 
-    isUpdatingCalories: boolean;
+    isUpdatingUser: boolean;
     updateError: ApiError;
 
     removingUsersIds: string[];

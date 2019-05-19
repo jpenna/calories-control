@@ -39,7 +39,7 @@ const initialState: Users.UsersState = {
   isFetchingUsers: false,
   usersError: {},
 
-  isUpdatingCalories: false,
+  isUpdatingUser: false,
   updateError: {},
 
   removingUsersIds: [],
@@ -63,10 +63,9 @@ const actions: ActionTree<Users.UsersState, RootInterface> = {
       });
   },
 
-  async updateCalories({ commit }, params: { userId: string, calories: number }) {
+  async updateUser({ commit }, params) {
     commit(types.UPDATE_CALORIES);
-    const { calories, userId } = params;
-    const update = { dailyCalories: calories };
+    const { userId, ...update } = params;
     api.updateUser(userId, update)
       .then((data: api.UpdateUserRes) => {
         commit(types.UPDATE_CALORIES_DONE, data.user);
@@ -108,24 +107,23 @@ const mutations: MutationTree<Users.UsersState> = {
     state.usersError = { status, message, code };
   },
 
-  // Update Calories
+  // Update User
   [types.UPDATE_CALORIES](state) {
-    state.isUpdatingCalories = true;
+    state.isUpdatingUser = true;
     state.updateError = {};
   },
   [types.UPDATE_CALORIES_DONE](state, user: api.UserRes) {
-    state.isUpdatingCalories = false;
+    state.isUpdatingUser = false;
     const mapped = mapUser(user);
     state.usersList[mapped.id] = mapped;
     window.$notifyGlobal({
-      title: 'Calories updated!',
-      message: `Your daily maximum is ${mapped.dailyCalories} now.`,
+      title: 'Profile updated!',
       type: 'success',
     });
   },
   [types.UPDATE_CALORIES_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
-    state.isUpdatingCalories = false;
+    state.isUpdatingUser = false;
     state.updateError = { status, message, code };
     window.$notifyGlobal({
       title: 'Something went wrong',
