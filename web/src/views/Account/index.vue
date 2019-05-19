@@ -1,8 +1,8 @@
 <template>
-  <div class="text-left">
+  <div class="pb-50" style="position: relative">
 
     <!-- Back link -->
-    <div class="text-left">
+    <div>
       <el-link type="info" class="fs-100" :underline="false" @click="$router.go(-1)">
         <i class="el-icon-caret-left" />
         Back
@@ -55,7 +55,7 @@
     </el-form>
 
     <!-- Users permissions -->
-    <UsersList v-if="$hasRole('usersEdit', myself)" style="max-width: 650px; margin: auto" class="mb-100"/>
+    <UsersList v-if="$hasRole('usersEdit', myself)" style="margin: auto" class="mt-50 mb-100"/>
 
     <el-button type="danger" class="logout-button" @click="handleLogout">
       Logout

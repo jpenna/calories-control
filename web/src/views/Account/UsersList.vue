@@ -1,32 +1,37 @@
 <template>
-  <div>
+  <div class="users-list">
     <h2>Users</h2>
 
     <!-- User List -->
-    <div v-for="user of usersList" :key="user.email" class="flex-split separate-list">
-      <div>{{ user.name }}</div>
-      <div>{{ user.email }}</div>
-      <div>
-        <el-select v-model="user.role">
-          <el-option
-            v-for="item in roles"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.disabled"
-          />
-        </el-select>
-        <el-tooltip effect="light" content="Delete" :open-delay="500">
-          <el-button type="text" class="ml-10" @click="handleRemoveUser(user.id)">
-            <img
-              v-if="!removingUsersIds.includes(user.id)"
-              src="@/assets/emojis/times.png"
-              style="height: 1.2rem"
+    <div class="d-table w-100 pl-20">
+
+      <div v-for="user of usersList" :key="user.email" class="user-item separate-list">
+        <div>{{ user.name }}</div>
+        <div>{{ user.email }}</div>
+        <div class="text-right pr-30">
+          <el-select v-model="user.role">
+            <el-option
+              v-for="item in roles"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
             />
-            <i v-else class="el-icon-loading" />
-          </el-button>
-        </el-tooltip>
+          </el-select>
+
+          <el-tooltip effect="light" content="Delete" :open-delay="500">
+            <el-button type="text" class="ml-10" @click="handleRemoveUser(user.id)">
+              <img
+                v-if="!removingUsersIds.includes(user.id)"
+                src="@/assets/emojis/times.png"
+                style="height: 1.2rem"
+              />
+              <i v-else class="el-icon-loading" />
+            </el-button>
+          </el-tooltip>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -83,3 +88,16 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss">
+.users-list {
+  .user-item {
+    display: table-row;
+    text-align: left;
+
+    > div {
+      display: table-cell;
+    }
+  }
+}
+</style>
