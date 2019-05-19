@@ -59,15 +59,17 @@ const getters: GetterTree<Meals.MealsState, RootInterface> = {
 
 const actions: ActionTree<Meals.MealsState, RootInterface> = {
   // New Meal
-  async newMeal({ commit }, meal: Meals.MealInterface) {
-    commit(types.NEW_MEAL);
+  async submitMeal({ commit }, meal: Meals.MealInterface) {
+    commit(types.SUBMIT_MEAL);
     const apiMeal = { ...meal, eatenAt: meal.eatenAt.toISOString() };
-    api.newMeal(apiMeal)
-      .then((data: api.NewMealRes) => {
-        commit(types.NEW_MEAL_DONE, data);
+    const method = meal.id ? api.updateMeal : api.newMeal;
+    method(apiMeal)
+      .then((data: api.SubmitMealRes) => {
+        // if (meal.id) commit(types.REMOVE_MEAL_DONE, meal.id) add remove first, because of date
+        commit(types.SUBMIT_MEAL_DONE, data);
       })
       .catch((error: ApiResponseError) => {
-        commit(types.NEW_MEAL_FAIL, error);
+        commit(types.SUBMIT_MEAL_FAIL, error);
       });
   },
 
@@ -110,11 +112,11 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
 
 const mutations: MutationTree<Meals.MealsState> = {
   // New Meal
-  [types.NEW_MEAL](state) {
+  [types.SUBMIT_MEAL](state) {
     state.isSubmitting = true;
     state.submitError = {};
   },
-  [types.NEW_MEAL_DONE](state, data: api.NewMealRes) {
+  [types.SUBMIT_MEAL_DONE](state, data: api.SubmitMealRes) {
     state.isSubmitting = false;
     const meal = mapMeal(data.meal);
     const mealDate = utils.getDayString(meal.eatenAt);
@@ -123,7 +125,7 @@ const mutations: MutationTree<Meals.MealsState> = {
     // Setting with Vue in case there was nothing fetched (offline mode)
     Vue.set(state.listTotal, mealDate, (state.listTotal[mealDate] || 0) + 1);
   },
-  [types.NEW_MEAL_FAIL](state, error: ApiResponseError) {
+  [types.SUBMIT_MEAL_FAIL](state, error: ApiResponseError) {
     const { status, message, code } = error.apiError;
 
     state.isSubmitting = false;

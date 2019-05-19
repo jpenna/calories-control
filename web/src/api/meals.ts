@@ -1,29 +1,35 @@
 import apiBase from './apiBase';
 
 export interface ApiMeal {
+  id: string;
   user: string;
   name: string;
   notes: string;
   calories: number;
   eatenAt: string;
-  id: string;
 }
 
-export interface NewMealRes {
+export interface SubmitMealRes {
   success: boolean;
   meal: ApiMeal;
 }
-interface NewMealParams {
+interface SubmitMealParams {
+  id?: string;
   name: string;
   notes: string;
   calories: number;
   eatenAt: string;
   userId: string;
 }
-export function newMeal(params: NewMealParams): Promise<NewMealRes> {
+export function newMeal(params: SubmitMealParams): Promise<SubmitMealRes> {
   return apiBase
     .post('/meals/new', params)
-    .then((res): NewMealRes => res.data);
+    .then((res): SubmitMealRes => res.data);
+}
+export function updateMeal(params: SubmitMealParams): Promise<SubmitMealRes> {
+  return apiBase
+    .put(`/meals/${params.id}`, params)
+    .then((res): SubmitMealRes => res.data);
 }
 
 interface ListMealsParams {

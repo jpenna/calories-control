@@ -19,7 +19,7 @@
       label-position="left"
       label-width="90px"
       hide-required-asterisk
-      @submit.native.prevent="submitNewMeal"
+      @submit.native.prevent="handleSubmitMeal"
     >
       <!-- Name -->
       <el-form-item label="Name" prop="name">
@@ -72,8 +72,8 @@
       </el-form-item>
 
       <div class="dialog-footer text-right mt-20">
-        <el-button type="text" @click="$emit('update:show', false)" class="mr-30">Cancel</el-button>
-        <el-button type="primary" native-type="submit" @click="submitNewMeal" :loading="isSubmitting">
+        <el-button type="text" @click="$emit('update:show', false)" class="mr-30" :disabled="isSubmitting">Cancel</el-button>
+        <el-button type="primary" native-type="submit" @click="handleSubmitMeal" :loading="isSubmitting">
           <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
           Eaten!
         </el-button>
@@ -179,13 +179,13 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions('meals', ['newMeal']),
+    ...mapActions('meals', ['submitMeal']),
 
-    submitNewMeal() {
+    handleSubmitMeal() {
       this.$refs.form.validate((valid) => {
         if (!valid) return;
-        if (this.form.id) return console.log('update');
-        this.newMeal({
+        this.submitMeal({
+          id: this.form.id,
           userId: this.userId,
           name: this.form.name,
           notes: this.form.notes,

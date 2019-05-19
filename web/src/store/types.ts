@@ -9,9 +9,9 @@ export const REGISTER_DONE = 'REGISTER_DONE';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 
 // New Meal
-export const NEW_MEAL = 'NEW_MEAL';
-export const NEW_MEAL_DONE = 'NEW_MEAL_DONE';
-export const NEW_MEAL_FAIL = 'NEW_MEAL_FAIL';
+export const SUBMIT_MEAL = 'SUBMIT_MEAL';
+export const SUBMIT_MEAL_DONE = 'SUBMIT_MEAL_DONE';
+export const SUBMIT_MEAL_FAIL = 'SUBMIT_MEAL_FAIL';
 
 // List meals
 export const FETCH_MEALS = 'FETCH_MEALS';
