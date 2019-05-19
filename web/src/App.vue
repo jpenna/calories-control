@@ -23,7 +23,7 @@ export default Vue.extend({
   created() {
     window.$notifyGlobal = (params) => {
       const message = typeof params === 'string' ? params : params.message;
-      const { title, type } = params;
+      const { title, type } = params as any;
 
       this.$notify({ title, message, type });
     };

@@ -134,7 +134,7 @@ export default Vue.extend({
       if (!this.submitError.status) {
         this.$emit('update:show', false);
         this.$notify({
-          title: 'New meal added!',
+          title: this.selectedMeal.id ? 'Meal updated!' : 'New meal added!',
           message: `${this.form.name} - ${this.form.calories} calories`,
           type: 'success',
         });
@@ -162,7 +162,7 @@ export default Vue.extend({
       this.form = {
         id: meal.id,
         name: meal.name,
-        eatenAt: meal.eatenAt, // Just for completeness. It will be calculated next
+        eatenAt: new Date(),
         calories: meal.calories,
         userId: meal.userId,
         notes: meal.notes,
@@ -184,13 +184,17 @@ export default Vue.extend({
     handleSubmitMeal() {
       this.$refs.form.validate((valid) => {
         if (!valid) return;
+        const dayString = this.selectedMeal.id && utils.getDayString(this.selectedMeal.eatenAt);
         this.submitMeal({
-          id: this.form.id,
-          userId: this.userId,
-          name: this.form.name,
-          notes: this.form.notes,
-          calories: this.form.calories,
-          eatenAt: this.form.eatenAt,
+          dayString,
+          meal: {
+            id: this.form.id,
+            userId: this.userId,
+            name: this.form.name,
+            notes: this.form.notes,
+            calories: this.form.calories,
+            eatenAt: this.form.eatenAt,
+          },
         });
       });
     },
