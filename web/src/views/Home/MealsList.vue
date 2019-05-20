@@ -24,7 +24,7 @@
     <div v-show="hasMeals">
       <!-- Grouped by User -->
       <div v-for="(userMeals, id) in mealsList" :key="id" class="separate-list">
-        <h4 class="color-regular">{{ usersList[id].name }}</h4>
+        <h4 class="color-regular">{{ (usersList[id] || {}).name }}</h4>
 
         <!-- List Meals -->
         <el-card v-for="meal in userMeals" :key="meal.id" class="meal-card separate-list">
@@ -53,7 +53,7 @@
             <!-- User -->
             <div v-if="$hasRole('mealsAll', myself)" class="icon-format">
               <img src="@/assets/emojis/smile.png" style="height: 1.2rem" class="v-align-middle" />
-              <span>{{ usersList[meal.userId].name || meal.userId }}</span>
+              <span>{{ (usersList[meal.userId] || {}).name || meal.userId }}</span>
             </div>
 
             <div class="fw-500 mt-10">
