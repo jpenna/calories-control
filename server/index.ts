@@ -17,5 +17,5 @@ if (process.env.NODE_ENV !== 'production') app.use(morgan('dev'));
 app.use('/api/v1', apiV1);
 
 app.listen(3000, (): void => {
-  console.log('Example app listening on http://localhost:3000');
+  console.log('Calories app listening on http://localhost:3000');
 });

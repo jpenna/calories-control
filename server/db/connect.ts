@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-mongoose.connect(process.env.MONGO_URL!, {
+mongoose.connect(`mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`, {
   useNewUrlParser: true, // mongodb
   useCreateIndex: true, // mongodb
   useFindAndModify: false, // mongodb
