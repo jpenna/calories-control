@@ -3,7 +3,7 @@
     ref="form"
     :model="form"
     :rules="rules"
-    label-position="left"
+    :label-position="labelTop ? 'top' : 'left'"
     label-width="120px"
     hide-required-asterisk
     @submit.native.prevent
@@ -26,16 +26,18 @@
     </el-form-item>
 
     <div class="flex-split" :class="{ 'mt-40': !isMe }">
-      <el-button v-if="isMe" @click="showUpdatePassword = true">
-        <img src="@/assets/emojis/key.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
-        Change Password
-      </el-button>
+      <div :class="{ 'buttons-section': isMe }">
+        <el-button v-if="isMe" @click="showUpdatePassword = true">
+          <img src="@/assets/emojis/key.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
+          Change Password
+        </el-button>
 
-      <el-button v-else @click="$emit('close')">
-        Cancel
-      </el-button>
+        <el-button v-else @click="$emit('close')">
+          Cancel
+        </el-button>
+      </div>
 
-      <div class="buttons-side">
+      <div :class="{ 'buttons-section': isMe }">
         <el-button type="text" @click="resetFields" class="mr-30" :disabled="updatingUsers[myself.id]">Reset</el-button>
         <el-button type="primary" native-type="submit" @click="handleSubmitUpdate" :loading="updatingUsers[myself.id]">
           <img src="@/assets/emojis/thumbs_up.png" class="mr-5" style="height: 1rem; vertical-align: sub" />
@@ -53,6 +55,8 @@
 import Vue from 'vue';
 import { mapMutations, mapGetters, mapActions, mapState } from 'vuex';
 
+import * as utils from '@/helpers/utils';
+
 import ChangePwd from './ChangePwd.vue';
 
 export default Vue.extend({
@@ -69,6 +73,7 @@ export default Vue.extend({
   data() {
     return {
       showUpdatePassword: false,
+      labelTop: utils.getWidth() <= 550,
 
       form: {
         name: '',
@@ -101,6 +106,9 @@ export default Vue.extend({
 
   mounted() {
     this.resetFields();
+    window.addEventListener('resize', () => {
+      this.labelTop = utils.getWidth() <= 550;
+    });
   },
 
   methods: {
@@ -126,8 +134,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 430px) {
-  .buttons-side {
+@media screen and (max-width: 510px) {
+  .buttons-section {
     width: 100%;
     text-align: center;
     margin-top: 15px;

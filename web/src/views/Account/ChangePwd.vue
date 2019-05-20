@@ -126,13 +126,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style lang="scss">
-.password-modal {
-  @media screen and (min-width: 550px) {
-    .el-dialog {
-      min-width: 500px;
-    }
-  }
-}
-</style>

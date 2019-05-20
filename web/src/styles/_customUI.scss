@@ -4,6 +4,12 @@
 // Increase border radius
 .el-dialog {
   border-radius: 10px;
+
+  // Handle width
+  @media screen and (min-width: 550px) {
+    min-width: 500px;
+    max-width: 600px;
+  }
 }
 
 // Bold title for modal

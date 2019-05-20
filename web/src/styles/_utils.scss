@@ -170,3 +170,33 @@ $width: 25 50 75 100;
     margin-top: 30px;
   }
 }
+
+// put table cells stacked for small width
+@media screen and (max-width: 770px) {
+  .responsive-table {
+    tr {
+      display: flex;
+      flex-direction: column;
+
+      // Row space top
+      &:not(:first-of-type) {
+        border-top: solid 1px $--border-color-base;
+        padding-top: 20px;
+      }
+
+      // Row space bottom
+      &:not(:last-of-type) {
+        padding-bottom: 25px;
+      }
+
+      td {
+        text-align: center !important;
+
+        // Cell spacing
+        &:not(:first-of-type) {
+          padding-top: 10px;
+        }
+      }
+    }
+  }
+}

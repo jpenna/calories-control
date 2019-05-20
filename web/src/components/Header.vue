@@ -4,7 +4,7 @@
       <img src="@/assets/logo.png" :width="isAuth ? '140px' : '200px'" />
     </router-link>
 
-    <router-link :to="{ name: 'account' }" v-if="isAuth" class="mr-30 icon-format">
+    <router-link :to="{ name: 'account' }" v-if="isAuth" class="settings-link icon-format">
       <img src="@/assets/emojis/wrench.png" style="height: 1.5rem" />
       <span class="fw-500 ml-5 color-regular">Settings</span>
     </router-link>
@@ -25,3 +25,11 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss">
+.settings-link {
+  @media screen and (min-width: 450px) {
+    margin-right: 30px;
+  }
+}
+</style>

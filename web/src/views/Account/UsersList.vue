@@ -3,18 +3,18 @@
     <h2>Users</h2>
 
     <!-- User List -->
-    <table>
+    <table class="responsive-table">
 
       <tr
         v-for="user of usersList"
         :key="user.email"
-        :class="{ 'pb-5': user.id === myself.id }"
         class="user-item"
       >
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td class="text-center">{{ user.dailyCalories }} cal.</td>
-        <td class="text-right">
+
+        <td>
           <el-select
             v-loading="updatingUsers[user.id]"
             v-model="usersRole[user.id]"
@@ -144,6 +144,10 @@ export default Vue.extend({
     padding: 0 20px;
     border-collapse: separate;
     border-spacing: 10px 20px;
+
+    tr td:last-child {
+      text-align: right;
+    }
   }
 }
 </style>

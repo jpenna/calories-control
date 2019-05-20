@@ -53,7 +53,11 @@ export default Vue.extend({
   min-height: 100vh;
 
   .el-main {
-    padding: 20px 50px;
+    padding: 20px 10px;
+
+    @media screen and (min-width: 450px) {
+      padding: 20px 50px;
+    }
   }
 
   .el-header {

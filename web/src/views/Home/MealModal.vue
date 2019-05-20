@@ -229,12 +229,6 @@ export default Vue.extend({
 
 <style lang="scss">
 .meal-modal {
-  @media screen and (min-width: 550px) {
-    .el-dialog {
-      min-width: 500px;
-    }
-  }
-
   // Remove border
   .time-block {
     input {
