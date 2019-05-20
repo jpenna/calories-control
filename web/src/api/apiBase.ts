@@ -22,8 +22,12 @@ axiosBase.interceptors.response.use(res => res,
       // eslint-disable-next-line no-param-reassign
       error.apiError = {
         status: -1, // status -1 means request error
-        message: 'Request error',
+        message: 'Connection Error',
       };
+    } else if (error.response.data === 'Unauthorized' && error.response.status === 401) {
+      localStorage.removeItem('token');
+      window.location.reload();
+      return;
     } else {
       const { status, data } = error.response;
       // eslint-disable-next-line no-param-reassign
