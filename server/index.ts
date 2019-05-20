@@ -11,10 +11,18 @@ const app: express.Application = express();
 
 app.use(cors());
 
+// serve static assets normally
+app.use(express.static(`${__dirname}/web/dist`));
+
 app.use(express.json());
 if (process.env.NODE_ENV !== 'production') app.use(morgan('dev'));
 
 app.use('/api/v1', apiV1);
+
+// handle every other route with index.html
+app.get('*', (req, res): void => {
+  res.sendFile(`${__dirname}/web/dist/index.html`);
+});
 
 app.listen(3000, (): void => {
   console.log('Calories app listening on http://localhost:3000');

@@ -91,3 +91,7 @@ build
 
 # env vars
 .env
+
+# From docker
+web
+dist
