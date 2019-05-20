@@ -10,12 +10,10 @@ I would develop each one on there own repository, but since I have only 1 to wor
 
 Enter each project directory and follow the instructions locally.
 
-## Add permission to admin user
+## Add ADMIN permission to all users
 
-Run this command in MongoDB changing the ID to the user ID.
+From inside the `docker` folder, run the following command.
 
-docker-compose exec mongodb mongo --username root --password pwd123 /set-all-admin.js
-
-```js
-db.users.update({ _id: ObjectId("5cdeaa8888847a14df5397ef") }, { $set: { permissions: ["users_edit", "meals_all"] } });
+```bash
+docker-compose exec mongodb mongo --username root --password pwd123 /usr/docker/set-all-admin.js
 ```
