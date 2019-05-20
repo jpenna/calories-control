@@ -12,3 +12,17 @@ module.exports = {
     },
   },
 };
+
+// module.exports = {
+//   pwa: {
+//     workboxOptions: {
+//       runtimeCaching: [{
+//         urlPattern: new RegExp(`${escapeRegExp(process.env.VUE_APP_API_URL)}`),
+//         handler: 'networkFirst',
+//         options: {
+//           networkTimeoutSeconds: 5,
+//         },
+//       }],
+//     },
+//   },
+// };

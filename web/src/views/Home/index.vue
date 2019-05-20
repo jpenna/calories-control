@@ -7,7 +7,7 @@
       :useTimeFilter.sync="useTimeFilter"
       :userId.sync="selectedUserId"
       :isRefreshing="isFetchingDate"
-      @forceRefresh="doFetchMeals(true)"
+      @forceRefresh="doFetchMeals"
     />
 
     <MealsList
@@ -146,6 +146,7 @@ export default Vue.extend({
 
     isFetchingDate() {
       const fetching = this.isFetching[this.dayString];
+      // Get undefined so the list won't tilt on the 'not loading' then 'loading' view
       if (fetching === undefined) return true;
       return fetching;
     },
@@ -164,7 +165,7 @@ export default Vue.extend({
     },
   },
 
-  created() {
+  mounted() {
     this.doFetchMeals({
       filters: { date: this.dayString },
     });
@@ -173,10 +174,9 @@ export default Vue.extend({
   methods: {
     ...mapActions('meals', ['fetchMeals']),
 
-    doFetchMeals(force) {
+    doFetchMeals() {
       this.fetchMeals({
         filters: { date: this.dayString },
-        force,
       });
     },
 

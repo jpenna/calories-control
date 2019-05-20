@@ -50,7 +50,9 @@ export function listMeals(params: ListMealsParams): Promise<ListMealsRes> {
     .get('/meals/list', {
       params,
     })
-    .then((res): ListMealsRes => res.data);
+    .then((res): ListMealsRes => {
+      return res.data;
+    });
 }
 
 export interface DeleteMealRes {

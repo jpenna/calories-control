@@ -126,9 +126,14 @@ const mutations: MutationTree<Users.UsersState> = {
     }, {});
   },
   [types.FETCH_USERS_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
-    state.isFetchingUsers = false;
-    state.usersError = { status, message, code };
+    try {
+      const { status, message, code } = error.apiError;
+      state.usersError = { status, message, code };
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      state.isFetchingUsers = false;
+    }
   },
 
   // Update User
@@ -148,15 +153,21 @@ const mutations: MutationTree<Users.UsersState> = {
     });
   },
   [types.UPDATE_USER_FAIL](state, params: { error: ApiResponseError, userId: string }) {
-    const { error, userId } = params;
-    const { status, message, code } = error.apiError;
-    Vue.set(state.updatingUsers, userId, false);
-    state.updateError = { status, message, code };
-    window.$notifyGlobal({
-      title: 'Something went wrong',
-      message: `Error ${code || status}: ${message}`,
-      type: 'error',
-    });
+    try {
+      const { error } = params;
+      const { status, message, code } = error.apiError;
+      state.updateError = { status, message, code };
+      window.$notifyGlobal({
+        title: 'Something went wrong',
+        message: `Error ${code || status}: ${message}`,
+        type: 'error',
+      });
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      const { userId } = params;
+      Vue.set(state.updatingUsers, userId, false);
+    }
   },
 
   // Delete User
@@ -170,14 +181,20 @@ const mutations: MutationTree<Users.UsersState> = {
     window.$messageGlobal(`User "${name}" removed!`);
   },
   [types.DELETE_USER_FAIL](state, params: { error: ApiResponseError, userId: string }) {
-    const { error, userId } = params;
-    const { status, message, code } = error.apiError;
-    Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
-    window.$notifyGlobal({
-      title: 'Something went wrong',
-      message: `Error ${code || status}: ${message}`,
-      type: 'error',
-    });
+    try {
+      const { error } = params;
+      const { status, message, code } = error.apiError;
+      window.$notifyGlobal({
+        title: 'Something went wrong',
+        message: `Error ${code || status}: ${message}`,
+        type: 'error',
+      });
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      const { userId } = params;
+      Vue.delete(state.removingUsersIds, state.removingUsersIds.findIndex(id => id === userId));
+    }
   },
 
   // Change Password
@@ -189,14 +206,19 @@ const mutations: MutationTree<Users.UsersState> = {
     state.isChangingPassword = false;
   },
   [types.CHANGE_PASSWORD_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
-    state.isChangingPassword = false;
-    state.passwordError = { status, message, code };
-    window.$notifyGlobal({
-      title: 'Something went wrong',
-      message: `Error ${code || status}: ${message}`,
-      type: 'error',
-    });
+    try {
+      const { status, message, code } = error.apiError;
+      state.passwordError = { status, message, code };
+      window.$notifyGlobal({
+        title: 'Something went wrong',
+        message: `Error ${code || status}: ${message}`,
+        type: 'error',
+      });
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      state.isChangingPassword = false;
+    }
   },
 };
 

@@ -61,12 +61,10 @@ const getters: GetterTree<Meals.MealsState, RootInterface> = {
 
 const actions: ActionTree<Meals.MealsState, RootInterface> = {
   // fetch meals
-  async fetchMeals({ commit, state }, { filters, force }: { filters: Meals.FiltersInterface, force: boolean }) {
+  async fetchMeals({ commit, state }, { filters }: { filters: Meals.FiltersInterface }) {
     const dayString = utils.getDayString(filters.date);
     // Skip fetch if it is currently fetching
     if (state.isFetching[dayString]) return;
-    // Skip fetch if already have the data AND is not force fetch
-    if (state.list[dayString] && !force) return;
 
     commit(types.FETCH_MEALS, dayString);
 
@@ -82,7 +80,7 @@ const actions: ActionTree<Meals.MealsState, RootInterface> = {
         commit(types.FETCH_MEALS_DONE, { data, dayString });
       })
       .catch((error: ApiResponseError) => {
-        commit(types.FETCH_MEALS_FAIL, error);
+        commit(types.FETCH_MEALS_FAIL, { error, dayString });
       });
   },
 
@@ -140,9 +138,14 @@ const mutations: MutationTree<Meals.MealsState> = {
     Vue.set(state.listTotal, dayString, data.count);
   },
   [types.FETCH_MEALS_FAIL](state, payload: { error: ApiResponseError, dayString: string }) {
-    const { status, message, code } = payload.error.apiError;
-    state.isFetching[payload.dayString] = false;
-    state.fetchingError[payload.dayString] = { status, message, code };
+    try {
+      const { status, message, code } = payload.error.apiError;
+      state.fetchingError[payload.dayString] = { status, message, code };
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      state.isFetching[payload.dayString] = false;
+    }
   },
 
   // New Meal
@@ -166,14 +169,19 @@ const mutations: MutationTree<Meals.MealsState> = {
     }
   },
   [types.SUBMIT_MEAL_FAIL](state, error: ApiResponseError) {
-    const { status, message, code } = error.apiError;
-    state.isSubmitting = false;
-    state.submitError = { status, message, code };
-    window.$notifyGlobal({
-      title: 'Something went wrong',
-      message: `Error ${code || status}: ${message}`,
-      type: 'error',
-    });
+    try {
+      const { status, message, code } = error.apiError;
+      state.submitError = { status, message, code };
+      window.$notifyGlobal({
+        title: 'Something went wrong',
+        message: `Error ${code || status}: ${message}`,
+        type: 'error',
+      });
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      state.isSubmitting = false;
+    }
   },
 
   // Remove Meal
@@ -194,16 +202,20 @@ const mutations: MutationTree<Meals.MealsState> = {
     }
   },
   [types.REMOVE_MEAL_FAIL](state, payload: { error: ApiResponseError, mealId: string, dayString: string }) {
-    const { mealId, dayString, error } = payload;
-    // const { status, message, code } = error.apiError;
-    Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
+    try {
+      const { mealId, dayString, error } = payload;
 
-    const { name } = state.list[dayString][mealId];
-    window.$notifyGlobal({
-      title: 'Error deleting meal =(',
-      message: `Meal "${name}" couldn't be removed`,
-      type: 'error',
-    });
+      const { name } = state.list[dayString][mealId];
+      window.$notifyGlobal({
+        title: 'Error deleting meal =(',
+        message: `Meal "${name}" couldn't be removed`,
+        type: 'error',
+      });
+    } catch (err) {
+      window.$messageGlobal('Something went wrong =(', 'error');
+    } finally {
+      Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
+    }
   },
 };
 
