@@ -13,8 +13,11 @@ services:
       - type: bind # Server files
         source: ../server
         target: /app
+      - type: bind # Server files
+        source: ../web
+        target: /app/web
       - /app/node_modules # Keep the image's folder
-      - /app/web/dist # Keep the image's folder
+      - /app/web/node_modules # Keep the image's folder
     environment:
       MONGO_HOST: mongodb
       MONGO_PORT: 27017
