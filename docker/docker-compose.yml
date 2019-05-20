@@ -3,7 +3,7 @@ services:
   node:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile-server
+      dockerfile: ./Dockerfile-server
     user: node
     # depends_on:
     #   - mongodb
