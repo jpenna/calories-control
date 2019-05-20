@@ -197,7 +197,7 @@ const mutations: MutationTree<Meals.MealsState> = {
 
     // If it isn't update, continue the regular delete procedure
     if (!update) {
-      Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
+      Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === payload.mealId));
       window.$messageGlobal(`Meal "${name}" removed!`);
     }
   },
@@ -214,7 +214,7 @@ const mutations: MutationTree<Meals.MealsState> = {
     } catch (err) {
       window.$messageGlobal('Something went wrong =(', 'error');
     } finally {
-      Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === mealId));
+      Vue.delete(state.removingIds, state.removingIds.findIndex(id => id === payload.mealId));
     }
   },
 };

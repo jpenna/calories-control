@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="offline-warning" v-show="!online">
+      <div class="fw-600">You are navigating offline.</div>
+      You can continue to use the application, but the data might be outdate.
+    </div>
     <router-view />
   </div>
 </template>
@@ -11,6 +15,12 @@ import { mapState } from 'vuex';
 import { Users } from './store/modules/@types';
 
 export default Vue.extend({
+  data() {
+    return {
+      online: navigator.onLine,
+    };
+  },
+
   computed: {
     ...mapState('auth', ['isAuthenticated']),
   },
@@ -34,6 +44,21 @@ export default Vue.extend({
     window.$messageGlobal = (message, type = 'success') => {
       this.$message({ message, type });
     };
+
+    window.addEventListener('online', () => { this.online = true; });
+    window.addEventListener('offline', () => { this.online = false; });
   },
 });
 </script>
+
+<style lang="scss">
+@import '@/styles/_variables.scss';
+
+.offline-warning {
+  width: 100%;
+  text-align: center;
+  padding: 7px 0;
+  background: transparentize($--color-danger, 0.4);
+  border: solid 1px $--color-danger;
+}
+</style>
