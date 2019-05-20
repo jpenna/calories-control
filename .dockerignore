@@ -1,0 +1,11 @@
+# Server
+server/.git
+server/*Dockerfile*
+server/*docker-compose*
+server/node_modules
+server/build
+
+# Web
+web/dist
+web/node_modules
+web/.git
