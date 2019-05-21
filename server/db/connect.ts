@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const mongoPort = process.env.MONGO_PORT ? `:${process.env.MONGO_PORT}` : '';
 
-mongoose.connect(`mongodb://${process.env.MONGO_HOST}${mongoPort}`, {
+mongoose.connect(`${process.env.MONGO_PROTOCOL || 'mongodb'}://${process.env.MONGO_HOST}${mongoPort}`, {
   useNewUrlParser: true, // mongodb
   useCreateIndex: true, // mongodb
   useFindAndModify: false, // mongodb

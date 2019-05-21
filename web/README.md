@@ -5,7 +5,7 @@ Frontend of the Calories Control application.
 It is a PWA that works offline for viewing only and can be installed on a mobile device.
 
 There are no unit tests or e2e tests.
-There environment is prepared but, because of time constraints and less priority on the requirements, I didn't work on it.
+The environment is prepared but, because of time constraints and less priority on the requirements, I didn't work on it.
 
 ## Project setup
 
