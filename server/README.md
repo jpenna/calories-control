@@ -76,3 +76,11 @@ mongo
 ```bash
 docker run -p 3000:3000 --name cal-server --net cal-net -v <ABSOLUTE_PATH_TO_SERVER>:/app cal-server
 ```
+
+## Trade-offs
+
+Since there was no iteration with the "client" to discuss this project, I took some decisions on my own.
+
+1. Roles are a set of permissions (check the API documentation on Postman). More flexibility, maybe unnecessary. Admins can do everything with the users meals and other accounts (except change their password). Managers can do everything with other users (except change their passwords). Users can only handle themselves.
+
+2. Authentication is done using JWT tokens, which are not revokable, blacklisted or refreshed, and lasts for 7 days. This means the user has to login again after 7 days and if the token is compromised, there is nothing the user can do.
