@@ -24,7 +24,8 @@ axiosBase.interceptors.response.use(res => res,
         status: -1, // status -1 means request error
         message: 'Connection Error',
       };
-    } else if (error.response.data === 'Unauthorized' && error.response.status === 401) {
+    } else if (error.response.data === 'Unauthorized' && error.response.status === 401
+      && !/\/login$/.test(error.config.url)) {
       localStorage.removeItem('token');
       window.location.reload();
       return;

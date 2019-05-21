@@ -29,8 +29,8 @@ export default new Router({
       }],
 
     }, {
-      path: '/home',
-      alias: '/',
+      path: '/',
+      alias: '/home',
       props: { auth: true },
       component: Authenticated,
       children: [{
@@ -42,6 +42,11 @@ export default new Router({
         name: 'account',
         component: Account,
       }],
+    },
+
+    {
+      path: '*',
+      redirect: '/',
     },
   ],
 });
