@@ -24,6 +24,7 @@ app.get('*', (req, res): void => {
   res.sendFile(`${__dirname}/web/dist/index.html`);
 });
 
-app.listen(process.env.PORT || 3000, (): void => {
-  console.log('Calories app listening on http://localhost:3000');
+const port = process.env.PORT || 3000;
+app.listen(port, (): void => {
+  console.log(`Calories app listening on http://localhost:${port}`);
 });

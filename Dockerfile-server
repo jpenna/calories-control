@@ -1,24 +1,25 @@
 FROM node:10.15.2
 
 # Front
-COPY ./web/package.json ./web/package-lock.json /app/web/
-WORKDIR /app/web
+COPY ./web/package.json ./web/package-lock.json /usr/app/web/
+WORKDIR /usr/app/web
 RUN npm install --no-progress
 
 # Server
-COPY ./server/package.json ./server/package-lock.json /app/
-WORKDIR /app
+COPY ./server/package.json ./server/package-lock.json /usr/app/
+WORKDIR /usr/app
 RUN npm install --no-progress; \
   npm install --no-progress -g nodemon
 
-COPY ./server /app
+COPY ./server /usr/app
 
 # Frontend
-WORKDIR /app/web
-COPY ./web /app/web
+WORKDIR /usr/app/web
+COPY ./web /usr/app/web
 RUN npm run build
 
 EXPOSE 3000
 
-WORKDIR /app
+WORKDIR /usr/app
+USER node
 CMD [ "npm", "start" ]
