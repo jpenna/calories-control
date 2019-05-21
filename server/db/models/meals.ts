@@ -19,6 +19,7 @@ const MealSchema = new mongoose.Schema({
     type: Date,
     required: true,
     index: true,
+    unique: false,
   },
   name: {
     type: String,
@@ -54,7 +55,7 @@ const MealSchema = new mongoose.Schema({
   },
 });
 
-MealSchema.index({ user: 1, eatenAt: -1 });
+MealSchema.index({ user: 1, eatenAt: -1 }, { unique: false });
 
 
 export default mongoose.model<MealInterface>('Meal', MealSchema);
