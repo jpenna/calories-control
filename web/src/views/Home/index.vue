@@ -78,6 +78,7 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapGetters('users', ['myself']),
     ...mapGetters('meals', ['getMealsForDate', 'getTotalMealsForDate']),
     ...mapState('meals', ['isFetching']),
 
@@ -162,6 +163,14 @@ export default Vue.extend({
       const [year, month, date] = adjusted.toISOString().split('T')[0].split('-');
       this.timeRange[0].setFullYear(year, month - 1, date);
       this.timeRange[1].setFullYear(year, month - 1, date);
+    },
+
+    myself: {
+      immediate: true,
+      handler(myself) {
+        console.log(myself, 'meals_all', myself.id)
+        if (!this.$hasRole('meals_all', myself)) this.selectedUserId = myself.id;
+      },
     },
   },
 

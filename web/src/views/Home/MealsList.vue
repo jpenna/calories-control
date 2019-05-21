@@ -24,7 +24,9 @@
     <div v-show="hasMeals">
       <!-- Grouped by User -->
       <div v-for="(userMeals, id) in mealsList" :key="id" class="separate-list">
-        <h4 class="color-regular">{{ (usersList[id] || {}).name }}</h4>
+        <h4 v-show="$hasRole('mealsAll', myself)" class="color-regular">
+          {{ (usersList[id] || {}).name }}
+        </h4>
 
         <!-- List Meals -->
         <el-card v-for="meal in userMeals" :key="meal.id" class="meal-card separate-list">
@@ -111,6 +113,7 @@ export default Vue.extend({
     ...mapGetters('users', ['myself']),
 
     exceedGoal() {
+      console.log(this.selectedUserId)
       if (!this.mealsList[this.selectedUserId]) return;
       const calSum = this.mealsList[this.selectedUserId] // Only when 1 user
         // eslint-disable-next-line no-return-assign, no-param-reassign
