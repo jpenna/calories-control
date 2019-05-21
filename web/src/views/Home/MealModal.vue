@@ -103,6 +103,15 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 
 import * as utils from '@/helpers/utils';
 
+const formModel = {
+  id: '',
+  userId: '',
+  name: '',
+  eatenAt: new Date(),
+  calories: undefined,
+  notes: '',
+};
+
 export default Vue.extend({
   name: 'EditMeal',
 
@@ -119,14 +128,7 @@ export default Vue.extend({
       date: new Date(),
       time: new Date(),
 
-      form: {
-        id: '',
-        userId: '',
-        name: '',
-        eatenAt: new Date(),
-        calories: undefined,
-        notes: '',
-      },
+      form: formModel,
 
       rules: {
         name: [{ required: true, type: 'string', trigger: 'submit', message: 'Please insert the dish name.' }],
@@ -220,7 +222,7 @@ export default Vue.extend({
     },
 
     onModalClosed() {
-      this.$refs.form.resetFields();
+      this.form = formModel;
       this.$emit('close');
     },
   },
