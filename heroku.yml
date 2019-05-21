@@ -1,3 +1,5 @@
 build:
   docker:
-    calories: Dockerfile-server
+    calories: ./docker/Dockerfile-server
+  config:
+    HEROKU: true

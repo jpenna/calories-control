@@ -1,0 +1,14 @@
+FROM csl-web-deps:latest
+
+COPY ./server /usr/app
+
+# Frontend
+WORKDIR /usr/app/web
+COPY ./web /usr/app/web
+RUN npm run build
+
+EXPOSE 3000
+
+WORKDIR /usr/app
+USER node
+CMD [ "npm", "run", "serve" ]

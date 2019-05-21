@@ -16,10 +16,20 @@ To build the server, database and frontend at once, run the following
 
 ```sh
 cd docker
+sh refrsh-deps.sh
 docker-compose up
 ```
 
-This will start a build the frontend files and copy them inside the server, which will serve  inside.
+`refresh-deps.sh` creates 2 images, one for the frontend dependencies and another for the server dependencies.
+This approach greatly speeds up rebuilding the containers and decouples front and server side dependencies.
+In case a new dependency is added, the build will fail (thanks to webpack and typescript),
+then run the above commands again.
+
+> Why this? Because the web and server are built in the same Dockerfile, this is bad for caching,
+> since one of them should install their dependencies first and, if one change, the other will have
+> to install everything again. By using 2 images for the dependencies, we are always using the cache.
+
+This will build the frontend files and copy them inside the server, which will serve them.
 
 The backend will refresh automatically on file changes. The frontend needs to be setup separately.
 You need to build the files inside the `web` folder and the container will update automatically. 

@@ -7,8 +7,8 @@
     "tsc": "tsc",
     "tsc:watch": "npm run tsc -- --watch",
     "build": "tsc -p .",
-    "build:live": "nodemon --watch './**/*.ts' --exec 'ts-node' --ignore 'web' index.ts",
-    "start": "npm run build:live",
+    "start": "nodemon --watch './**/*.ts' --exec 'ts-node' --ignore 'web' index.ts",
+    "serve": "ts-node index.ts",
     "lint": "./node_modules/.bin/eslint --ext .ts --parser-options=project:./tsconfig.json ./"
   },
   "eslintIgnore": [
