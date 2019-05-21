@@ -1,6 +1,6 @@
 FROM cal-server-deps:latest
 
 # Front
-COPY ./web/package.json ./web/package-lock.json /usr/app/web/
-WORKDIR /usr/app/web
+COPY ./web/package.json ./web/package-lock.json /home/node/app/web/
+WORKDIR /home/node/app/web
 RUN npm install --no-progress
