@@ -168,7 +168,6 @@ export default Vue.extend({
     myself: {
       immediate: true,
       handler(myself) {
-        console.log(myself, 'meals_all', myself.id)
         if (!this.$hasRole('meals_all', myself)) this.selectedUserId = myself.id;
       },
     },

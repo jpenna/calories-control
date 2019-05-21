@@ -113,7 +113,6 @@ export default Vue.extend({
     ...mapGetters('users', ['myself']),
 
     exceedGoal() {
-      console.log(this.selectedUserId)
       if (!this.mealsList[this.selectedUserId]) return;
       const calSum = this.mealsList[this.selectedUserId] // Only when 1 user
         // eslint-disable-next-line no-return-assign, no-param-reassign
