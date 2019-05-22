@@ -61,7 +61,8 @@ export default Vue.extend({
   }
 
   .el-header {
-    background: darken($background-color, 10);
+    background: white;
+    border-bottom: solid 1px $--border-color-light;
   }
 }
 </style>
