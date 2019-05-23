@@ -46,7 +46,7 @@ export default express.Router()
           .limit(+limit || 20)
           .skip(+skip || 0)
           .sort({ eatenAt: 1 }),
-        await MealModel.count(queryFilters),
+        await MealModel.countDocuments(queryFilters),
       ]);
 
       res.sendSuccess({ meals, count, skipped: +skip || 0 });

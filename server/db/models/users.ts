@@ -91,6 +91,4 @@ UserSchema.pre<UserInterface>('save', function (next): void {
   });
 });
 
-UserSchema.index({ email: 1 }, { unique: true });
-
 export default mongoose.model<UserInterface>('User', UserSchema);
