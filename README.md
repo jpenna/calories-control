@@ -1,5 +1,9 @@
 # Calories Application
 
+## API Documentation
+
+### [🌐 View API documentation](https://documenter.getpostman.com/view/3022591/S1LyT7Bh)
+
 ## Live Demo
 
 Check the live demo deployed with Heroku, Docker and MongoDB Atlas.

@@ -69,12 +69,8 @@ export function adjustTimezone(date: Date): Date {
 
 export function getDayString(date: Date): string {
   let aDate = new Date(date);
-  if (typeof date !== 'string') {
-    aDate = adjustTimezone(date);
-  }
-  return aDate.toISOString().split('T')[0];
+  return aDate.toISOString();
 }
-
 export function timeBetween(date: Date, start: Date, end: Date): boolean {
   const dateNum = date.getTime();
   const startNum = start.getTime();
